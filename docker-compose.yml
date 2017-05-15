@@ -44,8 +44,8 @@ services:
     # Logstash runs as one instance on each node in the cluster
     # since it's using the UDP protocol. Pushes all its collected
     # logs to the elasticsearch instance.
-    # See https://github.com/qlik-ea/qliktive-logstash-custom-analytics
-    image: qlikea/qliktive-logstash-custom-analytics:master-3
+    # See https://github.com/qlik-ea/qliktive-custom-analytics-logstash
+    image: qlikea/qliktive-custom-analytics-logstash:master-4
     ports:
       - "12201:12201/udp"
     environment:
@@ -56,7 +56,7 @@ services:
   kibana:
     # Used for visualizing and viewing logs stored in elasticsearch.
     # See https://github.com/qlik-ea/qliktive-kibana-custom-analytics
-    image: qlikea/qliktive-kibana-custom-analytics:master-2
+    image: qlikea/qliktive-custom-analytics-kibana:master-3
     deploy:
       placement:
         constraints: [node.role == manager]
