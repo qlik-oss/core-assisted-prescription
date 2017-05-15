@@ -4,8 +4,8 @@ services:
   openresty:
     # This is our externally-facing gateway, exposing the configured
     # things for all end-users. It has the Analytics UI bundled into it.
-    # See https://github.com/qlik-ea/qliktive-openresty-custom-analytics
-    image: qlikea/qliktive-openresty-custom-analytics:master-25
+    # See https://github.com/qlik-ea/qliktive-custom-analytics-openresty
+    image: qlikea/qliktive-custom-analytics-openresty:master-28
     command: -c /etc/nginx/swarm.conf
     ports:
       - "80:80"
