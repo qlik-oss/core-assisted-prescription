@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+cd "$(dirname "$0")" # change execution directory due to use of relative paths
 . ./output-styles.sh
 
 USERNAME=$(id -u -n)
