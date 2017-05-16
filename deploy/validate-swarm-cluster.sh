@@ -73,7 +73,7 @@ for key in ${services[@]}; do
   if [ "$replicas" = "$expected_replicas/$expected_replicas" ]; then
     echo -e $Green"\tNumber of replicas is correct!"$Reset
   else
-    echo - e $Red"\tNumber of replicas is NOT correct!"$Reset
+    echo -e $Red"\tNumber of replicas is NOT correct!"$Reset
     ERRORS=$(expr $ERRORS + 1)
   fi
 done

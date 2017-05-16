@@ -21,4 +21,4 @@ echo -e $BYellow"\nThen all the replicas for the service is started (this may ta
 echo -e $BYellow"The following routes can be accessed:"$Reset
 echo -e "CUSTOM ANALYTICS\t- http://$GW/hellochart/"
 echo -e "KIBANA\t\t\t- http://$GW/kibana/"
-echo -e "DOCKER VISUALIZER\t- http://$GW/viz/"
+echo -e "DOCKER SWARM VISUALIZER\t- http://$GW/viz/"
