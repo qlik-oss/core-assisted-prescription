@@ -9,8 +9,8 @@ USERNAME=$(id -u -n)
 eval $(docker-machine env $USERNAME-docker-manager1)
 
 # Swarm setup i.e. number of managers resp. workers nodes
-MANAGERS=$(docker-machine ls | grep -c "manager")
-WORKERS=$(docker-machine ls | grep -c "worker")
+MANAGERS=$(docker-machine ls | grep -c "$USERNAME-docker-manager")
+WORKERS=$(docker-machine ls | grep -c "$USERNAME-docker-worker")
 echo -e $BYellow"Docker swarm consists of $MANAGERS manager and $WORKERS worker nodes"$Reset
 
 if [ $MANAGERS -eq 0 ] || [ $WORKERS -eq 0 ]; then
