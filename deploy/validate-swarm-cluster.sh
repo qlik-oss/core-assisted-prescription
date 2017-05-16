@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+. ./output-styles.sh
 
 USERNAME=$(id -u -n)
 
@@ -9,7 +10,7 @@ eval $(docker-machine env $USERNAME-docker-manager1)
 # Swarm setup i.e. number of managers resp. workers nodes
 MANAGERS=$(docker-machine ls | grep -c "manager")
 WORKERS=$(docker-machine ls | grep -c "worker")
-echo "Docker swarm consists of $MANAGERS manager and $WORKERS worker nodes"
+echo -e $BYellow"Docker swarm consists of $MANAGERS manager and $WORKERS worker nodes"$Reset
 
 if [ $MANAGERS -eq 0 ] || [ $WORKERS -eq 0 ]; then
   echo "Could not find any manager and/or worker nodes on host"
@@ -54,24 +55,24 @@ expected_replicas() {
 # Verify the actual number of service replicas in swarm for each service
 # ----------------------------------
 echo -e "\n========================================================================"
-echo " Running test 1 "
+echo "  Running test 1 "
+echo "  Verifying number of replicas of each container in the swarm"
 echo "========================================================================"
-echo -e "\nVerifying number of replicas of each container in the swarm"
+
 service_ls=$(docker-machine ssh $USERNAME-docker-manager1 docker service ls)
 for key in ${services[@]}; do
   service=${key}
   expected_replicas=$(expected_replicas "$service")
-  echo "**********************************************************************"
-  echo -e "\nService with name $service should have $expected_replicas replica(s)"
+  echo -e "\n\tService with name $service should have $expected_replicas replica(s)"
   status=$(echo "$service_ls" | grep "$service")
 
   replicas=$(number_replicas "$status")
-  echo -e "Actual number of replicas: $replicas"
+  echo -e "\tActual number of replicas: $replicas"
 
   if [ "$replicas" = "$expected_replicas/$expected_replicas" ]; then
-    echo "Number of replicas is correct!"
+    echo -e $Green"\tNumber of replicas is correct!"$Reset
   else
-    echo "Number of replicas is NOT correct!"
+    echo - e $Red"\tNumber of replicas is NOT correct!"$Reset
     ERRORS=$(expr $ERRORS + 1)
   fi
 done
@@ -80,18 +81,18 @@ done
 # Verify ELK stack in docker swarm on manager node
 # ----------------------------------
 echo -e "\n========================================================================"
-echo " Running test 2 "
+echo "  Running test 2 "
+echo "  Verify ELK stack services"
 echo "========================================================================"
-echo -e "\nVerify ELK stack services"
 
-echo -e "\nOn the manager node one of each ELK stack service should be running"
+echo -e "\n\tOn the manager node one of each ELK stack service should be running"
 services=$(running_services "$USERNAME-docker-manager1")
 
 for key in ${elk[@]}; do
   if [ $(echo $services | grep -c "${key}") -ge 1 ]; then
-      echo "Service ${key} is running"
+      echo -e $Green"\tService ${key} is running"$Reset
   else
-    echo "Service ${key} is NOT running!"
+    echo -e $Red"\tService ${key} is NOT running!"$Reset
     ERRORS=$(expr $ERRORS + 1)
   fi
 done
@@ -100,18 +101,18 @@ done
 # Verify Logstash service in docker swarm on worker nodes
 # ----------------------------------
 echo -e "\n========================================================================"
-echo " Running test 3 "
+echo "  Running test 3 "
+echo "  On each worker node one instance of logstash should be running"
 echo "========================================================================"
-echo -e "\nOn each worker node one instance of logstash should be running"
 
 for i in $(seq 1 $WORKERS); do
-  echo -e "\nChecking services running on node: $USERNAME-docker-worker$i"
+  echo -e "\n\tChecking services running on node: $USERNAME-docker-worker$i"
   worker_services=$(running_services "$USERNAME-docker-worker$i")
 
   if [ $(echo $worker_services | grep -c "logstash") -eq 1 ]; then
-    echo "Logstash is running"
+    echo -e $Green"\tLogstash is running"$Reset
   else
-    echo "Logstash is NOT running!"
+    echo -e $Red"\tLogstash is NOT running!"$Reset
     ERRORS=$(expr $ERRORS + 1)
   fi
 done
@@ -119,34 +120,35 @@ done
 # ----------------------------------
 # Verify engine service in docker swarm on worker nodes
 # ----------------------------------
+echo -e "\n========================================================================"
+echo "  Running test 4 "
+echo "  On each worker node one instance of engine should be running"
 echo "========================================================================"
-echo " Running test 4 "
-echo "========================================================================"
-echo -e "\nOn each worker node one instance of engine should be running"
 
 for i in $(seq 1 $WORKERS); do
-  echo -e "\nChecking services running on node: $USERNAME-docker-worker$i"
+  echo -e "\n\tChecking services running on node: $USERNAME-docker-worker$i"
   worker_services=$(running_services "$USERNAME-docker-worker$i")
 
   if [ $(echo $worker_services | grep -c "engine") -eq 1 ]; then
-    echo "engine is running"
+    echo -e $Green"\tEngine is running"$Reset
   else
-    echo "engine is NOT running!"
+    echo -e $Red"\tEngine is NOT running!"$Reset
     ERRORS=$(expr $ERRORS + 1)
   fi
 done
 
-
 # ----------------------------------
 # Test Result
 # ----------------------------------
-echo "**********************************************************************"
+echo -e $BWhite"\n========================================================================"$Reset
+echo -e $BWhite"  System validation result"$Reset
+echo -e $BWhite"========================================================================"$Reset
 
 if [ $ERRORS -gt 0 ]; then
-  echo "FAILED"
+  echo -e $BRed"\n\tFAILED\n\n"$Reset
   exit 1
 fi
 
-echo "PASSED"
+echo -e $BGreen"\n\tPASSED\n\n"$Reset
 
 eval $(docker-machine env -u)

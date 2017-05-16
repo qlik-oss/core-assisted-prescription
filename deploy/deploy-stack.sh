@@ -1,6 +1,7 @@
 #!/bin/bash
 
 cd "$(dirname "$0")" # change execution directory due to use of relative paths
+. ./output-styles.sh
 
 USERNAME=$(id -u -n)
 
@@ -16,8 +17,8 @@ docker stack deploy -c ../docker-compose.yml --with-registry-auth custom-analyti
 
 GW=$(docker-machine ip $USERNAME-docker-manager1)
 echo -e "\n$(docker service ls)"
-echo -e "\n\033[1m\033[93mThen all the replicas for the service is started (this may take several minutes) - \033[0m"
-echo -e "\033[1m\033[93mThe following routes can be accessed: \033[0m"
+echo -e $BYellow"\nThen all the replicas for the service is started (this may take several minutes) -"$Reset
+echo -e $BYellow"The following routes can be accessed:"$Reset
 echo -e "CUSTOM ANALYTICS\t- http://$GW/hellochart/"
 echo -e "KIBANA\t\t\t- http://$GW/kibana/"
 echo -e "DOCKER VISUALIZER\t- http://$GW/viz/"
