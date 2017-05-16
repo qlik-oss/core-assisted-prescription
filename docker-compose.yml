@@ -112,7 +112,7 @@ services:
   # to place the session on.
   # See https://github.com/qlik-ea/qliktive-qix-session-service
   qliktive-qix-session-service:
-    image: qlikea/qliktive-qix-session-service:0.0.1-10
+    image: qlikea/qliktive-qix-session-service:0.0.1-19
     logging:
       driver: "gelf"
       options:
