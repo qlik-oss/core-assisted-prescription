@@ -11,7 +11,7 @@ const baseConfig = {
 const session = {
   secure: false,
   host: 'localhost',
-  route: '/doc/doc/FDA - Drug Cases.qvf',
+  route: '/doc/doc/drugcases.qvf',
 };
 enigma.getService('qix', baseConfig, { session: session}).then((qix) => {
   return qix.global.getActiveDoc().then((doc) => {
