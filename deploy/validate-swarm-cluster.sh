@@ -22,7 +22,7 @@ fi
 ERRORS=0
 
 # Name of services that should be part of the swarm
-services+=("openresty" "engine" "logstash" "kibana" "viz" "elasticsearch" "mira" "qliktive-qix-session-service")
+services+=("openresty" "engine" "logstash" "kibana" "viz" "elasticsearch" "mira" "qliktive-qix-session-service" "redis")
 elk+=( "elasticsearch" "logstash" "kibana" )
 
 # ----------------------------------
