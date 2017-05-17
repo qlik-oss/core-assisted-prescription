@@ -5,12 +5,13 @@ services:
     # This is our externally-facing gateway, exposing the configured
     # things for all end-users. It has the Analytics UI bundled into it.
     # See https://github.com/qlik-ea/qliktive-custom-analytics-openresty
-    image: qlikea/qliktive-custom-analytics-openresty:master-44
+    image: qlikea/qliktive-custom-analytics-openresty:auth-33
     command: -c /etc/nginx/swarm.conf
     restart: always
     ports:
       - "80:80"
     environment:
+      SESSION_COOKIE_NAME: custom-analytics
       KIBANA_HOST: kibana
       KIBANA_PORT: 5601
       VISUALIZER_HOST: viz
@@ -30,6 +31,17 @@ services:
     # up JWTs based on the session cookie, while the authentication service use
     # it to create/delete these entries.
     image: redis:3.0.7-alpine
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+  authentication:
+    # A service handling authentication and JWT generation.
+    image: qlikea/qliktive-authentication-service:0.0.1-7
+    environment:
+      SESSION_COOKIE_NAME: custom-analytics
+      GITHUB_CLIENT_ID: <insert here>
+      GITHUB_CLIENT_SECRET: <insert here>
     deploy:
       placement:
         constraints: [node.role == manager]
