@@ -9,7 +9,7 @@ USERNAME=$(id -u -n)
 ./deploy-data.sh
 
 echo -e "\n========================================================================"
-echo "Deploying stack to docker swarm"
+echo "  Deploying stack to docker swarm"
 echo "========================================================================"
 
 eval $(docker-machine env $USERNAME-docker-manager1)

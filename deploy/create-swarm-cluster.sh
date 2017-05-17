@@ -70,11 +70,11 @@ else
 fi
 
 echo "========================================================================"
-echo "Creating node(s)"
+echo "  Creating node(s)"
 echo "========================================================================"
 
 for i in $(seq 1 $MANAGERS); do
-    echo "== Creating $USERNAME-docker-manager$i machine ...";
+    echo "-> Creating $USERNAME-docker-manager$i machine ...";
     # Do not create managers in parallel if certificates does not exist (generated on first docker-machine create)
     if [ ! -f ~/.docker/machine/certs/ca.pem ]; then
       docker-machine create -d $DRIVER $SWITCH --engine-opt experimental=true --engine-label env=test $USERNAME-docker-manager$i
@@ -89,12 +89,12 @@ for i in $(seq 1 $WORKERS); do
 done
 
 echo "========================================================================"
-echo "Waiting for node(s) to be up and running"
+echo "  Waiting for node(s) to be up and running"
 echo "========================================================================"
 wait
 
 echo "========================================================================"
-echo "Init manager1 as the swarm manager"
+echo "  Init manager1 as the swarm manager"
 echo "========================================================================"
 eval $(docker-machine env $USERNAME-docker-manager1)
 docker swarm init --advertise-addr $(docker-machine ip $USERNAME-docker-manager1) --listen-addr $(docker-machine ip $USERNAME-docker-manager1):2377
@@ -103,21 +103,30 @@ MANAGERTOKEN=$(docker swarm join-token -q manager)
 WORKERTOKEN=$(docker swarm join-token -q worker)
 
 for node in $(seq 1 $WORKERS); do
-    echo "======> worker$node joining swarm as worker ..."
+    echo "-> worker$node joining swarm as worker ..."
     docker-machine ssh $USERNAME-docker-worker$node docker swarm join --token $WORKERTOKEN $(docker-machine ip $USERNAME-docker-manager1):2377
 done
 
 echo "========================================================================"
-echo "Increase available virtual memory on manager nodes due to ELK stack"
+echo "  Increase available virtual memory on manager nodes due to ELK stack"
+echo "  and setting hostname (reboot needed to register in DNS)"
 echo "========================================================================"
 
 for i in $(seq 1 $MANAGERS); do
-  echo "Increasing virtual memory vm.max_map_count on node manager$i for elasticsearch"
-  docker-machine ssh $USERNAME-docker-manager$i sudo sysctl -w vm.max_map_count=262144
+  echo "-> Increasing virtual memory vm.max_map_count on node manager$i for elasticsearch"
   # Add to boot2docker profile so the setting is not lost after a reboot
   docker-machine ssh $USERNAME-docker-manager$i "echo sysctl -w vm.max_map_count=262144 | sudo tee -a /var/lib/boot2docker/profile"
+
+  echo "-> Setting hostname to $USERNAME-docker-manager$i"
+  docker-machine ssh $USERNAME-docker-manager$i "sudo hostname $USERNAME-docker-manager$i"
+
+  echo "-> Restarting $USERNAME-docker-manager$i to register it in the DNS"
+  docker-machine restart $USERNAME-docker-manager$i
 done
 
+echo "========================================================================"
+echo "  STATUS"
+echo "========================================================================"
 echo "-> list swarm nodes"
 docker-machine ssh $USERNAME-docker-manager1 docker node ls
 echo
