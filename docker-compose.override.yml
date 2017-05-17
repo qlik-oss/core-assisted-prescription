@@ -13,7 +13,8 @@ services:
 
   engine:
     volumes:
-      - ./data:/data
+      - ./data/csv:/data
+      - ./data/doc:/doc
 
   mira:
     command: --mode=local

@@ -78,7 +78,8 @@ services:
     image: qlikea/engine:12.15.0
     command: -S TrafficLogVerbosity=5
     volumes:
-      - /home/docker/data:/data
+      - /home/docker/data/csv:/data
+      - /home/docker/data/doc:/doc
     logging:
       driver: "gelf"
       options:

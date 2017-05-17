@@ -9,10 +9,9 @@ const baseConfig = {
 };
 
 const session = {
-  unsecure: true,
+  secure: false,
   host: 'localhost',
-  port: 80,
-  route: '/doc/doc/57dc24b9ef467c0001977248',
+  route: '/doc/doc/FDA - Drug Cases.qvf',
 };
 enigma.getService('qix', baseConfig, { session: session}).then((qix) => {
   return qix.global.getActiveDoc().then((doc) => {
