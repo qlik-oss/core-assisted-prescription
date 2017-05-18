@@ -7,16 +7,16 @@ describe('QIX Session in a swarm', () => {
   let qixGlobal;
   let sessionApp;
 
-  let sessionConfig = {
-    session: {
-      host: getSwarmHost(),
-      secure: false,
-      route: '/doc/session-doc',
-    }
+  let enigmaConfig = getEnigmaBaseConfig();
+
+  enigmaConfig.session = {
+    host: getSwarmHost(),
+    secure: false,
+    route: '/doc/session-doc',
   }
 
   before(() => {
-    return enigma.getService('qix', getEnigmaBaseConfig(), sessionConfig).then((qix) => {
+    return enigma.getService('qix', enigmaConfig).then((qix) => {
       console.log('Connection established');
       qixGlobal = qix.global;
       return qixGlobal.getActiveDoc().then((app) => {
@@ -63,5 +63,3 @@ describe('QIX Session in a swarm', () => {
     })
   });
 });
-
-

@@ -5,11 +5,6 @@ import enigmaMixin from 'halyard.js/dist/halyard-enigma-mixin';
 export function getEnigmaBaseConfig() {
   return {
     schema: qixSchema,
-    session: {
-      host: process.env.SWARMMANAGER || (process.env.USERNAME || process.env.USER) + '-docker-manager1',
-      secure: false,
-      route: '/doc/session-doc',
-    },
     mixins: enigmaMixin,
     identity: generateGUID(),
     createSocket: url => new WebSocket(url),

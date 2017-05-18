@@ -6,18 +6,17 @@ describe('QIX open doc in a swarm', () => {
 
   let qixGlobal;
 
-  let sessionConfig = {
-    session: {
-      host: getSwarmHost(),
-      secure: false,
-      route: '/doc/doc/drugcases.qvf',
-    }
+  let enigmaConfig = getEnigmaBaseConfig();
+
+  enigmaConfig.session = {
+    host: getSwarmHost(),
+    secure: false,
+    route: '/doc/doc/drugcases.qvf',
   }
 
   before(() => {
-    return enigma.getService('qix', getEnigmaBaseConfig(), sessionConfig).then((qix) => {
+    return enigma.getService('qix', enigmaConfig).then((qix) => {
       qixGlobal = qix.global;
-
     }).catch((err) => {
       console.log("error" + err);
     });
@@ -36,5 +35,3 @@ describe('QIX open doc in a swarm', () => {
     });
   });
 });
-
-
