@@ -17,7 +17,6 @@ describe('QIX Session in a swarm', () => {
 
   before(() => {
     return enigma.getService('qix', enigmaConfig).then((qix) => {
-      console.log('Connection established');
       qixGlobal = qix.global;
       return qixGlobal.getActiveDoc().then((app) => {
         sessionApp = app;
@@ -49,8 +48,12 @@ describe('QIX Session in a swarm', () => {
     const filePathMovie = '/data/movies.csv';
     const tableMovie = new Halyard.Table(filePathMovie, {
       name: 'Movies',
-      fields: [{ src: 'Movie', name: 'Movie' }, { src: 'Year', name: 'Year' },
-      { src: 'Adjusted Costs', name: 'Adjusted Costs' }, { src: 'Description', name: 'Description' }, { src: 'Image', name: 'Image' }],
+      fields: [
+        { src: 'Movie', name: 'Movie' },
+        { src: 'Year', name: 'Year' },
+        { src: 'Adjusted Costs', name: 'Adjusted Costs' },
+        { src: 'Description', name: 'Description' },
+        { src: 'Image', name: 'Image' }],
       delimiter: ',',
     });
     halyard.addTable(tableMovie);

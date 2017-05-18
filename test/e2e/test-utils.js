@@ -1,5 +1,5 @@
 import WebSocket from 'ws';
-import qixSchema from '../../node_modules/enigma.js/schemas/qix/3.2/schema.json';
+import qixSchema from '../node_modules/enigma.js/schemas/qix/3.2/schema.json';
 import enigmaMixin from 'halyard.js/dist/halyard-enigma-mixin';
 
 export function getEnigmaBaseConfig() {

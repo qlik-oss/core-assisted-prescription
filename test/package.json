@@ -1,12 +1,12 @@
 {
-  "name": "qliktive-custom-analytics",
+  "name": "qliktive-custom-analytics-test",
   "private": true,
   "version": "0.0.1",
-  "description": "qliktive-custom-analytics",
+  "description": "Test cases for qliktive-custom-analytics use case",
   "author": "Qlik",
   "license": "MIT",
   "scripts": {
-    "test:e2e": "aw-test-runner ./test/e2e --timeout 5000"
+    "test:e2e": "aw-test-runner ./e2e --timeout 5000"
   },
   "devDependencies": {
     "after-work.js": "2.0.0",
