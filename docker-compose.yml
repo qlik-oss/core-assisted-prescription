@@ -15,7 +15,7 @@ services:
       KIBANA_PORT: 5601
       VISUALIZER_HOST: viz
       VISUALIZER_PORT: 8080
-      QIX_SESSION_HOST: qliktive-qix-session-service
+      QIX_SESSION_HOST: qix-session
       QIX_SESSION_PORT: 9455
     logging:
       driver: "gelf"
@@ -79,24 +79,6 @@ services:
       placement:
         constraints: [node.role == manager]
 
-  engine:
-    # QIX Engine is configured to run on all worker nodes in the
-    # cluster, and is the service we primarily want to scale up in
-    # this use-case.
-    image: qlikea/engine:12.21.0
-    command: -S TrafficLogVerbosity=5
-    volumes:
-      - /home/docker/data/csv:/data
-      - /home/docker/data/doc:/doc
-    logging:
-      driver: "gelf"
-      options:
-        gelf-address: "udp://localhost:12201"
-    deploy:
-      mode: global
-      placement:
-        constraints: [node.role == worker]
-
   mira:
     # Mira is our QIX Engine Discovery Service. It provides internal
     # APIs to list (or query) all available QIX Engine containers
@@ -116,11 +98,29 @@ services:
       placement:
         constraints: [node.role == manager]
 
+  qix-engine:
+    # QIX Engine is configured to run on all worker nodes in the
+    # cluster, and is the service we primarily want to scale up in
+    # this use-case.
+    image: qlikea/engine:12.21.0
+    command: -S TrafficLogVerbosity=5
+    volumes:
+      - /home/docker/data/csv:/data
+      - /home/docker/data/doc:/doc
+    logging:
+      driver: "gelf"
+      options:
+        gelf-address: "udp://localhost:12201"
+    deploy:
+      mode: global
+      placement:
+        constraints: [node.role == worker]
+
   # This service handles preparation of sessions against
   # QIX Engines. Uses Mira to find appropriate containers
   # to place the session on.
   # See https://github.com/qlik-ea/qliktive-qix-session-service
-  qliktive-qix-session-service:
+  qix-session:
     image: qlikea/qliktive-qix-session-service:0.0.1-19
     logging:
       driver: "gelf"
