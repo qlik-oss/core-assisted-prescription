@@ -7,7 +7,7 @@ services:
   viz:
     # Not used here, but Docker does not support removing services in override
 
-  engine:
+  qix-engine:
     volumes:
       - ./data/csv:/data
       - ./data/doc:/doc
