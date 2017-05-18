@@ -66,6 +66,18 @@ The following ports are exposed externally. Make sure you update your firewall t
 * 80: Openresty (externally facing gateway).
 * 12201: Logstash UDP input (temporarily needed since logdriver uses host network stack) - should not be accessible externally.
 
+## Test
+
+### E2E testing in swarm
+There is a set of basic e2e tests for verifying qix engine using enigma in a swarm. The test cases are either executed using the default naming convention from the ```create-swarm-cluster.sh```.
+```bash
+$ npm run test:e2e
+```
+or by specifying a specific manager node by hostname or IP
+```bash
+$ SWARMMANAGER=<IP address or hostname> npm run test:e2e
+```
+
 ## Terminology
 
 The terminology used in our use-cases with regards to tools, services, and names can be found in [here](https://github.com/qlik-ea/info/blob/master/terminology.md).
