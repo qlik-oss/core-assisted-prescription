@@ -2,7 +2,7 @@ import WebSocket from 'ws';
 import qixSchema from '../../node_modules/enigma.js/schemas/qix/3.2/schema.json';
 import enigmaMixin from 'halyard.js/dist/halyard-enigma-mixin';
 
-export default function getEnigmaConfig() {
+export function getEnigmaBaseConfig() {
   return {
     schema: qixSchema,
     session: {
@@ -20,6 +20,10 @@ export default function getEnigmaConfig() {
     },
     handleLog: logRow => console.log(logRow),
   };
+}
+
+export function getSwarmHost() {
+  return process.env.SWARMMANAGER || (process.env.USERNAME || process.env.USER) + '-docker-manager1'
 }
 
 let generateGUID = () => 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {

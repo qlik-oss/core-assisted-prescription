@@ -1,14 +1,22 @@
 import Halyard from 'halyard.js';
 import enigma from 'enigma.js';
-import getEnigmaConfig from './test-utils'
+import { getEnigmaBaseConfig, getSwarmHost } from './test-utils'
 
 describe('QIX Session in a swarm', () => {
 
   let qixGlobal;
   let sessionApp;
 
+  let sessionConfig = {
+    session: {
+      host: getSwarmHost(),
+      secure: false,
+      route: '/doc/session-doc',
+    }
+  }
+
   before(() => {
-    return enigma.getService('qix', getEnigmaConfig()).then((qix) => {
+    return enigma.getService('qix', getEnigmaBaseConfig(), sessionConfig).then((qix) => {
       console.log('Connection established');
       qixGlobal = qix.global;
       return qixGlobal.getActiveDoc().then((app) => {
@@ -38,7 +46,7 @@ describe('QIX Session in a swarm', () => {
 
   it('load data into session app using halyard', () => {
     const halyard = new Halyard();
-    const filePathMovie = '../../data/movies.csv';
+    const filePathMovie = '/data/movies.csv';
     const tableMovie = new Halyard.Table(filePathMovie, {
       name: 'Movies',
       fields: [{ src: 'Movie', name: 'Movie' }, { src: 'Year', name: 'Year' },
@@ -47,15 +55,12 @@ describe('QIX Session in a swarm', () => {
     });
     halyard.addTable(tableMovie);
 
-    return sessionApp.setScript(halyard.getScript()).then(() => {
-      return sessionApp.doReload().then(() => {
-        return sessionApp.getField('Movie').then((res) => console.log("field" + res));
-      });
-    });
-
-    // qixGlobal.setScriptAndReloadWithHalyard(sessionApp, halyard, false).then((result) => {
-    //   console.log("res" + result);
-    // })
+    return qixGlobal.setScriptAndReloadWithHalyard(sessionApp, halyard, false).then(() => {
+      return sessionApp.getAppLayout().then((layout) => {
+        expect(layout.qHasScript).to.be.true;
+        expect(layout.qHasData).to.be.true;
+      })
+    })
   });
 });
 

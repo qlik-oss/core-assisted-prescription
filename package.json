@@ -11,7 +11,7 @@
   "devDependencies": {
     "after-work.js": "2.0.0",
     "enigma.js": "1.1.1",
-    "halyard.js": "1.0.1",
+    "halyard.js": "1.1.0",
     "ws": "2.2.3"
   }
 }
