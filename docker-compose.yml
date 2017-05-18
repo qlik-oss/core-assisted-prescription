@@ -5,10 +5,18 @@ services:
     # This is our externally-facing gateway, exposing the configured
     # things for all end-users. It has the Analytics UI bundled into it.
     # See https://github.com/qlik-ea/qliktive-custom-analytics-openresty
-    image: qlikea/qliktive-custom-analytics-openresty:master-28
+    image: qlikea/qliktive-custom-analytics-openresty:master-44
     command: -c /etc/nginx/swarm.conf
+    restart: always
     ports:
       - "80:80"
+    environment:
+      KIBANA_HOST: kibana
+      KIBANA_PORT: 5601
+      VISUALIZER_HOST: viz
+      VISUALIZER_PORT: 8080
+      QIX_SESSION_HOST: qliktive-qix-session-service
+      QIX_SESSION_PORT: 9455
     logging:
       driver: "gelf"
       options:
@@ -75,7 +83,7 @@ services:
     # QIX Engine is configured to run on all worker nodes in the
     # cluster, and is the service we primarily want to scale up in
     # this use-case.
-    image: qlikea/engine:12.15.0
+    image: qlikea/engine:12.21.0
     command: -S TrafficLogVerbosity=5
     volumes:
       - /home/docker/data/csv:/data

@@ -4,10 +4,6 @@ version: "3.1"
 # not used when deploying to Swarm.
 
 services:
-  openresty:
-    command: -c /etc/nginx/compose.conf
-    restart: always
-
   viz:
     # Not used here, but Docker does not support removing services in override
 
