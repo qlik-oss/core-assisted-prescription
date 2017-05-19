@@ -103,7 +103,7 @@ services:
     # cluster, and is the service we primarily want to scale up in
     # this use-case.
     image: qlikea/engine:12.21.0
-    command: -S TrafficLogVerbosity=5
+    command: -S TrafficLogVerbosity=5 -S EnableTTL=1
     volumes:
       - /home/docker/data/csv:/data
       - /home/docker/data/doc:/doc
@@ -121,7 +121,7 @@ services:
   # to place the session on.
   # See https://github.com/qlik-ea/qliktive-qix-session-service
   qix-session:
-    image: qlikea/qliktive-qix-session-service:0.0.1-21
+    image: qlikea/qliktive-qix-session-service:0.0.1-23
     logging:
       driver: "gelf"
       options:
