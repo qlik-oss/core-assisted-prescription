@@ -25,13 +25,13 @@ You can easily start this use-case locally, without any Swarm deployment, by usi
 Simply run:
 
 ```bash
-$ docker-compose -f docker-compose.yml -f docker-compose.override.yml up
+$ docker-compose up
 ```
 
 or in detached mode (recommended):
 
 ```bash
-$ docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d
+$ docker-compose up -d
 ```
 
 You access it at http://localhost/. Read more in the [Routes section](#routes) about your available options.
