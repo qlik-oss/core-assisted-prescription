@@ -6,7 +6,8 @@
   "author": "Qlik",
   "license": "MIT",
   "scripts": {
-    "test:e2e": "aw-test-runner ./e2e --timeout 5000"
+    "test:e2e": "aw-test-runner ./e2e --timeout 5000",
+    "test:e2e:swarm": "env SWARM=true npm run test:e2e"
   },
   "devDependencies": {
     "after-work.js": "2.0.0",

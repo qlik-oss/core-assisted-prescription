@@ -1,21 +1,21 @@
 import Halyard from 'halyard.js';
 import enigma from 'enigma.js';
-import { getEnigmaBaseConfig, getSwarmHost } from './test-utils'
+import { getEnigmaBaseConfig, getTestHost } from './test-utils'
 
 describe('QIX Session in a swarm', () => {
 
   let qixGlobal;
   let sessionApp;
 
-  let enigmaConfig = getEnigmaBaseConfig();
+  beforeEach(() => {
+    let enigmaConfig = getEnigmaBaseConfig();
 
-  enigmaConfig.session = {
-    host: getSwarmHost(),
-    secure: false,
-    route: '/doc/session-doc',
-  }
-
-  before(() => {
+    enigmaConfig.session = {
+      host: getTestHost(),
+      secure: false,
+      route: '/doc/session-doc',
+    }
+    
     return enigma.getService('qix', enigmaConfig).then((qix) => {
       qixGlobal = qix.global;
       return qixGlobal.getActiveDoc().then((app) => {
@@ -26,7 +26,7 @@ describe('QIX Session in a swarm', () => {
     });
   });
 
-  after(() => {
+  afterEach(() => {
     qixGlobal.session.on('error', () => { });
     return qixGlobal.session.close().then(() => qixGlobal = null);
   });

@@ -17,8 +17,8 @@ export function getEnigmaBaseConfig() {
   };
 }
 
-export function getSwarmHost() {
-  return process.env.SWARMMANAGER || (process.env.USERNAME || process.env.USER) + '-docker-manager1'
+export function getTestHost() {
+  return process.env.SWARM ? process.env.SWARMMANAGER || (process.env.USERNAME || process.env.USER) + '-docker-manager1' : 'localhost';
 }
 
 let generateGUID = () => 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
