@@ -25,7 +25,7 @@ There are a number of environment variables needed to deploy using vSphere e.g. 
 
 Step-by-step:
 
-1. To spin up a environment there is a script [here](./environment.sh). 
+1. To spin up a environment there is a script [here](./create-swarm-cluster.sh). 
     For a local environment setup in Windows:
     ```bash
     $ ./deploy/create-swarm-cluster.sh -d local -v <virtual network switch name>
