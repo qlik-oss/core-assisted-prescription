@@ -65,7 +65,7 @@ else
   else
     # Non-Windows - Use Virtualbox and omit virtual switch.
     DRIVER=virtualbox
-    SWITCH=
+    SWITCH="--virtualbox-memory 2048"
   fi
 fi
 
@@ -122,6 +122,23 @@ for i in $(seq 1 $MANAGERS); do
 
   echo "-> Restarting $USERNAME-docker-manager$i to register it in the DNS"
   docker-machine restart $USERNAME-docker-manager$i
+done
+
+echo "========================================================================"
+echo "  Re-provisioning the nodes to make sure certificates and network is"
+echo "  set up properly"
+echo "========================================================================"
+
+for i in $(seq 1 $MANAGERS); do
+  node=$USERNAME-docker-manager$i
+  echo "-> Re-provisioning $node..."
+  docker-machine provision $node
+done
+
+for i in $(seq 1 $WORKERS); do
+  node=$USERNAME-docker-worker$i
+  echo "-> Re-provisioning $node..."
+  docker-machine provision $node
 done
 
 echo "========================================================================"
