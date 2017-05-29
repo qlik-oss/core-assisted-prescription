@@ -1,0 +1,14 @@
+version: 2
+jobs: 
+  build:
+    docker:
+      - image: node:7
+    working_directory: ~/qlik-custom-analytics/test
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: npm install --quiet
+      - run:
+          name: Run ESLint
+          command: npm run lint
