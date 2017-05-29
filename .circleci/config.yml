@@ -12,3 +12,6 @@ jobs:
       - run:
           name: Run ESLint
           command: npm run lint
+      - run:
+          name: Validate docker-compose files
+          command: npm run validate:compose
