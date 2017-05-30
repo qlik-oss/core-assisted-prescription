@@ -3,7 +3,7 @@ jobs:
   build:
     docker:
       - image: node:7
-    working_directory: ~/qlik-custom-analytics/test
+    working_directory: ~/qliktive-custom-analytics/test
     steps:
       - checkout
       - run:
