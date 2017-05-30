@@ -21,7 +21,7 @@ describe('QIX Session in a swarm', () => {
         sessionApp = app;
       });
     }).catch((err) => {
-      console.log(`error${err}`);
+      console.log(`error: ${err}`);
     });
   });
 

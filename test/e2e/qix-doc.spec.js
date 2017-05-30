@@ -16,7 +16,7 @@ describe('QIX open doc in a swarm', () => {
     return enigma.getService('qix', enigmaConfig).then((qix) => {
       qixGlobal = qix.global;
     }).catch((err) => {
-      console.log(`error${err}`);
+      console.log(`error: ${err}`);
     });
   });
 
