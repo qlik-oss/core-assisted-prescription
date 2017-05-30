@@ -3,15 +3,17 @@ jobs:
   build:
     docker:
       - image: node:7
-    working_directory: ~/qliktive-custom-analytics/test
+    working_directory: ~/qliktive-custom-analytics
     steps:
       - checkout
       - run:
           name: Install dependencies
           command: npm install --quiet
+          working_directory: ~/qliktive-custom-analytics/test
       - run:
           name: Run ESLint
           command: npm run lint
+          working_directory: ~/qliktive-custom-analytics/test
       - run:
           name: Install Docker Compose
           command: |
@@ -21,3 +23,4 @@ jobs:
       - run:
           name: Validate docker-compose files
           command: npm run validate:compose
+          working_directory: ~/qliktive-custom-analytics/test
