@@ -64,3 +64,25 @@ There is a small set of [tests](./validate-swarm-cluster.sh) that can validate a
 ```bash
 $ ./deploy/validate-swarm-cluster.sh
 ```
+
+## Scale
+
+Assuming that a swarm has been deployed with a fixed set of manager and worker nodes, there might be a need for scaling the swarm either up or down in size. For this use-case the scaling is focussed on the availability of nodes running with qix engine containers, hence we should scale worker nodes.
+
+To scale nodes up:
+
+```bash
+$ ./deploy/scale-nodes.sh up <number of nodes>
+```
+
+or down:
+
+```bash
+$ ./deploy/scale-nodes.sh down <number of nodes>
+```
+
+or with fixed set of nodes, regardless if scaling up or down:
+
+```bash
+$ ./deploy/scale-nodes.sh <total number of nodes>
+```
