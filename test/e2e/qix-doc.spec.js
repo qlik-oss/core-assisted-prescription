@@ -9,7 +9,6 @@ describe('QIX open doc in a swarm', () => {
 
     enigmaConfig.session = {
       host: getTestHost(),
-      secure: false,
       route: '/doc/doc/drugcases.qvf',
     };
 
