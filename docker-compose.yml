@@ -39,11 +39,22 @@ services:
 
   auth:
     # A service handling authentication and JWT generation.
-    image: qlikea/qliktive-authentication-service:0.0.1-7
+    image: qlikea/qliktive-authentication-service:0.0.1-32
+    secrets:
+      - github_client_id
+      - github_client_secret
+      - jwt_secret
+      - cookie_signing
     environment:
       SESSION_COOKIE_NAME: custom-analytics
-      GITHUB_CLIENT_ID: <insert here>
-      GITHUB_CLIENT_SECRET: <insert here>
+      GITHUB_CLIENT_ID_FILE: /run/secrets/github_client_id
+      GITHUB_CLIENT_SECRET_FILE: /run/secrets/github_client_secret
+      JWT_SECRET_FILE: /run/secrets/jwt_secret
+      COOKIE_SIGNING_FILE: /run/secrets/cookie_signing
+    logging:
+      driver: "gelf"
+      options:
+        gelf-address: "udp://localhost:12201"
     deploy:
       placement:
         constraints: [node.role == manager]
@@ -143,3 +154,13 @@ services:
     deploy:
       placement:
         constraints: [node.role == manager]
+
+secrets:
+  github_client_id:
+    file: ./secrets/GITHUB_CLIENT_ID
+  github_client_secret:
+    file: ./secrets/GITHUB_CLIENT_SECRET
+  jwt_secret:
+    file: ./secrets/JWT_SECRET
+  cookie_signing:
+    file: ./secrets/COOKIE_SIGNING

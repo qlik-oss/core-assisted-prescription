@@ -1,19 +1,20 @@
 #!/bin/bash
 
 cd "$(dirname "$0")" # change execution directory due to use of relative paths
-. ./output-styles.sh
+cd .. # needs to be run in root to get secrets corretly
+./deploy/output-styles.sh
 
 USERNAME=$(id -u -n)
 
 # deploy data to all worker nodes so that it can be accessed locally:
-./deploy-data.sh
+./deploy/deploy-data.sh
 
 echo -e "\n========================================================================"
 echo "  Deploying stack to docker swarm"
 echo "========================================================================"
 
 eval $(docker-machine env $USERNAME-docker-manager1)
-docker stack deploy -c ../docker-compose.yml --with-registry-auth custom-analytics
+docker stack deploy -c ./docker-compose.yml --with-registry-auth custom-analytics
 
 GW=$(docker-machine ip $USERNAME-docker-manager1)
 echo -e "\n$(docker service ls)"
