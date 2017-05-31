@@ -18,7 +18,7 @@
 
 ### Versions
 
-* qliktive-custom-analytics-ui: (Please use the current hash of the project until versioning is introduced)
+* qliktive-custom-analytics: (Please use the current hash of the project until versioning is introduced)
 * Browser:
 * Operating system:
 * [Other relevant versions]
