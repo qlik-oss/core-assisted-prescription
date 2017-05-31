@@ -6,7 +6,7 @@ USERNAME=$(id -u -n)
 print_usage () {
   echo
   echo "Usage:"
-  echo "  scale-nodes.sh [<total number of nodes>] [up|down <number of nodes>]"
+  echo "  scale-workers.sh [<total number of nodes>] [up|down <number of nodes>]"
   echo "  [<total number of nodes>] - Optional arg, scale swarm to <total number of nodes> nodes"
   echo "  [up|down <number of nodes>] - Optional arg, scale swarm up or down with <nbr of nodes> nodes".
 }

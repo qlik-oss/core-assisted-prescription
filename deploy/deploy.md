@@ -74,17 +74,17 @@ There is no logic handling of active sessions on nodes being scaled down, so in 
 To scale nodes up:
 
 ```bash
-$ ./deploy/scale-nodes.sh up <number of nodes>
+$ ./deploy/scale-workers.sh up <number of nodes>
 ```
 
 or down:
 
 ```bash
-$ ./deploy/scale-nodes.sh down <number of nodes>
+$ ./deploy/scale-workers.sh down <number of nodes>
 ```
 
 or with fixed set of nodes, regardless if scaling up or down:
 
 ```bash
-$ ./deploy/scale-nodes.sh <total number of nodes>
+$ ./deploy/scale-workers.sh <total number of nodes>
 ```
