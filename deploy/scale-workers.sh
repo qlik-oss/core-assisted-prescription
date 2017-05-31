@@ -6,9 +6,12 @@ USERNAME=$(id -u -n)
 print_usage () {
   echo
   echo "Usage:"
-  echo "  scale-workers.sh [<total number of nodes>] [up|down <number of nodes>]"
-  echo "  [<total number of nodes>] - Optional arg, scale swarm to <total number of nodes> nodes"
-  echo "  [up|down <number of nodes>] - Optional arg, scale swarm up or down with <nbr of nodes> nodes".
+  echo "  scale-workers.sh [<total number of nodes>] | [up|down <number of nodes>]"
+  echo "  [<total number of nodes>] - Scale swarm to <total number of nodes> nodes"
+  echo "  [up|down <number of nodes>] - Scale swarm up or down with <number of nodes> nodes"
+  echo ""
+  echo "  Choose to either scale swarm to a fixed number of nodes, or the number of nodes to scale up/down."
+  echo "  The swarm should have atleast one worker node."
 }
 
 while [[ $# -gt 0 ]]
@@ -47,7 +50,8 @@ if [[ $EXISTING_MACHINES == *"vmwarevsphere"* ]]; then
   SWITCH=
 elif [[ $EXISTING_MACHINES == *"hyperv"* ]]; then
   DRIVER=hyperv
-  VIRTUAL=$(docker-machine inspect $USERNAME-docker-manager1 | sed -n 's/.*"VSwitch": "\(.*\)",/\1/p') # Get virtual switch used for HyperV in Windows
+  # Get virtual switch used for HyperV in Windows
+  VIRTUAL=$(docker-machine inspect $USERNAME-docker-manager1 | sed -n 's/.*"VSwitch": "\(.*\)",/\1/p')
   SWITCH="--hyperv-memory 2048 --hyperv-virtual-switch $VIRTUAL"
 elif [[ $EXISTING_MACHINES == *"virtualbox"* ]]; then
   DRIVER=virtualbox
@@ -73,8 +77,13 @@ elif [ $REMOVE_WORKERS ]; then
   TOTAL_WORKERS=$(($EXISTING_WORKERS-$REMOVE_WORKERS))
 fi
 
+
+if [[ $TOTAL_WORKERS -lt 1 ]]; then
+  echo "Trying to scale worker nodes to less than one worker. Swarm should have atleast one worker node"
+  print_usage
+  exit 1
 # Scaling up
-if [[ $TOTAL_WORKERS -gt $EXISTING_WORKERS ]]; then
+elif [[ $TOTAL_WORKERS -gt $EXISTING_WORKERS ]]; then
   echo "========================================================================"
   echo "  Creating worker node(s)"
   echo "========================================================================"
