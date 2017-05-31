@@ -1,5 +1,6 @@
 #!/bin/bash
 
+cd "$(dirname "$0")" # change execution directory due to use of relative paths
 USERNAME=$(id -u -n)
 
 print_usage () {
@@ -98,6 +99,9 @@ if [[ $TOTAL_WORKERS -gt $EXISTING_WORKERS ]]; then
     docker-machine ssh $USERNAME-docker-worker$i docker swarm join --token $WORKERTOKEN $(docker-machine ip $USERNAME-docker-manager1):2377
   done
 
+  # deploy data to all worker nodes so that it can be accessed locally
+  ./deploy-data.sh
+
 # Scaling down
 elif [[ $TOTAL_WORKERS -lt $EXISTING_WORKERS ]]; then
   echo "========================================================================"
@@ -108,7 +112,9 @@ elif [[ $TOTAL_WORKERS -lt $EXISTING_WORKERS ]]; then
   # Remove worker nodes in reverse order
   for i in $(seq $EXISTING_WORKERS -1 $(($TOTAL_WORKERS+1))); do
     echo "-> Removing $USERNAME-docker-worker$i machine ..."
-    docker-machine rm -y $USERNAME-docker-worker$i
+    docker-machine ssh $USERNAME-docker-worker$i docker swarm leave # remove worker node from swarm
+    docker-machine ssh $USERNAME-docker-manager1 docker node rm -f $USERNAME-docker-worker$i # remove worker node from manager node list
+    docker-machine rm -y $USERNAME-docker-worker$i # remove docker-machine
   done
 fi
 
