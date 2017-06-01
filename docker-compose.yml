@@ -97,7 +97,7 @@ services:
   viz:
     # A swarm visualizer, enables us to view what the cluster
     # looks like, which services are running on which nodes etc.
-    image: dockersamples/visualizer:stable
+    image: dockersamples/visualizer:latest
     volumes:
      - /var/run/docker.sock:/var/run/docker.sock
     deploy:
@@ -141,11 +141,11 @@ services:
       placement:
         constraints: [node.role == worker]
 
-  # This service handles preparation of sessions against
-  # QIX Engines. Uses Mira to find appropriate containers
-  # to place the session on.
-  # See https://github.com/qlik-ea/qliktive-qix-session-service
   qix-session:
+    # This service handles preparation of sessions against
+    # QIX Engines. Uses Mira to find appropriate containers
+    # to place the session on.
+    # See https://github.com/qlik-ea/qliktive-qix-session-service
     image: qlikea/qliktive-qix-session-service:0.0.1-23
     logging:
       driver: "gelf"
