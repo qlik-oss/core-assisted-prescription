@@ -1,6 +1,6 @@
 # Deploying the use-case
 
-This document contains examples and step-by-steps for deployment into different environments.
+Deployment of the use case can be done both to the AWS environments (_to be documented_) and to a Swarm cluster provided by the developer. This section contains examples and step-by-steps for deployment into such different environments.
 
 ## Prerequisites
 

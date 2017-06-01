@@ -1,6 +1,6 @@
 # Testing
 
-This section describes how to run tests on the use case.
+End-to-end tests on the use case are configured to run periodically on the staging environment. Promotion to the production environment only takes place after all tests successfully pass in staging.
 
 Note that according the [Qlik Elastic Testing Strategy](https://github.com/qlik-ea/info/blob/master/docs/testing-strategy.md), it is assumed that all services and components are fully tested in their own scope, before integrating them into a use case like this, or into a larger solution.
 

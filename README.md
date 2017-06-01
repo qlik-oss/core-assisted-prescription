@@ -54,25 +54,14 @@ The following ports are exposed externally. Make sure you update your firewall t
 * 80: Openresty (externally facing gateway).
 * 12201: Logstash UDP input (temporarily needed since logdriver uses host network stack) - should not be accessible externally.
 
-## Development
+## Developing
 
-### Prerequisites
-
-* Access to the `qlikea` Docker Hub organization
-* Docker installed (latest release)
-* Logged in to Docker
-* Clone this repo
-
-Read more about developing this use case [here](./docs/developing.md).
+Developing this use case is covered in the [Developing](./docs/developing.md) section.
 
 ## Testing
 
-End-to-end tests on the use case are configured to run periodically on the staging environment. Promotion to the production environment only takes place after all tests successfully pass in staging.
+Resting this use case is covered in the [Testing](./docs/testing.md) section.
 
-Read more about testing this use case [here](./docs/testing.md)
-
-## Deployment
-
-Deployment of the use case can be done both to the AWS environments and locally, to a Swarm cluster provided by the developer.
+## Deploying
 
 Read more about deployment of this use case [here](./docs/deployment.md)
