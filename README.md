@@ -1,6 +1,6 @@
 # qliktive-custom-analytics
 
-Read more about the use-case background [here](https://github.com/qlik-ea/info/tree/master/use-case-custom-analytics).
+Read more about the use-case background [here](https://github.com/qlik-ea/info/tree/master/docs/use-cases/use-case-custom-analytics).
 
 **Warning**: This repo is under heavy development, we cannot guarantee that it works as described yet. Use at your own risk.
 
@@ -101,7 +101,7 @@ $ SWARMMANAGER=<IP address or hostname> npm run test:e2e:swarm
 
 ## Terminology
 
-The terminology used in our use-cases with regards to tools, services, and names can be found in [here](https://github.com/qlik-ea/info/blob/master/terminology.md).
+The terminology used in our use-cases with regards to tools, services, and names can be found in [here](https://github.com/qlik-ea/info/blob/master/docs/terminology.md).
 
 ## Orchestration & Deployment
 
