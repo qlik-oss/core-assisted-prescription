@@ -86,7 +86,7 @@ services:
   viz:
     # A swarm visualizer, enables us to view what the cluster
     # looks like, which services are running on which nodes etc.
-    image: manomarks/visualizer:latest
+    image: dockersamples/visualizer:stable
     volumes:
      - /var/run/docker.sock:/var/run/docker.sock
     deploy:

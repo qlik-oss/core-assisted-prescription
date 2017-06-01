@@ -6,12 +6,18 @@
   "author": "Qlik",
   "license": "MIT",
   "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "test:e2e": "aw-test-runner ./e2e --timeout 5000",
-    "test:e2e:swarm": "env SWARM=true npm run test:e2e"
+    "test:e2e:swarm": "env SWARM=true npm run test:e2e",
+    "validate:compose": "docker-compose -f ../docker-compose.yml -f ../docker-compose.override.yml config"
   },
   "devDependencies": {
     "after-work.js": "2.0.0",
     "enigma.js": "1.1.1",
+    "eslint": "3.19.0",
+    "eslint-config-airbnb-base": "11.2.0",
+    "eslint-plugin-import": "2.3.0",
     "halyard.js": "1.1.0",
     "ws": "2.2.3"
   }

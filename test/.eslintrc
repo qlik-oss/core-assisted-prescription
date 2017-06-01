@@ -1,0 +1,15 @@
+{
+  "env": {
+    "jasmine": true
+  },
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "extends": "airbnb-base",
+  "rules": {
+    "import/no-extraneous-dependencies": 0, // to allow devDependencies in package.json
+    "no-console": 0, // console is used for test logging,
+    "no-unused-expressions": 0 // chai expect triggers this lint rule
+  },
+  "root": true
+}

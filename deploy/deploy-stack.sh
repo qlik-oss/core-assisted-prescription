@@ -19,6 +19,6 @@ GW=$(docker-machine ip $USERNAME-docker-manager1)
 echo -e "\n$(docker service ls)"
 echo -e $BYellow"\nThen all the replicas for the service is started (this may take several minutes) -"$Reset
 echo -e $BYellow"The following routes can be accessed:"$Reset
-echo -e "CUSTOM ANALYTICS\t- http://$GW/hellochart/"
-echo -e "KIBANA\t\t\t- http://$GW/kibana/"
-echo -e "DOCKER SWARM VISUALIZER\t- http://$GW/viz/"
+echo -e "CUSTOM ANALYTICS         - http://$GW/hellochart/"
+echo -e "KIBANA                   - http://$GW/kibana/"
+echo -e "DOCKER SWARM VISUALIZER  - http://$GW/viz/"

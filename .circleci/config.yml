@@ -1,0 +1,26 @@
+version: 2
+jobs: 
+  build:
+    docker:
+      - image: node:7
+    working_directory: ~/qliktive-custom-analytics
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: npm install --quiet
+          working_directory: ~/qliktive-custom-analytics/test
+      - run:
+          name: Run ESLint
+          command: npm run lint
+          working_directory: ~/qliktive-custom-analytics/test
+      - run:
+          name: Install Docker Compose
+          command: |
+            set -x
+            curl -L https://github.com/docker/compose/releases/download/1.11.2/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+            chmod +x /usr/local/bin/docker-compose
+      - run:
+          name: Validate docker-compose files
+          command: npm run validate:compose
+          working_directory: ~/qliktive-custom-analytics/test
