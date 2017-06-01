@@ -18,7 +18,7 @@
 
 ### Versions
 
-* qliktive-custom-analytics: (Please use output of git rev-parse HEAD)
+* qliktive-custom-analytics: (`git rev-parse HEAD`)
 * Browser:
 * Operating system:
 * Docker version: (`docker --version`)
