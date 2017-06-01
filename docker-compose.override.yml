@@ -17,7 +17,6 @@ services:
 
   auth:
     environment:
-      SESSION_COOKIE_NAME: custom-analytics
       GITHUB_CLIENT_ID: -template-
       GITHUB_CLIENT_SECRET: -template-
       JWT_SECRET: jwtsecret
