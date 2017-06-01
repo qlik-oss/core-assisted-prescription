@@ -4,6 +4,9 @@ version: "3.1"
 # not used when deploying to Swarm.
 
 services:
+  openresty:
+    volumes:
+      - /path/to/local/ui:/usr/local/openresty/nginx/html/dev
   viz:
     # Not used here, but Docker does not support removing services in override
 
