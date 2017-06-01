@@ -16,6 +16,12 @@ The repository contains the service stack and various scripts and tools to deplo
 
 The terminology used in this documentation with regards to technologies, tools, services, and names can be found in [here](https://github.com/qlik-ea/info/blob/master/terminology.md).
 
+```bash
+$ ./deploy/create-certs.sh -a localhost
+```
+
+After that, simply run:
+
 ## AWS deployment
 
 The use case and the web UI being hosted on AWS can be reached at
@@ -51,7 +57,7 @@ This use case is primarily about consuming a UI-based analytics website, and we 
 
 The following ports are exposed externally. Make sure you update your firewall to allow/decline access to these!
 
-* 80: Openresty (externally facing gateway).
+* 443: Openresty (externally facing gateway).
 * 12201: Logstash UDP input (temporarily needed since logdriver uses host network stack) - should not be accessible externally.
 
 ## Developing

@@ -4,6 +4,10 @@ version: "3.1"
 # not used when deploying to Swarm.
 
 services:
+  openresty:
+    volumes:
+      - ./secrets:/run
+
   viz:
     # Not used here, but Docker does not support removing services in override
 
@@ -14,3 +18,10 @@ services:
 
   mira:
     command: --mode=local
+
+  auth:
+    environment:
+      GITHUB_CLIENT_ID: -template-
+      GITHUB_CLIENT_SECRET: -template-
+      JWT_SECRET: jwtsecret
+      COOKIE_SIGNING: cookiesign

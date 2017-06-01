@@ -9,5 +9,5 @@ echo "========================================================================"
 for i in $(seq 1 $WORKERS); do
   MACHINE=$USERNAME-docker-worker$i
   echo "-> deploying data to $MACHINE"
-  docker-machine scp -r ../data $MACHINE:/home/docker/
+  docker-machine scp -r ./data $MACHINE:/home/docker/
 done

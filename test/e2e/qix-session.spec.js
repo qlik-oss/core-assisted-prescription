@@ -11,7 +11,6 @@ describe('QIX Session in a swarm', () => {
 
     enigmaConfig.session = {
       host: getTestHost(),
-      secure: false,
       route: '/doc/session-doc',
     };
 
