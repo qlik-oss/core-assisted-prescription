@@ -19,13 +19,19 @@ For development purposes, the stack can be run on the local Docker Engine a deve
 
 ### Locally without Docker Swarm
 
-You can easily start this use case locally on a developer machine, without any Swarm cluster, by using `docker-compose`.
+You need to generate certificates the first time you want to start this project
+
+```sh
+$ ./deploy/create-certs.sh -a localhost
+```
+
+Then, you can easily start this use case locally on a developer machine, without any Swarm cluster, by using `docker-compose`.
 
 ```sh
 $ docker-compose up -d
 ```
 
-This starts all services in detached mode (recommended). You access it at http://localhost/.
+This starts all services in detached mode (recommended). You access it at https://localhost/.
 
 ### With Docker Swarm
 
