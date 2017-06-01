@@ -74,7 +74,7 @@ This use-case is primarily about consuming a UI-based analytics website, and we 
 
 The following ports are exposed externally. Make sure you update your firewall to allow/decline access to these!
 
-* 80: Openresty (externally facing gateway).
+* 443: Openresty (externally facing gateway).
 * 12201: Logstash UDP input (temporarily needed since logdriver uses host network stack) - should not be accessible externally.
 
 ## Test
