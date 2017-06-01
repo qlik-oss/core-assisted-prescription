@@ -30,9 +30,9 @@ do
   shift # past arg
 done
 
-echo "\n========================================================================"
-echo "  Setting up deployment certificates"
-echo "========================================================================"
+echo -e "\n========================================================================"
+echo -e "  Setting up deployment certificates"
+echo -e "========================================================================"
 
 if [[ -z "$ADDRESS" ]]; then
   echo "-> Failure: you need to pass in the hostname/ip of the deployment using -a"
@@ -50,5 +50,10 @@ fi
 
 echo "-> Creating new certificates..."
 
-SUBJECT="/O=Global Security/CN=$ADDRESS"
+if [[ $(uname -o) == "Msys" ]]; then
+  # https://stackoverflow.com/questions/31506158/running-openssl-from-a-bash-script-on-windows-subject-does-not-start-with
+  SUBJECT="//O=Global Security\CN=$ADDRESS"
+else
+  SUBJECT="/O=Global Security/CN=$ADDRESS"
+fi
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $CERT_KEY -out $CERT_FILE -subj "$SUBJECT"
