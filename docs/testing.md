@@ -1,0 +1,35 @@
+# Testing
+
+This section describes how to run tests on the use case.
+
+Note that according the [Qlik Elastic Testing Strategy](https://github.com/qlik-ea/info/blob/master/docs/testing-strategy.md), it is assumed that all services and components are fully tested in their own scope, before integrating them into a use case like this, or into a larger solution.
+
+Testing on the use case/system level shall ensure that the collaboration of services in the stack fulfill the requirements of the use case.
+
+## Testing the stack locally
+
+There is a set of basic end-to-end tests for verifying QIX Engine using [enigma.js](https://github.com/qlik-oss/enigma.js/).
+
+### Without Docker Swarm
+
+To execute tests on a local setup without Swarm, i.e. the services were started using `docker-compose`
+
+```sh
+$ cd test
+$ npm run test:e2e
+```
+
+### With Docker Swarm
+
+To execute test in a Swarm deployment using the default naming convention from the ```create-swarm-cluster.sh```, run
+
+```sh
+$ cd test
+$ npm run test:e2e:swarm
+```
+
+Or, by specifying a specific manager node by hostname or IP, run
+
+```sh
+$ SWARMMANAGER=<IP address or hostname> npm run test:e2e:swarm
+```

@@ -1,57 +1,40 @@
 # qliktive-custom-analytics
 
-Read more about the use-case background [here](https://github.com/qlik-ea/info/tree/master/use-case-custom-analytics).
-
-**Warning**: This repo is under heavy development, we cannot guarantee that it works as described yet. Use at your own risk.
-
-This repo contains the Qliktive use-case we call "Custom Analytics UI". It's all about scaling a specific document, to many users (one engine, one document, many users), using Docker Swarm for cluster management.
+**Warning**: This repo is under heavy development. We cannot guarantee that it works as described yet. Use at your own risk.
 
 ## Status
+
 [![CircleCI](https://circleci.com/gh/qlik-ea/qliktive-custom-analytics.svg?style=svg&circle-token=087152b4808d5373a8dcbbe82c2ff352e463a3a2)](https://circleci.com/gh/qlik-ea/qliktive-custom-analytics)
 
-## Services
+## Introduction
 
-See the [docker-compose.yml](docker-compose.yml) file.
+This repo contains the implementation of the Qliktive use case called "Custom Analytics UI". It's about serving a data visualization UI on the web to many users based on one single QIX Engine document. The deployment is hosted on AWS and uses Docker Swarm for container orchestration. Read more about Qliktive use case backgrounds [here](https://github.com/qlik-ea/info/).
 
-## Setup
+The repository contains the service stack and various scripts and tools to deploy the stack to AWS environments, as well as being able to develop and test the use case locally on a developer machine.
 
-Before starting, make sure you have access to `qlikea` Docker Hub organization.
+## Terminology
 
-1. Install docker (or make sure you are using the latest Docker release)
-2. Docker login
-3. Clone this repository
+The terminology used in this documentation with regards to technologies, tools, services, and names can be found in [here](https://github.com/qlik-ea/info/blob/master/terminology.md).
 
-## Starting it
+## AWS deployment
 
-### Local
+The use case and the web UI being hosted on AWS can be reached at
 
-You can easily start this use-case locally, without any Swarm deployment, by using `docker-compose`.
+**TODO: Provide link**
 
-Simply run:
+This is the _production_ environment of the deployment. This is a stable version that should work at all times. There is also a _staging_ environment, found at
 
-```bash
-$ docker-compose up
-```
+**TODO: Provide link**
 
-or in detached mode (recommended):
+This is always updated on new commits to the `master` branch of this repo. Deployment and provisioning from staging to production is a manual operation and supported by the deployment scripts hosted in this repo.
 
-```bash
-$ docker-compose up -d
-```
+### Services
 
-You access it at http://localhost/. Read more in the [Routes section](#routes) about your available options.
+The use case is realized by setting up a stack of multiple services, based on Docker images being developed in other repos. See the [docker-compose.yml](docker-compose.yml) file for detailed information on which services that are used.
 
-### Swarm (deployment)
+### Routes
 
-This repository has a some scripts for deploying the stack to a remote or local Swarm.
-
-Read more about this in the [deploy documentation](deploy/deploy.md).
-
-You access it by going to the hostname or IP address of your manager node in a web browser. You can find this address by running `docker-machine ls`. Read more in the [Routes section](#routes) about your available options.
-
-## Routes
-
-This use-case is primarily about consuming a UI-based analytics website, and we provide only a few of the APIs to the end-user.
+This use case is primarily about consuming a UI-based analytics website, and we provide only a few of the APIs to the end-user.
 
 * Analytics UI\* \*\*: `/` - The default UI.
 * Hello chart: `/hellochart/` - A temporary UI to test the use-case until we have the Analytics UI in place.
@@ -64,93 +47,32 @@ This use-case is primarily about consuming a UI-based analytics website, and we 
 
 \*\*\* Only available in Swarm mode.
 
-## Ports
+### Ports
 
 The following ports are exposed externally. Make sure you update your firewall to allow/decline access to these!
 
 * 80: Openresty (externally facing gateway).
 * 12201: Logstash UDP input (temporarily needed since logdriver uses host network stack) - should not be accessible externally.
 
-## Test
+## Development
 
-There is a set of basic e2e tests for verifying qix engine using enigma in either a local setup or in a swarm.
+### Prerequisites
 
-### E2E testing on a local setup
+* Access to the `qlikea` Docker Hub organization
+* Docker installed (latest release)
+* Logged in to Docker
+* Clone this repo
 
-To execute e2e tests on a local setup i.e. use-case was started using `docker-compose`.
+Read more about developing this use case [here](./docs/developing.md).
 
-```bash
-$ cd test
-$ npm run test:e2e
-```
+## Testing
 
-### E2E testing in swarm
+End-to-end tests on the use case are configured to run periodically on the staging environment. Promotion to the production environment only takes place after all tests successfully pass in staging.
 
-The test cases can also be executed against a swarm deployment by either using the default naming convention from the ```create-swarm-cluster.sh```.
+Read more about testing this use case [here](./docs/testing.md)
 
-```bash
-$ cd test
-$ npm run test:e2e:swarm
-```
+## Deployment
 
-or by specifying a specific manager node by hostname or IP
+Deployment of the use case can be done both to the AWS environments and locally, to a Swarm cluster provided by the developer.
 
-```bash
-$ SWARMMANAGER=<IP address or hostname> npm run test:e2e:swarm
-```
-
-## Terminology
-
-The terminology used in our use-cases with regards to tools, services, and names can be found in [here](https://github.com/qlik-ea/info/blob/master/terminology.md).
-
-## Orchestration & Deployment
-
-<table>
-  <tr>
-    <th></th>
-    <th colspan="4" style="text-align: center">Orchestration</th>
-  </tr>
-  <tr>
-    <th rowspan="7">Deployment</th>
-    <td></td>
-    <td>Docker Swarm</td>
-    <td>Kubernetes</td>
-    <td>Marathon/Mesos</td>
-  </tr>
-  <tr>
-    <td>AWS</td>
-    <td></td>
-    <td></td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>Google</td>
-    <td></td>
-    <td></td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>Azure</td>
-    <td></td>
-    <td></td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>Docker Cloud</td>
-    <td></td>
-    <td></td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>vSphere</td>
-    <td><a href="./deploy/deploy.md">Documentation</a></td>
-    <td></td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>local</td>
-    <td><a href="./deploy/deploy.md">Documentation</a></td>
-    <td></td>
-    <td></td>
-  </tr>
-</table>
+Read more about deployment of this use case [here](./docs/deployment.md)
