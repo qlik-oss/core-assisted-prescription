@@ -27,7 +27,7 @@ Before starting, make sure you have access to `qlikea` Docker Hub organization.
 
 You can easily start this use-case locally, without any Swarm deployment, by using `docker-compose`.
 
-You need to generate certificates the first-time you want to start this project:
+You need to generate certificates the first time you want to start this project:
 
 ```bash
 $ ./deploy/create-certs.sh -a localhost
