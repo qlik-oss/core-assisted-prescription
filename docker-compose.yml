@@ -78,7 +78,7 @@ services:
     # since it's using the UDP protocol. Pushes all its collected
     # logs to the elasticsearch instance.
     # See https://github.com/qlik-ea/qliktive-custom-analytics-logstash
-    image: qlikea/qliktive-custom-analytics-logstash:master-30
+    image: qlikea/qliktive-custom-analytics-logstash:master-32
     ports:
       - "12201:12201/udp"
     environment:
