@@ -18,7 +18,9 @@
 
 ### Versions
 
-* qliktive-custom-analytics: (Please use the current hash of the project until versioning is introduced)
+* qliktive-custom-analytics: (Please use output of git rev-parse HEAD)
 * Browser:
 * Operating system:
+* Docker version: (`docker --version`)
+* Docker-Machine version: (`docker-machine --version`)
 * [Other relevant versions]
