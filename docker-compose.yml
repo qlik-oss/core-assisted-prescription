@@ -26,6 +26,10 @@ services:
       AUTH_PORT: 3000
       CERT_FILE: /run/secrets/cert-gateway.crt
       CERT_KEY: /run/secrets/cert-gateway.key
+    logging:
+      driver: "gelf"
+      options:
+        gelf-address: "udp://localhost:12201"
     deploy:
       placement:
         constraints: [node.role == manager]
