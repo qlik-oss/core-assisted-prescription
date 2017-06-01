@@ -6,7 +6,7 @@ Note that according the [Qlik Elastic Testing Strategy](https://github.com/qlik-
 
 Testing on the use case/system level shall ensure that the collaboration of services in the stack fulfill the requirements of the use case.
 
-## Testing the stack locally
+## Testing the stack
 
 There is a set of basic end-to-end tests for verifying QIX Engine using [enigma.js](https://github.com/qlik-oss/enigma.js/).
 
