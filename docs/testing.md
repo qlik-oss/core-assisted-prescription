@@ -28,7 +28,7 @@ $ cd test
 $ npm run test:e2e:swarm
 ```
 
-Or, by specifying a specific manager node by hostname or IP, run
+Or, by setting the environment variable SWARMMANAGER to a specific manager node by hostname or IP, and then run
 
 ```sh
 $ SWARMMANAGER=<IP address or hostname> npm run test:e2e:swarm

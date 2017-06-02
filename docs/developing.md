@@ -15,7 +15,7 @@ Developing this use case consists mainly of
 
 ## Running the stack
 
-For development purposes, the stack can be run on the local Docker Engine a developer machine or in any Docker Swarm cluster the developer provides. Utility scripts to set up such a Swarm cluster are provided in this repo.
+For development purposes, the stack can be run on a developer machine using the local Docker Engine or in any Docker Swarm cluster the developer provides. Utility scripts to set up such a Swarm cluster are provided in this repo.
 
 ### Locally without Docker Swarm
 

@@ -56,4 +56,4 @@ The following ports are exposed externally. Make sure you update your firewall t
 
 * [Developing](./docs/developing.md) - Information on the development environment for the use case
 * [Testing the use case](./docs/testing.md) - Information on how the use case is tested and how to run tests
-* [Deploying the use case](./docs/deployment.md) - Information on deploying the use case, both to AWS and to other Docker Swarm clusters
+* [Deploying the use case](./docs/deploying.md) - Information on deploying the use case, both to AWS and to other Docker Swarm clusters
