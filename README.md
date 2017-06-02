@@ -36,7 +36,7 @@ This is always updated on new commits to the `master` branch of this repo. Deplo
 
 ### Services
 
-The use case is realized by setting up a stack of multiple services, based on Docker images being developed in other repos. See the [docker-compose.yml](docker-compose.yml) file for detailed information on which services that are used.
+The use case consists of multiple services, based on Docker images developed in other repos. See the [docker-compose.yml](docker-compose.yml) file for detailed information on which services that are used.
 
 ### Routes
 
@@ -62,6 +62,6 @@ The following ports are exposed externally. Make sure you update your firewall t
 
 ## Further reading
 
-* [Developing the use case](./docs/developing.md)
-* [Testing the use case](./docs/testing.md)
-* [Deploying the use case](./docs/deployment.md)
+* [Developing](./docs/developing.md) - Information on the development environment for the use case.
+* [Testing the use case](./docs/testing.md) - Information on how the use case is tested and how to run tests.
+* [Deploying the use case](./docs/deployment.md) - Information on deploying the use case, both to AWS and to other Docker Swarm clusters.
