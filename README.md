@@ -16,12 +16,6 @@ The repository contains the service stack and various scripts and tools to deplo
 
 The terminology used in this documentation with regards to technologies, tools, services, and names can be found in [here](https://github.com/qlik-ea/info/blob/master/terminology.md).
 
-```bash
-$ ./deploy/create-certs.sh -a localhost
-```
-
-After that, simply run:
-
 ## AWS deployment
 
 The use case and the web UI being hosted on AWS can be reached at
