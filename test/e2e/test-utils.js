@@ -4,10 +4,9 @@ import fs from 'fs';
 import qixSchema from '../node_modules/enigma.js/schemas/qix/3.2/schema.json';
 
 const getSwarmManagerIP = () => {
-  const USER_DIR = `${process.env.USERPROFILE || process.env.HOME}`;
-  const MANAGER_NAME = `${process.env.USERNAME || process.env.USER}-docker-manager1`;
-  const MANAGER_CONFIG = `${USER_DIR}/.docker/machine/machines/${MANAGER_NAME}/config.json`;
-  const config = JSON.parse(fs.readFileSync(MANAGER_CONFIG, 'utf8'));
+  const managerName = `${process.env.USERNAME || process.env.USER}-docker-manager1`;
+  const machineStoragePath = process.env.MACHINE_STORAGE_PATH || `${process.env.USERPROFILE || process.env.HOME}/.docker/machine/machines`;
+  const config = JSON.parse(fs.readFileSync(`${machineStoragePath}/${managerName}/config.json`, 'utf8'));
   return config.Driver.IPAddress;
 };
 
