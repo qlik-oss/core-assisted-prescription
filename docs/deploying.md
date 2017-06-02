@@ -19,13 +19,14 @@ Deployment of the use case can be done both to the AWS environments (_to be docu
 
 ### Additional prerequisites for vSphere deployment
 
-There are a number of environment variables needed to deploy using vSphere e.g. username, passwords and network specific configurations. The needed variables are documented [here](https://docs.docker.com/machine/drivers/vsphere/). In our setup we resolve it by exporting the environment variables using a `.bash_profile`.
+There are a number of environment variables needed to deploy using vSphere e.g. username, passwords and network specific configurations. The needed variables are listed in the [Docker documentation](https://docs.docker.com/machine/drivers/vsphere/). In our setup we resolve it by exporting the environment variables using a `.bash_profile`.
 
 ## Deploy
 
 Step-by-step:
 
-1. To spin up a environment there is a script [here](./create-swarm-cluster.sh). 
+1. To spin up an environment, use the script [create-swarm-cluster.sh](../deploy/create-swarm-cluster.sh).
+
     For a local environment setup in Windows:
     ```bash
     $ ./deploy/create-swarm-cluster.sh -d local -v <virtual network switch name>
@@ -44,7 +45,7 @@ Step-by-step:
     ```bash
     $ ./deploy/deploy-stack.sh
     ```
-    The bash script will deploy the services defined in [docker-compose.yml](../docker-compose-swarm.yml).
+    The bash script will deploy the services defined in [docker-compose.yml](../docker-compose.yml).
 
 3. To remove the deployed stack, use the following script.
     ```bash
@@ -52,14 +53,14 @@ Step-by-step:
     ```
     Note that this does not remove any Docker volumes on the nodes.
 
-4. To bring down the VMs (including services) you can use the script [remove-swarm-cluster.sh](./remove-swarm-cluster.sh). This script will work regardless if running a local or vSphere deployment.
+4. To bring down the VMs (including services) you can use the script [remove-swarm-cluster.sh](../deploy/remove-swarm-cluster.sh). This script will work regardless if running a local or vSphere deployment.
     ```bash
     $ ./deploy/remove-swarm-cluster.sh
     ```
 
 ### Validating your deployment
 
-There is a small set of [tests](./validate-swarm-cluster.sh) that can validate a running deployment that services etc. are deployed and running on correct nodes. This script will work regardless if running a local or vSphere deployment.
+There is a small set of tests in [validate-swarm-cluster.sh](../deploy/validate-swarm-cluster.sh) that can validate a running deployment that services etc. are deployed and running on correct nodes. This script will work regardless if running a local or vSphere deployment.
 
 ```bash
 $ ./deploy/validate-swarm-cluster.sh
