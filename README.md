@@ -14,7 +14,7 @@ The repository contains the service stack and various scripts and tools to deplo
 
 ## Terminology
 
-The terminology used in this documentation with regards to technologies, tools, services, and names can be found in [here](https://github.com/qlik-ea/info/blob/master/terminology.md).
+The terminology used in this documentation with regards to technologies, tools, services, and names can be found in [here](https://github.com/qlik-ea/info/blob/master/docs/terminology.md).
 
 ## AWS deployment
 
