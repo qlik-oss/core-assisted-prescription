@@ -1,4 +1,8 @@
 #!/bin/bash
+
+cd "$(dirname "$0")" # change execution directory due to use of relative paths
+cd ..
+
 USERNAME=$(id -u -n)
 WORKERS=$(docker-machine ls | grep -c "worker")
 
