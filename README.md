@@ -42,10 +42,10 @@ The use case consists of multiple services, based on Docker images developed in 
 
 This use case is primarily about consuming a UI-based analytics website, and we provide only a few of the APIs to the end-user.
 
-* Analytics UI (\*): `/` - The default UI.
-* Hello chart: `/hellochart/` - A temporary UI to test the use-case until we have the Analytics UI in place.
-* Kibana dashboard (\*\*): `/kibana/` - Use this to view logs from the different services.
-* Swarm Visualizer (\*\*\*): `/viz/` - Use this to see an overview of the Docker Swarm deployment, and which services are running where.
+* **Analytics UI**\* - `/`, the default UI
+* **Hello Chart** - `/hellochart/`, a temporary UI to test the use-case until we have the Analytics UI in place.
+* **Kibana Dashboard**\*\* - `/kibana/`, use to view logs from the different services.
+* **Swarm Visualizer**\*\*\* - `/viz/`, use to see an overview of the Docker Swarm deployment, and where services are running.
 
 _\* Not available yet._  
 _\*\* Will require authentication and possibly special authorization rights in the future (these are currently accessible by everyone)._  
@@ -55,11 +55,11 @@ _\*\*\* Only available in Swarm mode._
 
 The following ports are exposed externally. Make sure you update your firewall to allow/decline access to these!
 
-* 443: Openresty (externally facing gateway).
-* 12201: Logstash UDP input (temporarily needed since logdriver uses host network stack) - should not be accessible externally.
+* **443** - Openresty, the externally facing gateway.
+* **12201** - Logstash UDP input (temporarily needed since logdriver uses host network stack) - should not be accessible externally.
 
 ## Further reading
 
-* [Developing](./docs/developing.md) - Information on the development environment for the use case.
-* [Testing the use case](./docs/testing.md) - Information on how the use case is tested and how to run tests.
-* [Deploying the use case](./docs/deployment.md) - Information on deploying the use case, both to AWS and to other Docker Swarm clusters.
+* [Developing](./docs/developing.md) - Information on the development environment for the use case
+* [Testing the use case](./docs/testing.md) - Information on how the use case is tested and how to run tests
+* [Deploying the use case](./docs/deployment.md) - Information on deploying the use case, both to AWS and to other Docker Swarm clusters

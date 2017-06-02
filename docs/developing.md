@@ -2,16 +2,16 @@
 
 Developing this use case consists mainly of
 
-* Updating versions of existing services in the stack
-* Adding or removing services from the stack
-* Modifying utility scripts and/or configuration files used for development, testing, and deployment of the use case
+* Updating versions of existing services in the stack.
+* Adding or removing services from the stack.
+* Modifying utility scripts and/or configuration files used for development, testing, and deployment of the use case.
 
 ## Prerequisites
 
-* Access to the `qlikea` Docker Hub organization
-* Docker installed (latest release)
-* Logged in to Docker
-* Clone this repo
+* Access to the `qlikea` Docker Hub organization.
+* Docker installed (latest release).
+* Logged in to Docker.
+* Clone this repo.
 
 ## Running the stack
 
