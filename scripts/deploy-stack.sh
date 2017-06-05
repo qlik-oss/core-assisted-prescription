@@ -2,17 +2,17 @@
 
 cd "$(dirname "$0")" # change execution directory due to use of relative paths
 cd .. # needs to be run in root to get secrets corretly
-./deploy/output-styles.sh
+./scripts/output-styles.sh
 
 USERNAME=$(id -u -n)
 MACHINE=$USERNAME-docker-manager1
 MACHINEIP=$(docker-machine ip $MACHINE)
 
 # deploy data to all worker nodes so that it can be accessed locally:
-./deploy/deploy-data.sh
+./scripts/deploy-data.sh
 
 # create self-signed certificates for the manager node:
-./deploy/create-certs.sh -a $MACHINEIP
+./scripts/create-certs.sh -a $MACHINEIP
 
 echo -e "\n========================================================================"
 echo "  Deploying stack to docker swarm"

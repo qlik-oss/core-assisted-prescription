@@ -22,7 +22,7 @@ For development purposes, the stack can be run on a developer machine using the 
 You need to generate certificates the first time you want to start this project
 
 ```sh
-$ ./deploy/create-certs.sh -a localhost
+$ ./scripts/create-certs.sh -a localhost
 ```
 
 Then, you can easily start this use case locally on a developer machine, without any Swarm cluster, by using `docker-compose`.
