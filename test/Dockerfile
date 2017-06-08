@@ -7,7 +7,7 @@ ENV SWARMMANAGER $TEST_HOST
 RUN mkdir -p /usr/src/test
 WORKDIR /usr/src/test
 
-# Bundle app source
+# Bundle test folder
 COPY . /usr/src/test
 
 # Execute tests

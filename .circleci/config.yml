@@ -35,11 +35,11 @@ jobs:
           name: Run E2E tests on a local setup
           command: |
             # Create certificates
-            ../deploy/create-certs.sh -a localhost
+            ../scripts/create-certs.sh -a localhost
 
             # Create a data volume containing the secrets (needed for remote docker setup)
             docker create -v /secrets --name secrets alpine:3.4 /bin/true
-            docker cp ../secrets secrets:/secrets
+            docker cp ../secrets secrets:/run/secrets
 
             # Spin up a local setup
             docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
@@ -55,4 +55,3 @@ jobs:
             # Execute tests
             docker run --rm test/test-e2e
           working_directory: ~/qliktive-custom-analytics/test
-
