@@ -1,5 +1,5 @@
 version: 2
-jobs: 
+jobs:
   build:
     docker:
       - image: node:7
@@ -24,3 +24,35 @@ jobs:
           name: Validate docker-compose files
           command: npm run validate:compose
           working_directory: ~/qliktive-custom-analytics/test
+      - run:
+          name: Install docker client
+          command: |
+            curl -L -o /tmp/docker-17.04.0-ce.tgz https://get.docker.com/builds/Linux/x86_64/docker-17.04.0-ce.tgz
+            tar -xz -C /tmp -f /tmp/docker-17.04.0-ce.tgz
+            mv /tmp/docker/* /usr/bin
+      - setup_remote_docker
+      - run:
+          name: Run E2E tests on a local setup
+          command: |
+            # Create certificates
+            ../deploy/create-certs.sh -a localhost
+
+            # Create a data volume containing the secrets (needed for remote docker setup)
+            docker create -v /secrets --name secrets alpine:3.4 /bin/true
+            docker cp ../secrets secrets:/secrets
+
+            # Spin up a local setup
+            docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
+            docker-compose -f ../docker-compose.yml up -d
+
+            # Find out ip address of gateway
+            CONTAINER_ID=$(docker ps -aqf "name=qliktivecustomanalytics_openresty_1")
+            TEST_HOST=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$CONTAINER_ID")
+
+            # Build docker image for test
+            docker build --build-arg TEST_HOST="$TEST_HOST" -t test/test-e2e .
+
+            # Execute tests
+            docker run --rm test/test-e2e
+          working_directory: ~/qliktive-custom-analytics/test
+
