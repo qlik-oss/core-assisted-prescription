@@ -49,6 +49,9 @@ jobs:
             docker cp ../secrets/cert-gateway.crt openresty:/run/secrets
             docker cp ../secrets/cert-gateway.key openresty:/run/secrets
 
+            # Properly start openresty. Cannot be done earlier as it needs the certs
+            docker exec openresty /usr/local/openresty/nginx/entrypoint.sh
+
             # Find out ip address of gateway
             CONTAINER_ID=$(docker ps -aqf "name=qliktivecustomanalytics_openresty_1")
             TEST_HOST=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$CONTAINER_ID")
