@@ -37,13 +37,13 @@ jobs:
             # Create certificates
             ../scripts/create-certs.sh -a localhost
 
-            # Create a data volume containing the secrets (needed for remote docker setup)
-            docker create -v /secrets --name secrets alpine:3.4 /bin/true
-            docker cp ../secrets secrets:/run/secrets
-
             # Spin up a local setup
             docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
-            docker-compose -f ../docker-compose.yml up -d
+            docker-compose -f ../docker-compose.yml -f ../docker-compose.cci.yml up -d
+
+            # Copy files into engine container
+            docker cp ../data/csv/. qix-engine:/data
+            docker cp ../data/doc/. qix-engine:/doc
 
             # Find out ip address of gateway
             CONTAINER_ID=$(docker ps -aqf "name=qliktivecustomanalytics_openresty_1")

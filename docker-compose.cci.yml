@@ -1,0 +1,24 @@
+version: "3.1"
+
+# This file has overrides that apply when running the stack on Circle CI
+# (CCI config for docker-compose up).
+
+services:
+  viz:
+    # Not used here, but Docker does not support removing services in override
+
+  qix-engine:
+    container_name: qix-engine
+    # Use named volume so that 'docker cp' can be used to move files from job space
+    # into remote docker space on CCI.
+    volumes:
+      - data-volume:/data
+      - doc-volume:/doc
+
+  mira:
+    # On CCI, run Mira in 'local' mode instead of default 'swarm' mode.
+    command: --mode=local
+
+volumes:
+  data-volume:
+  doc-volume:
