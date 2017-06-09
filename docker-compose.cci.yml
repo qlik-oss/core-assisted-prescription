@@ -4,6 +4,11 @@ version: "3.1"
 # (CCI config for docker-compose up).
 
 services:
+  openresty:
+    container_name: openresty
+    volumes:
+      - secrets-volume:/run/secrets
+
   viz:
     # Not used here, but Docker does not support removing services in override
 
@@ -22,3 +27,4 @@ services:
 volumes:
   data-volume:
   doc-volume:
+  secrets-volume:

@@ -41,9 +41,13 @@ jobs:
             docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
             docker-compose -f ../docker-compose.yml -f ../docker-compose.cci.yml up -d
 
-            # Copy files into engine container
+            # Copy data and doc files into engine container
             docker cp ../data/csv/. qix-engine:/data
             docker cp ../data/doc/. qix-engine:/doc
+
+            # Copy certs into openresty container for TLS
+            docker cp ../secrets/cert-gateway.crt openresty:/run/secrets
+            docker cp ../secrets/cert-gateway.key openresty:/run/secrets
 
             # Find out ip address of gateway
             CONTAINER_ID=$(docker ps -aqf "name=qliktivecustomanalytics_openresty_1")
