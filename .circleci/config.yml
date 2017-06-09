@@ -50,7 +50,7 @@ jobs:
             docker cp ../secrets/cert-gateway.key openresty:/secrets
 
             # Properly start openresty. Cannot be done earlier as it needs the certs
-            docker exec openresty /usr/local/openresty/nginx/entrypoint.sh
+            docker exec -d openresty /usr/local/openresty/nginx/entrypoint.sh
 
             # Find out ip address of gateway
             CONTAINER_ID=$(docker ps -aqf "name=qliktivecustomanalytics_openresty_1")
