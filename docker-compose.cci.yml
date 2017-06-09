@@ -27,11 +27,15 @@ services:
     # On CCI, run Mira in 'local' mode instead of default 'swarm' mode.
     command: --mode=local
 
-  secrets:
+  dummy-data:
+    # Dummy container just to hold data that is needed in CCI remote docker space.
+    # Not to be used in any production scenario.
     image: alpine:3.6
-    container_name: secrets
+    container_name: dummy-data
     command: sleep 1m
     volumes:
+      - data-volume:/data
+      - doc-volume:/doc
       - secrets-volume:/secrets
 
 volumes:
