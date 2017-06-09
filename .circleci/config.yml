@@ -46,8 +46,8 @@ jobs:
             docker cp ../data/doc/. qix-engine:/doc
 
             # Copy certs into openresty container for TLS
-            docker cp ../secrets/cert-gateway.crt openresty:/run/secrets
-            docker cp ../secrets/cert-gateway.key openresty:/run/secrets
+            docker cp ../secrets/cert-gateway.crt openresty:/secrets
+            docker cp ../secrets/cert-gateway.key openresty:/secrets
 
             # Properly start openresty. Cannot be done earlier as it needs the certs
             docker exec openresty /usr/local/openresty/nginx/entrypoint.sh
