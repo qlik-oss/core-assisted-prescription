@@ -37,21 +37,18 @@ jobs:
             # Create certificates
             ../scripts/create-certs.sh -a localhost
 
-            # Spin up a local setup
             docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
+
+            docker-compose -f ../docker-compose.yml -f ../docker-compose.cci.yml up -d secrets
+            docker cp ../secrets/cert-gateway.crt secrets:/secrets
+            docker cp ../secrets/cert-gateway.key secrets:/secrets
+
             docker-compose -f ../docker-compose.yml -f ../docker-compose.cci.yml up -d
 
             # Copy data and doc files into engine container
             docker cp ../data/csv/. qix-engine:/data
             docker cp ../data/doc/. qix-engine:/doc
-
-            # Copy certs into openresty container for TLS
-            docker cp ../secrets/cert-gateway.crt openresty:/secrets
-            docker cp ../secrets/cert-gateway.key openresty:/secrets
-
-            # Properly start openresty. Cannot be done earlier as it needs the certs
-            docker exec -d openresty /usr/local/openresty/nginx/entrypoint.sh
-
+    
             # Find out ip address of gateway
             CONTAINER_ID=$(docker ps -aqf "name=qliktivecustomanalytics_openresty_1")
             TEST_HOST=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$CONTAINER_ID")

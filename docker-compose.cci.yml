@@ -29,6 +29,12 @@ services:
     # On CCI, run Mira in 'local' mode instead of default 'swarm' mode.
     command: --mode=local
 
+  secrets:
+    image: alpine:3.6
+    container_name: secrets
+    volumes:
+      - secrets-volume:/secrets
+
 volumes:
   data-volume:
   doc-volume:
