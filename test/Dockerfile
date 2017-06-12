@@ -1,6 +1,5 @@
 FROM node:7
 ARG TEST_HOST
-RUN echo $TEST_HOST
 ENV SWARMMANAGER $TEST_HOST
 
 # Create test directory
