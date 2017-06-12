@@ -39,5 +39,5 @@ jobs:
             echo "### Login to docker"
             docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
             echo "### Execute tests"
-            ./scripts/run_e2e_tests_cci.sh
+            ../scripts/run_e2e_tests_cci.sh
           working_directory: ~/qliktive-custom-analytics/test
