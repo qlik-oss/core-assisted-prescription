@@ -2,18 +2,43 @@ version: "3.1"
 
 # This file is for development overrides (e.g. config for docker-compose up),
 # not used when deploying to Swarm.
-# Secrets seems to be supported in local mode regardless of what the documentation states,
-# hence mounting secrets is not needed in the override.
 
 services:
+  openresty:
+    container_name: openresty
+    environment:
+      CERT_FILE: /secrets/cert-gateway.crt
+      CERT_KEY: /secrets/cert-gateway.key
+    volumes:
+      - secrets-volume:/secrets
 
   viz:
     # Not used here, but Docker does not support removing services in override
 
   qix-engine:
+    container_name: qix-engine
+    # Use named volume so that 'docker cp' can be used to move files from job space
+    # into remote docker space on CCI.
     volumes:
-      - ./data/csv:/data
-      - ./data/doc:/doc
+      - data-volume:/data
+      - doc-volume:/doc
 
   mira:
+    # On CCI, run Mira in 'local' mode instead of default 'swarm' mode.
     command: --mode=local
+
+  dummy-data:
+    # Dummy container just to hold data that is needed in CCI remote docker space.
+    # Not to be used in any production scenario.
+    image: alpine:3.6
+    container_name: dummy-data
+    command: sleep 1m
+    volumes:
+      - data-volume:/data
+      - doc-volume:/doc
+      - secrets-volume:/secrets
+
+volumes:
+  data-volume:
+  doc-volume:
+  secrets-volume:

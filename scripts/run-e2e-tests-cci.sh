@@ -5,7 +5,7 @@ cd "$(dirname "$0")"
 cd ../test
 
 echo "### Starting dummy-data container"
-docker-compose -f ../docker-compose.yml -f ../docker-compose.cci.yml up -d dummy-data
+docker-compose up -d dummy-data
 
 echo "### Copying to dummy-data container"
 docker cp ../data/csv/. dummy-data:/data
@@ -14,7 +14,7 @@ docker cp ../secrets/cert-gateway.crt dummy-data:/secrets
 docker cp ../secrets/cert-gateway.key dummy-data:/secrets
 
 echo "### Starting full stack"
-docker-compose -f ../docker-compose.yml -f ../docker-compose.cci.yml up -d
+docker-compose up -d
 
 echo "### Find out IP address of gateway"
 CONTAINER_ID=$(docker ps -aqf "name=openresty")
