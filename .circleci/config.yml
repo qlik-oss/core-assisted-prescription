@@ -6,6 +6,8 @@ jobs:
     working_directory: ~/qliktive-custom-analytics
     steps:
       - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "test/package.json" }}
       - run:
           name: Install dependencies
           command: npm install --quiet
@@ -14,6 +16,10 @@ jobs:
           name: Run ESLint
           command: npm run lint
           working_directory: ~/qliktive-custom-analytics/test
+      - save_cache:
+          key: dependency-cache-{{ checksum "test/package.json" }}
+          paths:
+            - test/node_modules
       - run:
           name: Install Docker Compose
           command: |
