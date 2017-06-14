@@ -37,6 +37,7 @@ jobs:
             ./create-certs.sh -a localhost
             docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
             ./deploy-local.sh
+          working_directory: ~/qliktive-custom-analytics/scripts
       - run:
           name: Run E2E tests in remote Docker space
           command: ../scripts/run-e2e-tests-cci.sh
