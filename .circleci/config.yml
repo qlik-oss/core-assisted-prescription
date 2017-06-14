@@ -32,12 +32,12 @@ jobs:
             mv /tmp/docker/* /usr/bin
       - setup_remote_docker
       - run:
-          name: Run E2E tests on a local setup
-          command: |
-            echo "### Create certificates"
+          name: Deploy to remote Docker space
+          command: |            
             ../scripts/create-certs.sh -a localhost
-            echo "### Login to docker"
             docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
-            echo "### Execute tests"
-            ../scripts/run-e2e-tests-cci.sh
+            ./deploy-local.sh
+      - run:
+          name: Run E2E tests in remote Docker space
+          command: ../scripts/run-e2e-tests-cci.sh
           working_directory: ~/qliktive-custom-analytics/test

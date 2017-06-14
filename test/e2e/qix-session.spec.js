@@ -1,6 +1,6 @@
 import Halyard from 'halyard.js';
 import enigma from 'enigma.js';
-import { getEnigmaBaseConfig, getTestHost } from './test-utils';
+import { getEnigmaBaseConfig, getTestHost } from '../utils/test-utils';
 
 describe('QIX Session in a swarm', () => {
   let qixGlobal;
