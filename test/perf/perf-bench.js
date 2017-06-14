@@ -50,10 +50,25 @@ async function connect(numConnections, delay) {
   });
 }
 
+async function verify() {
+  // eslint-disable-next-line no-restricted-syntax
+  for (const qix of qixSessions) {
+    /* eslint-disable no-await-in-loop */
+    const app = await qix.global.getActiveDoc();
+    const layout = await app.getAppLayout();
+    /* eslint-enable no-await-in-loop */
+    if (layout.qFileName !== '/doc/drugcases.qvf') {
+      throw new Error('Unexpected filename');
+    }
+  }
+}
+
 async function disconnectAll() {
-  qixSessions.forEach(async (qix) => {
+  // eslint-disable-next-line no-restricted-syntax
+  for (const qix of qixSessions) {
+    // eslint-disable-next-line no-await-in-loop
     await qix.global.session.close();
-  });
+  }
 }
 
 async function sleep(delay) {
@@ -61,6 +76,19 @@ async function sleep(delay) {
     setTimeout(() => { resolve(); }, delay);
   });
 }
+
+function onUnhandledError(err) {
+  console.error('Process encountered an unhandled error', err);
+  process.exit(1);
+}
+
+process.on('SIGTERM', () => {
+  console.log('Process exiting on SIGTERM');
+  process.exit(0);
+});
+
+process.on('uncaughtException', onUnhandledError);
+process.on('unhandledRejection', onUnhandledError);
 
 (async () => {
   const avgUsers = args['avg-users'];
@@ -82,9 +110,9 @@ async function sleep(delay) {
   await sleep(5000);
   console.log(`Connecting ${maxUsers} users (max)`);
   await connect(maxUsers - avgUsers, 10);
-  console.log('Sleeping for 5 seconds');
-  await sleep(5000);
+  console.log('Verifying connections');
+  await verify();
   console.log('Closing all connections');
-  disconnectAll();
+  await disconnectAll();
   console.log('Done');
 })();
