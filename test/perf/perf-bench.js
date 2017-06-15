@@ -4,11 +4,11 @@ const qixSchema = require('../node_modules/enigma.js/schemas/qix/3.2/schema.json
 const commandLineArgs = require('command-line-args');
 
 const optionDefinitions = [
-  { name: 'max-users', alias: 'm', type: Number },
-  { name: 'avg-users', alias: 'a', type: Number },
+  { name: 'gateway', alias: 'g', type: String },
+  { name: 'max', alias: 'm', type: Number },
+  { name: 'duration', alias: 'd', type: Number },
 ];
 const args = commandLineArgs(optionDefinitions, { partial: true });
-const qixSessions = [];
 
 function generateGUID() {
   /* eslint-disable no-bitwise */
@@ -20,10 +20,10 @@ function generateGUID() {
   /* eslint-enable no-bitwise */
 }
 
-function getEnigmaConfig(id) {
+function getEnigmaConfig(gateway, id) {
   return {
     session: {
-      host: process.env.GATEWAY_IP_ADDR || 'localhost',
+      host: gateway,
       route: '/doc/doc/drugcases.qvf',
       disableCache: true,
       identity: id,
@@ -33,15 +33,23 @@ function getEnigmaConfig(id) {
   };
 }
 
-async function connect(numConnections, delay) {
+async function sleep(delay) {
   return new Promise((resolve) => {
+    setTimeout(() => { resolve(); }, delay);
+  });
+}
+
+async function connect(gateway, numConnections, duration) {
+  return new Promise((resolve) => {
+    const sessions = [];
+    const delay = (duration * 1000) / numConnections;
     let count = 0;
     async function addSession() {
-      const qix = await enigma.getService('qix', getEnigmaConfig(generateGUID()));
-      qixSessions.push(qix);
+      const qix = await enigma.getService('qix', getEnigmaConfig(gateway, generateGUID()));
+      sessions.push(qix);
       count += 1;
       if (count === numConnections) {
-        resolve();
+        resolve(sessions);
       } else {
         setTimeout(addSession, delay);
       }
@@ -50,9 +58,9 @@ async function connect(numConnections, delay) {
   });
 }
 
-async function verify() {
+async function verify(sessions) {
   // eslint-disable-next-line no-restricted-syntax
-  for (const qix of qixSessions) {
+  for (const qix of sessions) {
     /* eslint-disable no-await-in-loop */
     const app = await qix.global.getActiveDoc();
     const layout = await app.getAppLayout();
@@ -63,18 +71,15 @@ async function verify() {
   }
 }
 
-async function disconnectAll() {
+async function disconnect(sessions, duration) {
+  const delay = (duration * 1000) / sessions.length;
   // eslint-disable-next-line no-restricted-syntax
-  for (const qix of qixSessions) {
-    // eslint-disable-next-line no-await-in-loop
+  for (const qix of sessions) {
+    /* eslint-disable no-await-in-loop */
     await qix.global.session.close();
+    await sleep(delay);
+    /* eslint-enable no-await-in-loop */
   }
-}
-
-async function sleep(delay) {
-  return new Promise((resolve) => {
-    setTimeout(() => { resolve(); }, delay);
-  });
 }
 
 function onUnhandledError(err) {
@@ -91,28 +96,30 @@ process.on('uncaughtException', onUnhandledError);
 process.on('unhandledRejection', onUnhandledError);
 
 (async () => {
-  const avgUsers = args['avg-users'];
-  const maxUsers = args['max-users'];
+  const maxNumUsers = args.max;
+  let duration = args.duration;
+  let gateway = args.gateway;
 
-  if (!avgUsers) {
-    console.error('Error - Average number of users not provided (-a, --avg-users)');
+  if (!maxNumUsers) {
+    console.error('Error - Max number of users not provided (-m, --max)');
     process.exit(1);
   }
 
-  if (!maxUsers) {
-    console.error('Error - Max number of users not provided (-a, --avg-users)');
-    process.exit(1);
-  }
+  if (!duration) { duration = 60; }
+  if (!gateway) { gateway = 'localhost'; }
 
-  console.log(`Connecting ${avgUsers} users (average)`);
-  await connect(avgUsers, 10);
-  console.log('Sleeping for 5 seconds');
-  await sleep(5000);
-  console.log(`Connecting ${maxUsers} users (max)`);
-  await connect(maxUsers - avgUsers, 10);
+  console.log('================================================================================');
+  console.log(' Running performance benchmarking');
+  console.log(` Gateway: ${gateway}`);
+  console.log(` Max number of users: ${maxNumUsers}`);
+  console.log(` Duration to peak: ${duration}`);
+  console.log('================================================================================');
+
+  console.log('Connecting users');
+  const sessions = await connect(gateway, maxNumUsers, duration);
   console.log('Verifying connections');
-  await verify();
-  console.log('Closing all connections');
-  await disconnectAll();
+  await verify(sessions);
+  console.log('Disconnecting users');
+  await disconnect(sessions, duration);
   console.log('Done');
 })();

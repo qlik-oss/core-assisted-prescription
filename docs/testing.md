@@ -6,32 +6,31 @@ Note that according the [Qlik Elastic Testing Strategy](https://github.com/qlik-
 
 Testing on the use case/system level shall ensure that the collaboration of services in the stack fulfill the requirements of the use case.
 
-## Testing the stack
+## E2E tests
 
 There is a set of basic end-to-end tests for verifying QIX Engine using [enigma.js](https://github.com/qlik-oss/enigma.js/).
 
 ### Without Docker Swarm
 
-To execute tests on a local setup without Swarm, i.e. the services were started using `docker-compose`
+To execute the same sanity E2E tests as on CCI, on a local setup without Swarm (i.e. using ```deploy-local.sh```), run:
 
 ```sh
-$ cd test
-$ npm run test:e2e
+$ ./scripts/run-e2e-tests-cci.sh
 ```
 
 ### With Docker Swarm
 
-To execute test in a Swarm deployment using the default naming convention from the ```create-swarm-cluster.sh```, run
+To execute test in a Swarm deployment using the default naming convention from the ```create-swarm-cluster.sh```, run:
 
 ```sh
 $ cd test
 $ npm run test:e2e:swarm
 ```
 
-Or, by setting the environment variable SWARMMANAGER to a specific manager node by hostname or IP, and then run
+Or, by setting the environment variable `GATEWAY_IP_ADDR` to a specific manager node by hostname or IP, and then run
 
 ```sh
-$ SWARMMANAGER=<IP address or hostname> npm run test:e2e:swarm
+$ GATEWAY_IP_ADDR=<IP address or hostname> npm run test:e2e:swarm
 ```
 
 ### Circle CI
@@ -41,3 +40,5 @@ Circle CI makes use of remote docker spaces, hence the tests and data mounts mus
 ```sh
 $ ./scripts/run-e2e-tests-cci.sh
 ```
+
+## Performance benchmarking

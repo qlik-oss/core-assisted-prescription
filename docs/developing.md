@@ -25,13 +25,19 @@ You need to generate certificates the first time you want to start this project
 $ ./scripts/create-certs.sh -a localhost
 ```
 
-Then, you can easily start this use case locally on a developer machine, without any Swarm cluster, by using `docker-compose`.
+Then, you can easily start this use case locally on a developer machine, without any Swarm cluster, with:
 
 ```sh
-$ docker-compose up -d
+$ ./scripts/deploy-local.sh
 ```
 
-This starts all services in detached mode (recommended). You access it at https://localhost/.
+The script uses `docker-compose` and the application can now be accessed at https://localhost/.
+
+To bring the system down, run:
+
+```sh
+$ ./scripts/remove-local.sh
+```
 
 ### With Docker Swarm
 

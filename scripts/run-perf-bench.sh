@@ -2,19 +2,18 @@
 set -e
 
 GATEWAY_IP_ADDR=
-AVG_USERS=500
-MAX_USERS=10000
+DURATION=60
 
-while getopts ":m:a:g:" opt; do
+while getopts ":m:d:g:" opt; do
   case $opt in
     g)
       GATEWAY_IP_ADDR=$OPTARG
       ;;
+    d)
+      DURATION=$OPTARG
+      ;;
     m)
       MAX_USERS=$OPTARG
-      ;;
-    a)
-      AVG_USERS=$OPTARG
       ;;
     \?)
       echo "Error - Invalid option: -$OPTARG" >&2
@@ -32,11 +31,4 @@ if [[ -z $GATEWAY_IP_ADDR ]]; then
     GATEWAY_IP_ADDR=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.Gateway}}{{end}}' "$CONTAINER_ID")
 fi
 
-echo "================================================================================"
-echo " Running qliktive-custom-analytics performance benchmarking"
-echo " Gateway: $GATEWAY_IP_ADDR"
-echo " Average number of users: $AVG_USERS"
-echo " Max number of users: $MAX_USERS"
-echo "================================================================================"
-
-docker run --rm -e "GATEWAY_IP_ADDR=$GATEWAY_IP_ADDR" test/qliktive-custom-analytics-test perf-bench -- -a $AVG_USERS -m $MAX_USERS
+docker run --rm test/qliktive-custom-analytics-test perf-bench -- -g $GATEWAY_IP_ADDR -m $MAX_USERS -d $DURATION
