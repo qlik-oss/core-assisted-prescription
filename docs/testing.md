@@ -40,5 +40,3 @@ Circle CI makes use of remote docker spaces, hence the tests and data mounts mus
 ```sh
 $ ./scripts/run-e2e-tests-cci.sh
 ```
-
-## Performance benchmarking
