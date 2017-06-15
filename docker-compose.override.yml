@@ -12,6 +12,12 @@ services:
     volumes:
       - secrets-volume:/secrets
 
+  auth:
+    environment:
+      GITHUB_CLIENT_ID_FILE: /secrets/github_client_id
+      GITHUB_CLIENT_SECRET_FILE: /secrets/github_client_secret
+      JWT_SECRET_FILE: /secrets/jwt_secret
+      COOKIE_SIGNING_FILE: /secrets/cookie_signing
   viz:
     # Not used here, but Docker does not support removing services in override
 
