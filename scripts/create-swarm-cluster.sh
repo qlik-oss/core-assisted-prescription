@@ -6,6 +6,7 @@ set -e
 MANAGERS=1
 WORKERS=2
 USERNAME=$(id -u -n)
+BOOT2DOCKER_ISO_URL=https://github.com/boot2docker/boot2docker/releases/download/v17.06.0-ce-rc3/boot2docker.iso
 
 print_usage () {
   echo
@@ -44,7 +45,7 @@ if [[ -z "$DEPLOYMENT" ]]; then
   exit 1
 elif [ $DEPLOYMENT == "vsphere" ] || [ $DEPLOYMENT == "VSPHERE" ]; then
   DRIVER=vmwarevsphere
-  SWITCH=
+  SWITCH="--vmwarevsphere-boot2docker-url $BOOT2DOCKER_ISO_URL"
 else
   # Windows - Use HyperV and determine HyperV virtual switch.
   if [[ $(uname -o) == "Msys" ]]; then
@@ -61,11 +62,11 @@ else
     fi
 
     DRIVER=hyperv
-    SWITCH="--hyperv-memory 2048 --hyperv-virtual-switch $SWITCH"
+    SWITCH="--hyperv-memory 2048 --hyperv-boot2docker-url $BOOT2DOCKER_ISO_URL --hyperv-virtual-switch $SWITCH"
   else
     # Non-Windows - Use Virtualbox and omit virtual switch.
     DRIVER=virtualbox
-    SWITCH="--virtualbox-memory 2048"
+    SWITCH="--virtualbox-memory 2048 --virtualbox-boot2docker-url $BOOT2DOCKER_ISO_URL"
   fi
 fi
 

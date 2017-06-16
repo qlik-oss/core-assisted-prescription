@@ -37,12 +37,14 @@ echo "  Deploying stack to docker swarm"
 echo "========================================================================"
 
 eval $(docker-machine env $MACHINE)
-docker stack deploy -c ./docker-compose.yml --with-registry-auth custom-analytics
+docker-compose -f docker-compose.yml -f docker-compose.logging.yml pull
+docker-compose -f docker-compose.yml -f docker-compose.logging.yml config > docker-compose.prod.yml
+docker stack deploy -c ./docker-compose.prod.yml --with-registry-auth custom-analytics
 
 echo "\n$(docker service ls)"
 echo "${BYellow}\nThen all the replicas for the service is started (this may take several minutes) -${Reset}"
 echo
 echo "${BYellow}The following routes can be accessed:${Reset}"
-echo "CUSTOM ANALYTICS         - https://$MACHINEIP/hellochart/"
+echo "CUSTOM ANALYTICS         - https://$MACHINEIP/"
 echo "KIBANA                   - https://$MACHINEIP/kibana/"
 echo "DOCKER SWARM VISUALIZER  - https://$MACHINEIP/viz/"

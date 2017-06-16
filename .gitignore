@@ -8,3 +8,4 @@ node_modules/
 
 # Ignore generated certificates
 secrets/cert*
+docker-compose.prod.yml

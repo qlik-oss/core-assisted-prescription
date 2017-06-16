@@ -16,7 +16,9 @@ services:
     #  - "80:80"
     environment:
       SESSION_COOKIE_NAME: custom-analytics
-      KIBANA_HOST: kibana
+      # kibana is defined in docker-compose.logging.yml, this is just here to
+      # satisfy openresty DNS resolve:
+      KIBANA_HOST: 127.0.0.1
       KIBANA_PORT: 5601
       VISUALIZER_HOST: viz
       VISUALIZER_PORT: 8080
@@ -26,10 +28,6 @@ services:
       AUTH_PORT: 3000
       CERT_FILE: /run/secrets/cert-gateway.crt
       CERT_KEY: /run/secrets/cert-gateway.key
-    logging:
-      driver: "gelf"
-      options:
-        gelf-address: "udp://localhost:12201"
     deploy:
       placement:
         constraints: [node.role == manager]
@@ -59,45 +57,6 @@ services:
       COOKIE_SIGNING_FILE: /run/secrets/cookie_signing
       SUCCESS_REDIRECT_URL: /auth-test
       FAILURE_REDIRECT_URL: /login-fail
-    logging:
-      driver: "gelf"
-      options:
-        gelf-address: "udp://localhost:12201"
-    deploy:
-      placement:
-        constraints: [node.role == manager]
-
-  elasticsearch:
-    # This service only runs as one instance in our stack and is
-    # used by Kibana (consuming) and Logstash (storing).
-    image: docker.elastic.co/elasticsearch/elasticsearch:5.2.2
-    environment:
-      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
-      xpack.security.enabled: "false"
-      xpack.monitoring.enabled: "false"
-      xpack.graph.enabled: "false"
-      xpack.watcher.enabled: "false"
-    deploy:
-      placement:
-        constraints: [node.role == manager]
-
-  logstash:
-    # Logstash runs as one instance on each node in the cluster
-    # since it's using the UDP protocol. Pushes all its collected
-    # logs to the elasticsearch instance.
-    # See https://github.com/qlik-ea/qliktive-custom-analytics-logstash
-    image: qlikea/qliktive-custom-analytics-logstash:master-32
-    ports:
-      - "12201:12201/udp"
-    environment:
-      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
-    deploy:
-      mode: global
-
-  kibana:
-    # Used for visualizing and viewing logs stored in elasticsearch.
-    # See https://github.com/qlik-ea/qliktive-kibana-custom-analytics
-    image: qlikea/qliktive-custom-analytics-kibana:master-3
     deploy:
       placement:
         constraints: [node.role == manager]
@@ -123,10 +82,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - QIX_ENGINE_IMAGE_NAME=qlikea/engine
-    logging:
-      driver: "gelf"
-      options:
-        gelf-address: "udp://localhost:12201"
     deploy:
       placement:
         constraints: [node.role == manager]
@@ -140,10 +95,6 @@ services:
     volumes:
       - /home/docker/data/csv:/data
       - /home/docker/data/doc:/doc
-    logging:
-      driver: "gelf"
-      options:
-        gelf-address: "udp://localhost:12201"
     deploy:
       mode: global
       placement:
@@ -155,10 +106,6 @@ services:
     # to place the session on.
     # See https://github.com/qlik-ea/qliktive-qix-session-service
     image: qlikea/qliktive-qix-session-service:0.0.1-26
-    logging:
-      driver: "gelf"
-      options:
-        gelf-address: "udp://localhost:12201"
     deploy:
       placement:
         constraints: [node.role == manager]
