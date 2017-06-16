@@ -1,11 +1,13 @@
 version: 2
-jobs: 
+jobs:
   build:
     docker:
       - image: node:7
     working_directory: ~/qliktive-custom-analytics
     steps:
       - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "test/package.json" }}
       - run:
           name: Install dependencies
           command: npm install --quiet
@@ -14,6 +16,10 @@ jobs:
           name: Run ESLint
           command: npm run lint
           working_directory: ~/qliktive-custom-analytics/test
+      - save_cache:
+          key: dependency-cache-{{ checksum "test/package.json" }}
+          paths:
+            - test/node_modules
       - run:
           name: Install Docker Compose
           command: |
@@ -23,4 +29,24 @@ jobs:
       - run:
           name: Validate docker-compose files
           command: npm run validate:compose
+          working_directory: ~/qliktive-custom-analytics/test
+      - run:
+          name: Install docker client
+          command: |
+            curl -L -o /tmp/docker-17.04.0-ce.tgz https://get.docker.com/builds/Linux/x86_64/docker-17.04.0-ce.tgz
+            tar -xz -C /tmp -f /tmp/docker-17.04.0-ce.tgz
+            mv /tmp/docker/* /usr/bin
+      - setup_remote_docker
+      - run:
+          name: Deploy to remote Docker space
+          command: |            
+            ./create-certs.sh -a localhost
+            docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
+            ./deploy-local.sh
+          working_directory: ~/qliktive-custom-analytics/scripts
+      - run:
+          name: Run E2E tests in remote Docker space
+          command: |
+            ../scripts/build-test-image.sh
+            ../scripts/run-e2e-tests-cci.sh
           working_directory: ~/qliktive-custom-analytics/test

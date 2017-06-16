@@ -2,18 +2,20 @@
   "name": "qliktive-custom-analytics-test",
   "private": true,
   "version": "0.0.1",
-  "description": "Test cases for qliktive-custom-analytics use case",
+  "description": "Test cases and performance benchmarking for qliktive-custom-analytics use case",
   "author": "Qlik",
   "license": "MIT",
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "test:e2e": "aw-test-runner ./e2e --timeout 5000",
+    "test:e2e": "aw-test-runner ./e2e --timeout 10000",
     "test:e2e:swarm": "env SWARM=true npm run test:e2e",
+    "perf-bench": "node ./perf/perf-bench.js",
     "validate:compose": "docker-compose -f ../docker-compose.yml -f ../docker-compose.override.yml config"
   },
   "devDependencies": {
     "after-work.js": "2.0.0",
+    "command-line-args": "4.0.6",
     "enigma.js": "1.1.1",
     "eslint": "3.19.0",
     "eslint-config-airbnb-base": "11.2.0",
