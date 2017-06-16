@@ -13,7 +13,7 @@ cd ..
 
 mkdir -p ./secrets/
 
-while [[ $# -gt 1 ]]
+while [[ $# -gt 0 ]]
 do
   arg="$1"
 
@@ -24,7 +24,6 @@ do
     ;;
     -r)
     FORCE="1"
-    shift
     ;;
   esac
   shift # past arg

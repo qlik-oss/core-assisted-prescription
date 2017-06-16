@@ -8,11 +8,28 @@ USERNAME=$(id -u -n)
 MACHINE=$USERNAME-docker-manager1
 MACHINEIP=$(docker-machine ip $MACHINE)
 
+while [[ $# -gt 0 ]]
+do
+  arg="$1"
+
+  case $arg in
+    -o)
+    OVERWRITE="-o"
+    shift # past arg
+    ;;
+    -r)
+    FORCE="-r"
+    shift
+    ;;
+  esac
+  shift # past arg
+done
+
 # deploy data to all worker nodes so that it can be accessed locally:
-./scripts/deploy-data.sh
+./scripts/deploy-data.sh $OVERWRITE
 
 # create self-signed certificates for the manager node:
-./scripts/create-certs.sh -a $MACHINEIP
+./scripts/create-certs.sh $FORCE -a $MACHINEIP
 
 echo
 echo "========================================================================"

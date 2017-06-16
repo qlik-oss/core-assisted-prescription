@@ -41,7 +41,7 @@ Step-by-step:
     ```
     By default the script will spin up `1 manager` node and `2 worker` nodes. When all nodes are up and running the script will finish with listing all the nodes.
 
-2. Now there are three VMs available in the setup, and the environment is ready for deployment. 
+2. Now there are three VMs available in the setup, and the environment is ready for deployment.
     ```bash
     $ ./scripts/deploy-stack.sh
     ```
@@ -57,6 +57,22 @@ Step-by-step:
     ```bash
     $ ./scripts/remove-swarm-cluster.sh
     ```
+
+### Updating your deployed stack
+
+If you make updates to the stack and want to update the deployment you just run the ```deploy-stack``` script again.
+
+```bash
+$ ./scripts/deploy-stack.sh
+```
+If you have made changes to the data that should be mounted in the containers, you need supply an additional switch.
+```bash
+$ ./scripts/deploy-stack.sh -o
+```
+Or if you need to regenerate SSL certificates for the gateway
+```bash
+$ ./scripts/deploy-stack.sh -r
+```
 
 ### Validating your deployment
 
