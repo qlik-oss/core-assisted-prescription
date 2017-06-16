@@ -2,6 +2,10 @@
 set -e
 
 cd "$(dirname "$0")"
+
+# Built test container
+./build-test-image.sh
+
 cd ../test
 
 echo "### Find out IP address of gateway"

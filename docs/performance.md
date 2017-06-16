@@ -7,7 +7,6 @@ A performance benchmarking tool is provided to simulate such a peak in user conn
 The tool can be run directly as a Node.js command line tool, but the recommended way is to run it as a Docker container. To do so, run the following:
 
 ```sh
-$ ./scripts/build-test-image.sh
 $ ./scripts/run-perf-bench.sh -g localhost -m 1000 -d 60
 ```
 

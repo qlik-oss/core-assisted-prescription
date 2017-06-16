@@ -39,14 +39,12 @@ jobs:
       - setup_remote_docker
       - run:
           name: Deploy to remote Docker space
-          command: |            
+          command: |
             ./create-certs.sh -a localhost
             docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
             ./deploy-local.sh
           working_directory: ~/qliktive-custom-analytics/scripts
       - run:
           name: Run E2E tests in remote Docker space
-          command: |
-            ../scripts/build-test-image.sh
-            ../scripts/run-e2e-tests-cci.sh
-          working_directory: ~/qliktive-custom-analytics/test
+          command: ./run-e2e-tests-cci.sh
+          working_directory: ~/qliktive-custom-analytics/scripts
