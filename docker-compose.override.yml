@@ -14,10 +14,10 @@ services:
 
   auth:
     environment:
-      GITHUB_CLIENT_ID_FILE: /secrets/github_client_id
-      GITHUB_CLIENT_SECRET_FILE: /secrets/github_client_secret
-      JWT_SECRET_FILE: /secrets/jwt_secret
-      COOKIE_SIGNING_FILE: /secrets/cookie_signing
+      GITHUB_CLIENT_ID_FILE: /secrets/GITHUB_CLIENT_ID
+      GITHUB_CLIENT_SECRET_FILE: /secrets/GITHUB_CLIENT_SECRET
+      JWT_SECRET_FILE: /secrets/JWT_SECRET
+      COOKIE_SIGNING_FILE: /secrets/COOKIE_SIGNING
     volumes:
       - secrets-volume:/secrets
 
