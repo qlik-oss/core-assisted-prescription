@@ -2,6 +2,7 @@
 
 cd "$(dirname "$0")" # change execution directory due to use of relative paths
 USERNAME=$(id -u -n)
+source scripts/boot2docker-iso.sh
 
 print_usage () {
   echo
