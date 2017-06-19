@@ -36,9 +36,9 @@ The use case consists of multiple services, based on Docker images developed in 
 
 This use case is primarily about consuming a UI-based analytics website, and we provide only a few of the APIs to the end-user.
 
-* **Analytics UI** - `/`, the default UI
+* **Analytics UI** - `/`, the default UI.
 * **Kibana Dashboard** - `/kibana/`, use to view logs from the different services — only available if the logging stack is included during deployment.
-* **Swarm Visualizer**\*\*\* - `/viz/`, use to see an overview of the deployment, and where services are running. Only available in Swarm mode.
+* **Swarm Visualizer** - `/viz/`, use to see an overview of the deployment, and where services are running. Only available in Swarm mode.
 
 ### Ports
 
