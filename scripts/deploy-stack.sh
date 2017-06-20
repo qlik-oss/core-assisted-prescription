@@ -17,19 +17,12 @@ do
     OVERWRITE="-o"
     shift # past arg
     ;;
-    -r)
-    FORCE="-r"
-    shift
-    ;;
   esac
   shift # past arg
 done
 
 # deploy data to all worker nodes so that it can be accessed locally:
 ./scripts/deploy-data.sh $OVERWRITE
-
-# create self-signed certificates for the manager node:
-./scripts/create-certs.sh $FORCE -a $MACHINEIP
 
 echo
 echo "========================================================================"

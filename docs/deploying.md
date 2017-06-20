@@ -69,10 +69,6 @@ If you have made changes to the data that should be mounted in the containers, y
 ```bash
 $ ./scripts/deploy-stack.sh -o
 ```
-Or if you need to regenerate SSL certificates for the gateway
-```bash
-$ ./scripts/deploy-stack.sh -r
-```
 
 ### Validating your deployment
 

@@ -40,7 +40,6 @@ jobs:
       - run:
           name: Deploy to remote Docker space
           command: |
-            ./create-certs.sh -a localhost
             docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
             ./deploy-local.sh
           working_directory: ~/qliktive-custom-analytics/scripts

@@ -19,13 +19,7 @@ For development purposes, the stack can be run on a developer machine using the 
 
 ### Locally without Docker Swarm
 
-You need to generate certificates the first time you want to start this project
-
-```sh
-$ ./scripts/create-certs.sh -a localhost
-```
-
-Then, you can easily start this use case locally on a developer machine, without any Swarm cluster, with:
+You can easily start this use case locally on a developer machine, without any Swarm cluster, with:
 
 ```sh
 $ ./scripts/deploy-local.sh

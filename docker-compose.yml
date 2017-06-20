@@ -6,9 +6,6 @@ services:
     # things for all end-users. It has the Analytics UI bundled into it.
     # See https://github.com/qlik-ea/qliktive-custom-analytics-openresty
     image: qlikea/qliktive-custom-analytics-openresty:master-128
-    secrets:
-      - cert-gateway.crt
-      - cert-gateway.key
     restart: always
     ports:
       - "443:443"
@@ -26,8 +23,6 @@ services:
       QIX_SESSION_PORT: 9455
       AUTH_HOST: auth
       AUTH_PORT: 3000
-      CERT_FILE: /run/secrets/cert-gateway.crt
-      CERT_KEY: /run/secrets/cert-gateway.key
     deploy:
       placement:
         constraints: [node.role == manager]
@@ -119,7 +114,3 @@ secrets:
     file: ./secrets/JWT_SECRET
   cookie_signing:
     file: ./secrets/COOKIE_SIGNING
-  cert-gateway.crt:
-    file: ./secrets/cert-gateway.crt
-  cert-gateway.key:
-    file: ./secrets/cert-gateway.key
