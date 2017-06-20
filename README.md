@@ -2,6 +2,8 @@
 
 **Warning**: This repo is under heavy development. We cannot guarantee that it works as described yet. Use at your own risk.
 
+Due to issues in the Docker binaries on Stable track (17.03), we require you to use least Docker 17.06 (currently in Edge track).
+
 ## Status
 
 [![CircleCI](https://circleci.com/gh/qlik-ea/qliktive-custom-analytics.svg?style=svg&circle-token=087152b4808d5373a8dcbbe82c2ff352e463a3a2)](https://circleci.com/gh/qlik-ea/qliktive-custom-analytics)
