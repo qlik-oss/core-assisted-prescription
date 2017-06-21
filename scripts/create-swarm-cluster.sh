@@ -37,18 +37,13 @@ do
   shift # past arg
 done
 
-if [[ -z "$DEPLOYMENT" ]]; then
-  echo "Error - No deployment provided."
-  echo "Use the -d option to set deployment to either local or vsphere"
-  print_usage
-  exit 1
-elif [ $DEPLOYMENT == "vsphere" ] || [ $DEPLOYMENT == "VSPHERE" ]; then
+if [ $DEPLOYMENT == "vsphere" ] || [ $DEPLOYMENT == "VSPHERE" ]; then
   DRIVER=vmwarevsphere
   SWITCH=
 elif [ $DEPLOYMENT == "amazonec2" ] || [ $DEPLOYMENT == "AMAZONEC2" ]; then
   DRIVER=amazonec2
   SWITCH=
-else
+elif [ $DEPLOYMENT == "local" ] || [ $DEPLOYMENT == "LOCAL" ]; then
   # Windows - Use HyperV and determine HyperV virtual switch.
   if [[ $(uname -o) == "Msys" ]]; then
     if [[ -z "$SWITCH" ]]; then
@@ -70,6 +65,11 @@ else
     DRIVER=virtualbox
     SWITCH="--virtualbox-memory 2048"
   fi
+else
+  echo "Error - No valid deployment provided."
+  echo "Use the -d option to set deployment to either local / vsphere / amazonec2"
+  print_usage
+  exit 1
 fi
 
 echo "========================================================================"

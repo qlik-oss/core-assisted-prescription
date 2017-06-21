@@ -1,6 +1,6 @@
 # Deploying the use-case
 
-Deployment of the use case can be done both to the AWS environments (_to be documented_) and to a Swarm cluster provided by the developer. This section contains examples and step-by-steps for deployment into such different environments.
+Deployment of the use case can be done both to the AWS environments and to a Swarm cluster provided by the developer. This section contains examples and step-by-steps for deployment into such different environments.
 
 ## Prerequisites
 
@@ -21,27 +21,43 @@ Deployment of the use case can be done both to the AWS environments (_to be docu
 
 There are a number of environment variables needed to deploy using vSphere e.g. username, passwords and network specific configurations. The needed variables are listed in the [Docker documentation](https://docs.docker.com/machine/drivers/vsphere/). In our setup we resolve it by exporting the environment variables using a `.bash_profile`.
 
+### Additional prerequisites for AWS deployment
+
+There are a number of environment variables needed to deploy using amazonec2. The needed variables are listed in the [Docker documentation](https://docs.docker.com/machine/drivers/aws/). In our setup we resolve it by exporting the environment variables using a `.bash_profile`.
+The AMIs could differ between different AWS zones  but could be found using [Amazon EC2 AMI Locator](https://cloud-images.ubuntu.com/locator/ec2/).
+The deployment has been verified with:
+```
+export AWS_DEFAULT_REGION=eu-west-1
+export AWS_AMI=ami-6c101b0a
+export AWS_INSTANCE_TYPE=t2.medium
+```
+After deploying to AWS you need to open the https/443 for external IPs and at least the ports specified in [Open protocols and ports between the hosts](https://docs.docker.com/engine/swarm/swarm-tutorial/#open-protocols-and-ports-between-the-hosts). This is done thru *AWS Console > EC2 > Security Groups (Select security group created by 'docker-machine') > Inbound (tab)*
+
 ## Deploy
 
 Step-by-step:
 
 1. To spin up an environment, use the script [create-swarm-cluster.sh](../scripts/create-swarm-cluster.sh).
 
-    For a local environment setup in Windows:
+    Windows local environment:
     ```bash
     $ ./scripts/create-swarm-cluster.sh -d local -v <virtual network switch name>
     ```
-    And a local setup on Mac OS X using VirtualBox:
+    Mac OS X local environment using VirtualBox:
     ```bash
     $ ./scripts/create-swarm-cluster.sh -d local
     ```
-    And to deploy to vsphere
+    vSphere:
     ```bash
     $ ./scripts/create-swarm-cluster.sh -d vsphere
     ```
+    Amazone EC2:
+    ```bash
+    $ ./scripts/create-swarm-cluster.sh -d amazonec2
+    ```
     By default the script will spin up `1 manager` node and `2 worker` nodes. When all nodes are up and running the script will finish with listing all the nodes.
 
-2. Now there are three VMs available in the setup, and the environment is ready for deployment. 
+2. Now there are three VMs available in the setup, and the environment is ready for deployment.
     ```bash
     $ ./scripts/deploy-stack.sh
     ```
