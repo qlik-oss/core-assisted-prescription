@@ -6,6 +6,7 @@ set -e
 MANAGERS=1
 WORKERS=2
 USERNAME=$(id -u -n)
+source scripts/boot2docker-iso.sh
 
 print_usage () {
   echo
@@ -39,11 +40,11 @@ done
 
 if [ $DEPLOYMENT == "vsphere" ] || [ $DEPLOYMENT == "VSPHERE" ]; then
   DRIVER=vmwarevsphere
-  SWITCH=
+  SWITCH="--vmwarevsphere-boot2docker-url $(boot2docker_iso)"
 elif [ $DEPLOYMENT == "amazonec2" ] || [ $DEPLOYMENT == "AMAZONEC2" ]; then
   DRIVER=amazonec2
   SWITCH=
-elif [ $DEPLOYMENT == "local" ] || [ $DEPLOYMENT == "LOCAL" ]; then
+elif
   # Windows - Use HyperV and determine HyperV virtual switch.
   if [[ $(uname -o) == "Msys" ]]; then
     if [[ -z "$SWITCH" ]]; then
@@ -59,11 +60,11 @@ elif [ $DEPLOYMENT == "local" ] || [ $DEPLOYMENT == "LOCAL" ]; then
     fi
 
     DRIVER=hyperv
-    SWITCH="--hyperv-memory 2048 --hyperv-virtual-switch $SWITCH"
+    SWITCH="--hyperv-memory 2048 --hyperv-boot2docker-url $(boot2docker_iso) --hyperv-virtual-switch $SWITCH"
   else
     # Non-Windows - Use Virtualbox and omit virtual switch.
     DRIVER=virtualbox
-    SWITCH="--virtualbox-memory 2048"
+    SWITCH="--virtualbox-memory 2048 --virtualbox-boot2docker-url $(boot2docker_iso)"
   fi
 else
   echo "Error - No valid deployment provided."

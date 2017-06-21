@@ -2,6 +2,7 @@
 
 cd "$(dirname "$0")" # change execution directory due to use of relative paths
 USERNAME=$(id -u -n)
+source scripts/boot2docker-iso.sh
 
 print_usage () {
   echo
@@ -47,15 +48,15 @@ EXISTING_MACHINES=$(docker-machine ls)
 
 if [[ $EXISTING_MACHINES == *"vmwarevsphere"* ]]; then
   DRIVER=vmwarevsphere
-  SWITCH=
+  SWITCH="--vmwarevsphere-boot2docker-url $(boot2docker_iso)"
 elif [[ $EXISTING_MACHINES == *"hyperv"* ]]; then
   DRIVER=hyperv
   # Get virtual switch used for HyperV in Windows
   VIRTUAL=$(docker-machine inspect $USERNAME-docker-manager1 | sed -n 's/.*"VSwitch": "\(.*\)",/\1/p')
-  SWITCH="--hyperv-memory 2048 --hyperv-virtual-switch $VIRTUAL"
+  SWITCH="--hyperv-memory 2048 --hyperv-boot2docker-url $(boot2docker_iso) --hyperv-virtual-switch $VIRTUAL"
 elif [[ $EXISTING_MACHINES == *"virtualbox"* ]]; then
   DRIVER=virtualbox
-  SWITCH="--virtualbox-memory 2048"
+  SWITCH="--virtualbox-memory 2048 --virtualbox-boot2docker-url $(boot2docker_iso)"
 else
   echo "No existing deployment found or unknown driver is used"
   print_usage

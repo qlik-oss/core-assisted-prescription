@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+cd "$(dirname "$0")"
+
 GATEWAY_IP_ADDR=
 DURATION=60
 
@@ -25,6 +27,9 @@ while getopts ":m:d:g:" opt; do
       ;;
   esac
 done
+
+# Built test container
+./build-test-image.sh
 
 if [[ -z $GATEWAY_IP_ADDR ]]; then
     CONTAINER_ID=$(docker ps -aqf "name=openresty")

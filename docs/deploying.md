@@ -74,6 +74,18 @@ Step-by-step:
     $ ./scripts/remove-swarm-cluster.sh
     ```
 
+### Updating your deployed stack
+
+If you make updates to the stack and want to update the deployment you just run the ```deploy-stack``` script again.
+
+```bash
+$ ./scripts/deploy-stack.sh
+```
+If you have made changes to the data that should be mounted in the containers, you need supply an additional switch.
+```bash
+$ ./scripts/deploy-stack.sh -o
+```
+
 ### Validating your deployment
 
 There is a small set of tests in [validate-swarm-cluster.sh](../scripts/validate-swarm-cluster.sh) that can validate a running deployment that services etc. are deployed and running on correct nodes. This script will work regardless if running a local or vSphere deployment.
