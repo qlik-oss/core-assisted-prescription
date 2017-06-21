@@ -44,7 +44,7 @@ if [ $DEPLOYMENT == "vsphere" ] || [ $DEPLOYMENT == "VSPHERE" ]; then
 elif [ $DEPLOYMENT == "amazonec2" ] || [ $DEPLOYMENT == "AMAZONEC2" ]; then
   DRIVER=amazonec2
   SWITCH=
-elif
+elif [ $DEPLOYMENT == "local" ] || [ $DEPLOYMENT == "LOCAL" ]; then
   # Windows - Use HyperV and determine HyperV virtual switch.
   if [[ $(uname -o) == "Msys" ]]; then
     if [[ -z "$SWITCH" ]]; then
