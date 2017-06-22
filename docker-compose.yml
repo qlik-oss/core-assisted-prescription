@@ -44,6 +44,7 @@ services:
       - github_client_secret
       - jwt_secret
       - cookie_signing
+      - accounts_file
     environment:
       SESSION_COOKIE_NAME: custom-analytics
       GITHUB_CLIENT_ID_FILE: /run/secrets/github_client_id
@@ -52,7 +53,8 @@ services:
       COOKIE_SIGNING_FILE: /run/secrets/cookie_signing
       SUCCESS_REDIRECT_URL: /#/app
       FAILURE_REDIRECT_URL: /
-      AUTH_STRATEGY: github
+      AUTH_STRATEGY: local #change to 'github' to login via github
+      ACCOUNTS_FILE: /run/secrets/accounts_file
     deploy:
       placement:
         constraints: [node.role == manager]
@@ -115,3 +117,5 @@ secrets:
     file: ./secrets/JWT_SECRET
   cookie_signing:
     file: ./secrets/COOKIE_SIGNING
+  accounts_file:
+    file: ./secrets/ACCOUNTS
