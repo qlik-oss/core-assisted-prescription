@@ -31,7 +31,7 @@ export AWS_DEFAULT_REGION=eu-west-1
 export AWS_AMI=ami-6c101b0a
 export AWS_INSTANCE_TYPE=t2.medium
 ```
-After deploying to AWS you need to open the https/443 for external IPs and at least the ports specified in [Open protocols and ports between the hosts](https://docs.docker.com/engine/swarm/swarm-tutorial/#open-protocols-and-ports-between-the-hosts). This is done thru *AWS Console > EC2 > Security Groups (Select security group created by 'docker-machine') > Inbound (tab)*
+After deploying to AWS you need to open the https/443 for external IPs and at least the ports specified in [Open protocols and ports between the hosts](https://docs.docker.com/engine/swarm/swarm-tutorial/#open-protocols-and-ports-between-the-hosts). This is done through *AWS Console > EC2 > Security Groups (Select security group created by 'docker-machine') > Inbound (tab)*
 
 ## Deploy
 
@@ -51,7 +51,7 @@ Step-by-step:
     ```bash
     $ ./scripts/create-swarm-cluster.sh -d vsphere
     ```
-    Amazone EC2:
+    Amazon EC2:
     ```bash
     $ ./scripts/create-swarm-cluster.sh -d amazonec2
     ```
