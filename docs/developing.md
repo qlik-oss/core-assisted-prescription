@@ -10,7 +10,10 @@ Developing this use case consists mainly of
 
 * Access to the `qlikea` Docker Hub organization.
 * Docker installed (latest release).
-* Logged in to Docker Hub.
+* Login to docker with your Docker hub account via the command line: 
+```sh
+$ docker login
+```
 * Clone this repo.
 
 ## Running the stack
