@@ -26,7 +26,7 @@ A service can then reference a secret like this
       FIRST_SECRET_FILE: /run/secrets/first_secret
   ...
 ```
-The secret will then be available to the service during run time under the path `/run/secrets/secret_name` only the secrets referenced by the service will be available. IE `first_secret` would  be available for the service `service-example` but not `second_secret`
+The secret will then be available to the service during run time under the path `/run/secrets/secret_name`. The service will only get access to the secrets that it's given access to in the docker-compose and not all the defined secrets. IE `first_secret` would  be available for the service `service-example` but not `second_secret`
 
 More info on how docker swarm handles secrets can be found [here](https://docs.docker.com/engine/swarm/secrets/)
 
