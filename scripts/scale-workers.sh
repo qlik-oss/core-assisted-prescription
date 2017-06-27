@@ -1,8 +1,10 @@
 #!/bin/bash
+set -e
 
-cd "$(dirname "$0")" # change execution directory due to use of relative paths
+cd "$(dirname "$0")"
+
 USERNAME=$(id -u -n)
-source scripts/boot2docker-iso.sh
+source ./boot2docker-iso.sh
 
 print_usage () {
   echo
