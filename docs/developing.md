@@ -10,7 +10,7 @@ Developing this use case consists mainly of
 
 * Access to the `qlikea` Docker Hub organization.
 * Docker installed (latest release).
-* Logged in to Docker.
+* Logged in to Docker Hub.
 * Clone this repo.
 
 ## Running the stack
@@ -45,6 +45,6 @@ You access it by going to the hostname or IP address of your manager VM node in 
 
 All pushed commits to the `master` branch or feature branches trigger the Circle CI job and some basic testing is performed on the use case configuration.
 
-On commits to `master` the Circle CI job also deploys the stack the AWS staging environment, where further more covering tests of the use case will take place. More on this can be found in the [Testing](./testing.md) section. (_This is not implemented yet_)
+On commits to `master` the Circle CI job also deploys the stack to the AWS staging environment, where further more covering tests of the use case will take place. More on this can be found in the [Testing](./testing.md) section. (_This is not implemented yet_)
 
 The Circle CI job for this use case can be found [here](https://circleci.com/gh/qlik-ea/qliktive-custom-analytics).

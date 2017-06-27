@@ -15,7 +15,7 @@ Deployment of the use case can be done both to the AWS environments (_to be docu
 
 ### Additional prerequisites for local deployment in OS X
 
-1. Install VirtualBox
+1. Install [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 
 ### Additional prerequisites for vSphere deployment
 
