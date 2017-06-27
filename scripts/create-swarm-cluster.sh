@@ -1,12 +1,13 @@
 #!/bin/bash
 
 set -e
+cd "$(dirname "$0")" # change execution directory due to use of relative paths
 
 # Set the amount of managers and worker nodes
 MANAGERS=1
 WORKERS=2
 USERNAME=$(id -u -n)
-source scripts/boot2docker-iso.sh
+source ./boot2docker-iso.sh
 
 print_usage () {
   echo

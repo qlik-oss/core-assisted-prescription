@@ -2,7 +2,7 @@
 
 cd "$(dirname "$0")" # change execution directory due to use of relative paths
 USERNAME=$(id -u -n)
-source scripts/boot2docker-iso.sh
+source ./boot2docker-iso.sh
 
 print_usage () {
   echo
@@ -49,6 +49,9 @@ EXISTING_MACHINES=$(docker-machine ls)
 if [[ $EXISTING_MACHINES == *"vmwarevsphere"* ]]; then
   DRIVER=vmwarevsphere
   SWITCH="--vmwarevsphere-boot2docker-url $(boot2docker_iso)"
+elif [[ $EXISTING_MACHINES == *"amazonec2"* ]]; then
+  DRIVER=amazonec2
+  SWITCH=""
 elif [[ $EXISTING_MACHINES == *"hyperv"* ]]; then
   DRIVER=hyperv
   # Get virtual switch used for HyperV in Windows
@@ -106,7 +109,7 @@ elif [[ $TOTAL_WORKERS -gt $EXISTING_WORKERS ]]; then
 
   for i in $(seq $(($EXISTING_WORKERS+1)) 1 $TOTAL_WORKERS); do
     echo "-> $USERNAME-docker-worker$i joining swarm as worker ..."
-    docker-machine ssh $USERNAME-docker-worker$i docker swarm join --token $WORKERTOKEN $(docker-machine ip $USERNAME-docker-manager1):2377
+    docker-machine ssh $USERNAME-docker-worker$i "sudo docker swarm join --token $WORKERTOKEN $(docker-machine ip $USERNAME-docker-manager1):2377"
   done
 
   # deploy data to all worker nodes so that it can be accessed locally
@@ -122,8 +125,8 @@ elif [[ $TOTAL_WORKERS -lt $EXISTING_WORKERS ]]; then
   # Remove worker nodes in reverse order
   for i in $(seq $EXISTING_WORKERS -1 $(($TOTAL_WORKERS+1))); do
     echo "-> Removing $USERNAME-docker-worker$i machine ..."
-    docker-machine ssh $USERNAME-docker-worker$i docker swarm leave # remove worker node from swarm
-    docker-machine ssh $USERNAME-docker-manager1 docker node rm -f $USERNAME-docker-worker$i # remove worker node from manager node list
+    docker-machine ssh $USERNAME-docker-worker$i "sudo docker swarm leave" # remove worker node from swarm
+    docker-machine ssh $USERNAME-docker-manager1 "sudo docker node rm -f $USERNAME-docker-worker$i" # remove worker node from manager node list
     docker-machine rm -y $USERNAME-docker-worker$i # remove docker-machine
   done
 fi
