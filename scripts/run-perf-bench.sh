@@ -28,7 +28,9 @@ while getopts ":m:d:g:" opt; do
   esac
 done
 
-# Built test container
+echo "========================================================================"
+echo " Building test image"
+echo "========================================================================"
 ./build-test-image.sh
 
 if [[ -z $GATEWAY_IP_ADDR ]]; then
@@ -36,4 +38,8 @@ if [[ -z $GATEWAY_IP_ADDR ]]; then
     GATEWAY_IP_ADDR=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.Gateway}}{{end}}' "$CONTAINER_ID")
 fi
 
+echo
+echo "========================================================================"
+echo " Running test image (perf-bench)"
+echo "========================================================================"
 docker run --rm test/qliktive-custom-analytics-test perf-bench -- -g $GATEWAY_IP_ADDR -m $MAX_USERS -d $DURATION
