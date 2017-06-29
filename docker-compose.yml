@@ -5,7 +5,7 @@ services:
     # This is our externally-facing gateway, exposing the configured
     # things for all end-users. It has the Analytics UI bundled into it.
     # See https://github.com/qlik-ea/qliktive-custom-analytics-openresty
-    image: qlikea/qliktive-custom-analytics-openresty:master-172
+    image: qlikea/qliktive-custom-analytics-openresty:master-208
     restart: always
     ports:
       - "443:443"
@@ -38,7 +38,7 @@ services:
 
   auth:
     # A service handling authentication and JWT generation.
-    image: qlikea/qliktive-authentication-service:0.0.1-70
+    image: qlikea/qliktive-authentication-service:0.0.1-72
     secrets:
       - github_client_id
       - github_client_secret
