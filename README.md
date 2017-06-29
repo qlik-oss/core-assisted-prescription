@@ -4,7 +4,7 @@
 
 **Warning**: This repo is under heavy development. We cannot guarantee that it works as described yet. Use at your own risk.
 
-To run this use case it's require to use latest Docker stable (version 17.06).
+To run this use case it's required to use Docker stable version 17.06 or latest.
 
 ## Introduction
 
