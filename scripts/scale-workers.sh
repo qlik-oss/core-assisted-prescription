@@ -1,8 +1,6 @@
 #!/bin/bash
-set -e
 
 cd "$(dirname "$0")"
-
 USERNAME=$(id -u -n)
 source ./boot2docker-iso.sh
 
