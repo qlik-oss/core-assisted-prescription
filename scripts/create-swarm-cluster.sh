@@ -7,7 +7,6 @@ cd "$(dirname "$0")" # change execution directory due to use of relative paths
 MANAGERS=1
 WORKERS=2
 USERNAME=$(id -u -n)
-source ./boot2docker-iso.sh
 
 print_usage () {
   echo
@@ -41,7 +40,7 @@ done
 
 if [ $DEPLOYMENT == "vsphere" ] || [ $DEPLOYMENT == "VSPHERE" ]; then
   DRIVER=vmwarevsphere
-  SWITCH="--vmwarevsphere-boot2docker-url $(boot2docker_iso)"
+  SWITCH=""
 elif [ $DEPLOYMENT == "amazonec2" ] || [ $DEPLOYMENT == "AMAZONEC2" ]; then
   DRIVER=amazonec2
   SWITCH=
@@ -61,11 +60,11 @@ elif [ $DEPLOYMENT == "local" ] || [ $DEPLOYMENT == "LOCAL" ]; then
     fi
 
     DRIVER=hyperv
-    SWITCH="--hyperv-memory 2048 --hyperv-boot2docker-url $(boot2docker_iso) --hyperv-virtual-switch $SWITCH"
+    SWITCH="--hyperv-memory 2048 --hyperv-virtual-switch $SWITCH"
   else
     # Non-Windows - Use Virtualbox and omit virtual switch.
     DRIVER=virtualbox
-    SWITCH="--virtualbox-memory 2048 --virtualbox-boot2docker-url $(boot2docker_iso)"
+    SWITCH="--virtualbox-memory 2048"
   fi
 else
   echo "Error - No valid deployment provided."
