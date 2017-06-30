@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+
 cd "$(dirname "$0")"
 USERNAME=$(id -u -n)
 
