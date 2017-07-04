@@ -30,8 +30,8 @@ echo "  Deploying stack to docker swarm"
 echo "========================================================================"
 
 eval $(docker-machine env $MACHINE)
-docker-compose -f docker-compose.yml -f docker-compose.logging.yml pull
-docker-compose -f docker-compose.yml -f docker-compose.logging.yml config > docker-compose.prod.yml
+docker-compose -f docker-compose.yml -f docker-compose.logging.yml -f docker-compose.monitoring.yml pull
+docker-compose -f docker-compose.yml -f docker-compose.logging.yml -f docker-compose.monitoring.yml config > docker-compose.prod.yml
 docker stack deploy -c ./docker-compose.prod.yml --with-registry-auth custom-analytics
 
 echo "\n$(docker service ls)"

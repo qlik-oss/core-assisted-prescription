@@ -46,7 +46,7 @@ if [ $DEPLOYMENT == "vsphere" ] || [ $DEPLOYMENT == "VSPHERE" ]; then
   SWITCH="--vmwarevsphere-boot2docker-url $(boot2docker_iso)"
 elif [ $DEPLOYMENT == "amazonec2" ] || [ $DEPLOYMENT == "AMAZONEC2" ]; then
   DRIVER=amazonec2
-  SWITCH=
+  SWITCH="--engine-install-url=https://releases.rancher.com/install-docker/17.05.sh"
 elif [ $DEPLOYMENT == "local" ] || [ $DEPLOYMENT == "LOCAL" ]; then
   # Windows - Use HyperV and determine HyperV virtual switch.
   if [[ $(uname -o) == "Msys" ]]; then
@@ -63,7 +63,7 @@ elif [ $DEPLOYMENT == "local" ] || [ $DEPLOYMENT == "LOCAL" ]; then
     fi
 
     DRIVER=hyperv
-    SWITCH="--hyperv-memory 2048 --hyperv-boot2docker-url $(boot2docker_iso) --hyperv-virtual-switch $SWITCH"
+    SWITCH="--hyperv-memory 2048 --hyperv-virtual-switch $SWITCH"
   else
     # Non-Windows - Use Virtualbox and omit virtual switch.
     DRIVER=virtualbox
@@ -84,15 +84,15 @@ for i in $(seq 1 $MANAGERS); do
     echo "-> Creating $USERNAME-docker-manager$i machine ...";
     # Do not create managers in parallel if certificates does not exist (generated on first docker-machine create)
     if [ ! -f ~/.docker/machine/certs/ca.pem ]; then
-      docker-machine create -d $DRIVER $SWITCH --engine-opt experimental=true --engine-label env=test $USERNAME-docker-manager$i
+      docker-machine create -d $DRIVER $SWITCH --engine-opt experimental=true --engine-opt metrics-addr=0.0.0.0:4999 --engine-label env=test $USERNAME-docker-manager$i
     else
-      docker-machine create -d $DRIVER $SWITCH --engine-opt experimental=true --engine-label env=test $USERNAME-docker-manager$i &
+      docker-machine create -d $DRIVER $SWITCH --engine-opt experimental=true --engine-opt metrics-addr=0.0.0.0:4999 --engine-label env=test $USERNAME-docker-manager$i &
     fi
 done
 
 for i in $(seq 1 $WORKERS); do
    echo "== Creating $USERNAME-docker-worker$i machine ...";
-   docker-machine create -d $DRIVER $SWITCH --engine-opt experimental=true --engine-label env=test $USERNAME-docker-worker$i &
+   docker-machine create -d $DRIVER $SWITCH --engine-opt experimental=true --engine-opt metrics-addr=0.0.0.0:4999 --engine-label env=test $USERNAME-docker-worker$i &
 done
 
 echo "========================================================================"
