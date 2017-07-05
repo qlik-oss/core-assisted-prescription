@@ -5,7 +5,7 @@ networks:
 
 services:
   cadvisor:
-    image: google/cadvisor:${CADVISOR_VERSION:-v0.25.0}
+    image: google/cadvisor:v0.26.1
     networks:
       - monitoring
     volumes:
@@ -68,8 +68,8 @@ services:
       - monitoring
     command: -config.file=/etc/prometheus/prometheus.yml -storage.local.path=/prometheus -web.console.libraries=/etc/prometheus/console_libraries -web.console.templates=/etc/prometheus/consoles -alertmanager.url=http://alertmanager:9093
     deploy:
-      mode: replicated
-      replicas: 1
+      placement:
+        constraints: [node.role == manager]
       resources:
         limits:
           cpus: '0.50'
@@ -90,14 +90,14 @@ services:
       ELASTICSEARCH_ENDPOINT: ${ES_ADDRESS:-http://elasticsearch:9200}
       ELASTICSEARCH_USER: ${ES_USERNAME}
       ELASTICSEARCH_PASSWORD: ${ES_PASSWORD}
-    entrypoint: /init_grafana #init.sh
+    entrypoint: /init_grafana
     configs:
       - source: init_grafana
-        mode: 777
+        mode: 100
       - source: datasource_prometheus
-        mode: 777
+        mode: 100
       - source: import_dashboards
-        mode: 777
+        mode: 100
     deploy:
       placement:
         constraints: [node.role == manager]
