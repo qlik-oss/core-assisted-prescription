@@ -21,14 +21,8 @@ if [ "$i" = 0 ]; then
 fi
 printf "${GREEN}Grafana service ready!${NC}\n"
 
-echo
-    for f in /initgrafana.d/*; do
-        case "$f" in
-            *.sh)     echo "$0: running $f"; . "$f" ;;
-            *)        echo "$0: ignoring $f" ;;
-        esac
-        echo
-    done
+. /datasource_prometheus
+. /import_dashboards
 
 jobs
 

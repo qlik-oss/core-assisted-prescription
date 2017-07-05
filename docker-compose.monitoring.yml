@@ -1,4 +1,4 @@
-version: "3.1"
+version: "3.3"
 
 networks:
   monitoring:
@@ -79,7 +79,7 @@ services:
           memory: 128M
 
   grafana:
-    image: basi/grafana:${GRAFANA_VERSION:-v4.1.1}
+    image: grafana/grafana:4.3.2
     ports:
       - "3000:3000"
     networks:
@@ -90,9 +90,17 @@ services:
       ELASTICSEARCH_ENDPOINT: ${ES_ADDRESS:-http://elasticsearch:9200}
       ELASTICSEARCH_USER: ${ES_USERNAME}
       ELASTICSEARCH_PASSWORD: ${ES_PASSWORD}
+    entrypoint: /init_grafana #init.sh
+    configs:
+      - source: init_grafana
+        mode: 777
+      - source: datasource_prometheus
+        mode: 777
+      - source: import_dashboards
+        mode: 777
     deploy:
-      mode: replicated
-      replicas: 1
+      placement:
+        constraints: [node.role == manager]
       resources:
         limits:
           cpus: '0.50'
@@ -100,3 +108,12 @@ services:
         reservations:
           cpus: '0.50'
           memory: 32M
+configs:
+  init_grafana:
+    file: ./configs/grafana/init.sh
+  datasource_prometheus:
+    file: ./configs/grafana/datasource-prometheus.sh
+  import_dashboards:
+    file: ./configs/grafana/import-dashboards.sh
+
+
