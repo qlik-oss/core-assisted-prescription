@@ -1,14 +1,30 @@
 # Logging
 
+All services developed by Qlik will follow a pattern there all logging is sent to `stdout` and the format of the log message will be in JSON.
 
+This allows you to pick up logs either by CLI
+`docker logs <container id>` or use a log driver such as gelf to forward all logging to a service. This use case has a logstash service that transforms the log messages (if needed) and adds it to a elastic search database. All messages can then be searched and visualized by kibana.
 
 The system clock must be set for the UTC 00:00 timezone (a.k.a Zulu), and events must be logged in this timezone.
 
-## Logging output
-To ease the configuration the output from engine will be a json structure for each log type described below.
+## Example configuration
+```
+qix-engine:
+	image: qlikea/engine
+	command: -S TrafficLogVerbosity=5 -S EnableTTL=1
+	logging:
+		driver: gelf
+		options:
+			gelf-address: udp://localhost:12201
+```
 
-## Configuration
-| Name	| Description | Default value |
+### Verbosity of QIX engine logging
+
+ The verbosity of different log types is set through command line parameters when starting the docker container.
+
+ `command: -S TrafficLogVerbosity=5 `
+
+| Name	| Description | Default verbosity value°|
 | --- | --- | --- |
 | SystemLogVerbosity | System log | 4 |
 | AuditLogVerbosity	| Audit log |	0 |
@@ -19,3 +35,11 @@ To ease the configuration the output from engine will be a json structure for ea
 | SmartSearchQueryLogVerbosity	| SmartSearchQuery log |	3 |
 | SmartSearchIndexLogVerbosity	| SmartSearchIndex log |	3 |
 | SSE	| Server side extension log |	4 |
+
+° (Off =0, Fatal=1, Error=2, Warning=3, Info=4, Debug=5)
+
+### Collect the logs
+
+Depending of the deployment the logging sent to `stdout` can be collected in different ways. Amazon has CloudWatch, there are logging as a service (e.g. logit.io) and in this use case we deploy the ELK° stack and use the [gelf logdriver](https://docs.docker.com/engine/admin/logging/gelf) to forward the log messages. Looking at the configuration above all messages sent to `stdout` will be picked up by the gelf driver and forwarded to `udp://localhost:12201` there logstash (on every node) will receive the messages, transform them and post them to the elastic search database hosted on the manager node.
+
+° ELK = Elastic search, Logstash and Kibana ([elastic](www.elastic.co))
