@@ -1,6 +1,6 @@
 # Logging
 
-All services developed by Qlik will follow a pattern there all logging is sent to `stdout` and the format of the log message will be in JSON.
+All services developed by Qlik will follow a pattern where all logging is sent to `stdout` and the format of the log message will be in JSON.
 
 This allows you to pick up logs either by CLI
 `docker logs <container id>` or use a log driver such as gelf to forward all logging to a service. This use case has a logstash service that transforms the log messages (if needed) and adds it to a elastic search database. All messages can then be searched and visualized by kibana.
@@ -40,6 +40,6 @@ qix-engine:
 
 ### Collect the logs
 
-Depending of the deployment the logging sent to `stdout` can be collected in different ways. Amazon has CloudWatch, there are logging as a service (e.g. logit.io) and in this use case we deploy the ELK° stack and use the [gelf logdriver](https://docs.docker.com/engine/admin/logging/gelf) to forward the log messages. Looking at the configuration above all messages sent to `stdout` will be picked up by the gelf driver and forwarded to `udp://localhost:12201` there logstash (on every node) will receive the messages, transform them and post them to the elastic search database hosted on the manager node.
+Depending on the deployment the logging sent to `stdout` can be collected in different ways. Amazon has CloudWatch, there are logging as a service (e.g. logit.io) and in this use case we deploy the ELK° stack and use the [gelf logdriver](https://docs.docker.com/engine/admin/logging/gelf) to forward the log messages. Looking at the configuration above all messages sent to `stdout` will be picked up by the gelf driver and forwarded to `udp://localhost:12201` there logstash (on every node) will receive the messages, transform them and post them to the elastic search database hosted on the manager node.
 
 ° ELK = Elastic search, Logstash and Kibana ([elastic](www.elastic.co))
