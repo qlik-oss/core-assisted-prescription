@@ -89,11 +89,7 @@ services:
     # cluster, and is the service we primarily want to scale up in
     # this use-case.
     image: qlikea/engine:12.26.0
-<<<<<<< HEAD
-    command: -S EnableTTL=1 -S SessionLogVerbosity=5
-=======
     command: -S EnableTTL=1
->>>>>>> master
     volumes:
       - /home/docker/data/csv:/data
       - /home/docker/data/doc:/doc
