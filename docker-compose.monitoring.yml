@@ -74,6 +74,8 @@ services:
       - monitoring
     environment:
       PROMETHEUS_ENDPOINT: http://prometheus:9090
+      GF_SECURITY_ADMIN_PASSWORD: ${GF_PASSWORD:-admin}
+      DASHBOARDS_IMPORT: "179:5"
     entrypoint: /init_grafana
     configs:
       - source: init_grafana
