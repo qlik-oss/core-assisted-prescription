@@ -43,7 +43,7 @@ if [ $DEPLOYMENT == "vsphere" ] || [ $DEPLOYMENT == "VSPHERE" ]; then
   SWITCH=""
 elif [ $DEPLOYMENT == "amazonec2" ] || [ $DEPLOYMENT == "AMAZONEC2" ]; then
   DRIVER=amazonec2
-  SWITCH="--engine-install-url=https://releases.rancher.com/install-docker/17.05.sh"
+  SWITCH=
 elif [ $DEPLOYMENT == "local" ] || [ $DEPLOYMENT == "LOCAL" ]; then
   # Windows - Use HyperV and determine HyperV virtual switch.
   if [[ $(uname -o) == "Msys" ]]; then
