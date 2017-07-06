@@ -1,4 +1,5 @@
 #!/usr/bin/env bash -ex
+# these scripts comes (and have been slightly modified from the docker images used in this guide: https://medium.com/@basilio.vera/docker-swarm-metrics-in-prometheus-e02a6a5745a
 
 : ${GF_SECURITY_ADMIN_USER:=admin}
 

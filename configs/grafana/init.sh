@@ -1,4 +1,5 @@
 #!/bin/bash
+# these scripts comes (and have been slightly modified from the docker images used in this guide: https://medium.com/@basilio.vera/docker-swarm-metrics-in-prometheus-e02a6a5745a
 set -o monitor
 
 RED='\033[0;31m'
