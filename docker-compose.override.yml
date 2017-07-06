@@ -1,4 +1,4 @@
-version: "3.1"
+version: "3.3"
 
 # This file is for development overrides (e.g. config for docker-compose up),
 # not used when deploying to Swarm.

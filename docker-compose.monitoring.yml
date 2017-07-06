@@ -1,4 +1,4 @@
-version: "3.1"
+version: "3.3"
 
 networks:
   monitoring:
@@ -61,12 +61,11 @@ services:
           memory: 4M
 
   prometheus:
-    image: basi/prometheus-swarm:${PROMETHEUS_SWARM_VERSION:-v0.4.3}
-    ports:
-      - "9090"
+    image: prom/prometheus:v1.7.1
     networks:
       - monitoring
-    command: -config.file=/etc/prometheus/prometheus.yml -storage.local.path=/prometheus -web.console.libraries=/etc/prometheus/console_libraries -web.console.templates=/etc/prometheus/consoles -alertmanager.url=http://alertmanager:9093
+    configs:
+      - prometheus
     deploy:
       placement:
         constraints: [node.role == manager]
@@ -94,3 +93,7 @@ services:
         reservations:
           cpus: '0.50'
           memory: 32M
+
+configs:
+  prometheus:
+    file: .config/prometheus/prometheus.yml
