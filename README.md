@@ -4,7 +4,7 @@
 
 **Warning**: This repo is under heavy development. We cannot guarantee that it works as described yet. Use at your own risk.
 
-Due to issues in the Docker binaries on Stable track (17.03), we require you to **use at least Docker 17.06 (currently in Edge track).**
+To run this use case it's required to use Docker stable version 17.06 or latest.
 
 ## Introduction
 
