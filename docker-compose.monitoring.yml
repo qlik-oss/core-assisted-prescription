@@ -20,9 +20,6 @@ services:
         limits:
           cpus: '0.10'
           memory: 128M
-        reservations:
-          cpus: '0.10'
-          memory: 64M
 
   node-exporter:
     image: basi/node-exporter:${NODE_EXPORTER_VERSION:-v1.13.0}
@@ -35,16 +32,13 @@ services:
       - /etc/hostname:/etc/host_hostname
     environment:
       HOST_HOSTNAME: /etc/host_hostname
-    command: -collector.procfs "/host/proc" -collector.sysfs /host/sys -collector.textfile.directory /etc/node-exporter/ -collectors.enabled 'conntrack,diskstats,entropy,filefd,filesystem,loadavg,mdadm,meminfo,netdev,netstat,stat,textfile,time,vmstat,ipvs' -collector.filesystem.ignored-mount-points "^/(sys|proc|dev|host|etc)($$/)"
+    command: -collector.procfs "/host/proc" -collector.sysfs /host/sys -collector.textfile.directory /etc/node-exporter/ -collectors.enabled 'conntrack,diskstats,entropy,filefd,filesystem,loadavg,mdadm,meminfo,netdev,netstat,stat,textfile,time,vmstat,ipvs' -collector.filesystem.ignored-mount-points "^/(sys|proc|dev|host|etc)($$$$/)"
     deploy:
       mode: global
       resources:
         limits:
           cpus: '0.10'
           memory: 32M
-        reservations:
-          cpus: '0.10'
-          memory: 16M
 
   docker-exporter:
     image: basi/socat:${DOCKER_EXPORTER_VERSION:-v0.1.0}
@@ -56,9 +50,6 @@ services:
         limits:
           cpus: '0.05'
           memory: 6M
-        reservations:
-          cpus: '0.05'
-          memory: 4M
 
   prometheus:
     image: prom/prometheus:v1.7.1
@@ -73,9 +64,6 @@ services:
         limits:
           cpus: '0.50'
           memory: 1024M
-        reservations:
-          cpus: '0.50'
-          memory: 128M
 
   grafana:
     image: grafana/grafana:4.3.2
@@ -83,6 +71,16 @@ services:
       - "3000:3000"
     networks:
       - monitoring
+    environment:
+      PROMETHEUS_ENDPOINT: http://prometheus:9090
+    entrypoint: /init_grafana
+    configs:
+      - source: init_grafana
+        mode: 100
+      - source: datasource_prometheus
+        mode: 100
+      - source: import_dashboards
+        mode: 100
     deploy:
       placement:
         constraints: [node.role == manager]
@@ -90,10 +88,13 @@ services:
         limits:
           cpus: '0.50'
           memory: 64M
-        reservations:
-          cpus: '0.50'
-          memory: 32M
 
 configs:
+  init_grafana:
+    file: ./configs/grafana/init.sh
+  datasource_prometheus:
+    file: ./configs/grafana/datasource-prometheus.sh
+  import_dashboards:
+    file: ./configs/grafana/import-dashboards.sh
   prometheus:
     file: .config/prometheus/prometheus.yml
