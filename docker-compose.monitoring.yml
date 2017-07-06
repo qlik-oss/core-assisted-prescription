@@ -99,4 +99,4 @@ configs:
   import_dashboards:
     file: ./configs/grafana/import-dashboards.sh
   prometheus:
-    file: .configs/prometheus/prometheus.yml
+    file: ./configs/prometheus/prometheus.yml
