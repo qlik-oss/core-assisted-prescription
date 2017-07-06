@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env bash -ex
 
 : ${GF_SECURITY_ADMIN_USER:=admin}
 
