@@ -1,10 +1,7 @@
 #!/bin/bash
-set -e
 
 cd "$(dirname "$0")"
-
 USERNAME=$(id -u -n)
-source ./boot2docker-iso.sh
 
 print_usage () {
   echo
@@ -50,7 +47,7 @@ EXISTING_MACHINES=$(docker-machine ls)
 
 if [[ $EXISTING_MACHINES == *"vmwarevsphere"* ]]; then
   DRIVER=vmwarevsphere
-  SWITCH="--vmwarevsphere-boot2docker-url $(boot2docker_iso)"
+  SWITCH=""
 elif [[ $EXISTING_MACHINES == *"amazonec2"* ]]; then
   DRIVER=amazonec2
   SWITCH=""
@@ -58,10 +55,10 @@ elif [[ $EXISTING_MACHINES == *"hyperv"* ]]; then
   DRIVER=hyperv
   # Get virtual switch used for HyperV in Windows
   VIRTUAL=$(docker-machine inspect $USERNAME-docker-manager1 | sed -n 's/.*"VSwitch": "\(.*\)",/\1/p')
-  SWITCH="--hyperv-memory 2048 --hyperv-boot2docker-url $(boot2docker_iso) --hyperv-virtual-switch $VIRTUAL"
+  SWITCH="--hyperv-memory 2048 --hyperv-virtual-switch $VIRTUAL"
 elif [[ $EXISTING_MACHINES == *"virtualbox"* ]]; then
   DRIVER=virtualbox
-  SWITCH="--virtualbox-memory 2048 --virtualbox-boot2docker-url $(boot2docker_iso)"
+  SWITCH="--virtualbox-memory 2048"
 else
   echo "No existing deployment found or unknown driver is used"
   print_usage
