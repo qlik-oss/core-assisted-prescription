@@ -87,15 +87,15 @@ for i in $(seq 1 $MANAGERS); do
     echo "-> Creating $USERNAME-docker-manager$i machine ...";
     # Do not create managers in parallel if certificates does not exist (generated on first docker-machine create)
     if [ ! -f ~/.docker/machine/certs/ca.pem ]; then
-      docker-machine create -d $DRIVER $SWITCH --engine-opt experimental=true --engine-label env=qliktive $USERNAME-docker-manager$i
+      docker-machine create -d $DRIVER $SWITCH --engine-opt experimental=true --engine-opt metrics-addr=0.0.0.0:4999 --engine-label env=qliktive $USERNAME-docker-manager$i
     else
-      docker-machine create -d $DRIVER $SWITCH --engine-opt experimental=true --engine-label env=qliktive $USERNAME-docker-manager$i &
+      docker-machine create -d $DRIVER $SWITCH --engine-opt experimental=true --engine-opt metrics-addr=0.0.0.0:4999 --engine-label env=qliktive $USERNAME-docker-manager$i &
     fi
 done
 
 for i in $(seq 1 $WORKERS); do
    echo "== Creating $USERNAME-docker-worker$i machine ...";
-   docker-machine create -d $DRIVER $SWITCH --engine-opt experimental=true --engine-label env=qliktive $USERNAME-docker-worker$i &
+   docker-machine create -d $DRIVER $SWITCH --engine-opt experimental=true --engine-opt metrics-addr=0.0.0.0:4999 --engine-label env=qliktive $USERNAME-docker-worker$i &
 done
 
 echo "========================================================================"
