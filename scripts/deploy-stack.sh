@@ -1,12 +1,21 @@
 #!/bin/bash
 
+set -e
+
 cd "$(dirname "$0")" # change execution directory due to use of relative paths
 cd .. # needs to be run in root to get secrets corretly
 source ./scripts/output-styles.sh
 
+print_usage () {
+  echo
+  echo "Usage:"
+  echo "  deploy-stack.sh [-o <switch>] [-u <username>]"
+  echo "  -o <overwrite> - Force deployment of data files to workers."
+  echo "  -u <username>  - Possibility to override the username in machinename."
+  echo
+}
+
 USERNAME=$(id -u -n)
-MACHINE=$USERNAME-docker-manager1
-MACHINEIP=$(docker-machine ip $MACHINE)
 
 while [[ $# -gt 0 ]]
 do
@@ -17,12 +26,23 @@ do
     OVERWRITE="-o"
     shift # past arg
     ;;
+    -u)
+    USERNAME="$2"
+    shift # past arg
+    ;;
+    *)
+    print_usage
+    exit 1
+    ;;
   esac
   shift # past arg
 done
 
+MACHINE=$USERNAME-docker-manager1
+MACHINEIP=$(docker-machine ip $MACHINE)
+
 # deploy data to all worker nodes so that it can be accessed locally:
-./scripts/deploy-data.sh $OVERWRITE
+./scripts/deploy-data.sh $OVERWRITE -u $USERNAME
 
 echo
 echo "========================================================================"
