@@ -50,7 +50,7 @@ jobs:
           name: Run E2E tests in remote Docker space
           command: ./run-e2e-tests-cci.sh
           working_directory: ~/qliktive-custom-analytics/scripts
-      - deployment:
+      - deploy:
           name: Deploy public demo to AWS
           filters:
             branches:
