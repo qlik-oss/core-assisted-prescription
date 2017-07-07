@@ -31,8 +31,10 @@ services:
 
   kibana:
     # Used for visualizing and viewing logs stored in elasticsearch.
-    # See https://github.com/qlik-ea/qliktive-kibana-custom-analytics
-    image: qlikea/qliktive-custom-analytics-kibana:master-3
+    image:  docker.elastic.co/kibana/kibana:5.2.2
+    configs:
+      - source: kibana-config
+        target: /usr/share/kibana/config/kibana.yml
     deploy:
       placement:
         constraints: [node.role == manager]
@@ -75,3 +77,5 @@ configs:
     file: ./configs/logstash/logstash.yml
   logstash-pipeline:
     file: ./configs/logstash/logstash.conf
+  kibana-config:
+    file: ./configs/kibana/kibana.yml
