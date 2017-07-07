@@ -38,12 +38,23 @@ jobs:
             mv /tmp/docker/* /usr/bin
       - setup_remote_docker
       - run:
-          name: Deploy to remote Docker space
+          name: Login to Dockerhub
           command: |
             docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
+      - run:
+          name: Deploy to remote Docker space
+          command: |
             ./deploy-local.sh
           working_directory: ~/qliktive-custom-analytics/scripts
       - run:
           name: Run E2E tests in remote Docker space
           command: ./run-e2e-tests-cci.sh
+          working_directory: ~/qliktive-custom-analytics/scripts
+      - deployment:
+          name: Deploy public demo to AWS
+          filters:
+            branches:
+              only: deployFromCCI
+          command: |
+              ./deploy-stack.sh
           working_directory: ~/qliktive-custom-analytics/scripts
