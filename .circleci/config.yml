@@ -59,6 +59,7 @@ jobs:
               curl -L https://github.com/docker/machine/releases/download/v0.12.0/docker-machine-`uname -s`-`uname -m` > /usr/local/bin/docker-machine
               chmod +x /usr/local/bin/docker-machine
               scp -o StrictHostKeyChecking=no ubuntu@54.229.164.168:/home/ubuntu/*-docker-*.zip ~/
+              apt-get install unzip
               for i in ~/*-docker-*.zip; do ./import-machine.sh "$i"; done;
               ./deploy-stack.sh -u demo
           working_directory: ~/qliktive-custom-analytics/scripts
