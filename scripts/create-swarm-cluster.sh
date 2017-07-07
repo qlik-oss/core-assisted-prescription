@@ -11,10 +11,12 @@ USERNAME=$(id -u -n)
 print_usage () {
   echo
   echo "Usage:"
-  echo "  create-swarm-cluster.sh -d <deployment> [-v <switch>]"
+  echo "  create-swarm-cluster.sh -d <deployment> [-v <switch>] [-u <username>]"
   echo "  -d <deployment> - Type of deployment. Currently supported deployments are; local / vsphere / amazonec2"
-  echo "  -v <switch> - Windows only. Use <switch> as HyperV virtual switch".
-  echo "                Overrides the HYPERV_VIRTUAL_SWITCH environment variable."
+  echo "  -v <switch>     - Windows only. Use <switch> as HyperV virtual switch."
+  echo "                    Overrides the HYPERV_VIRTUAL_SWITCH environment variable."
+  echo "  -u <username>   - Possibility to override the username in machinename."
+  echo
 }
 
 while [[ $# -gt 1 ]]
@@ -28,6 +30,10 @@ do
     ;;
     -v)
     SWITCH="$2"
+    shift # past arg
+    ;;
+    -u)
+    USERNAME="$2"
     shift # past arg
     ;;
     *)
@@ -81,15 +87,15 @@ for i in $(seq 1 $MANAGERS); do
     echo "-> Creating $USERNAME-docker-manager$i machine ...";
     # Do not create managers in parallel if certificates does not exist (generated on first docker-machine create)
     if [ ! -f ~/.docker/machine/certs/ca.pem ]; then
-      docker-machine create -d $DRIVER $SWITCH --engine-opt experimental=true --engine-label env=test $USERNAME-docker-manager$i
+      docker-machine create -d $DRIVER $SWITCH --engine-opt experimental=true --engine-opt metrics-addr=0.0.0.0:4999 --engine-label env=qliktive $USERNAME-docker-manager$i
     else
-      docker-machine create -d $DRIVER $SWITCH --engine-opt experimental=true --engine-label env=test $USERNAME-docker-manager$i &
+      docker-machine create -d $DRIVER $SWITCH --engine-opt experimental=true --engine-opt metrics-addr=0.0.0.0:4999 --engine-label env=qliktive $USERNAME-docker-manager$i &
     fi
 done
 
 for i in $(seq 1 $WORKERS); do
    echo "== Creating $USERNAME-docker-worker$i machine ...";
-   docker-machine create -d $DRIVER $SWITCH --engine-opt experimental=true --engine-label env=test $USERNAME-docker-worker$i &
+   docker-machine create -d $DRIVER $SWITCH --engine-opt experimental=true --engine-opt metrics-addr=0.0.0.0:4999 --engine-label env=qliktive $USERNAME-docker-worker$i &
 done
 
 echo "========================================================================"
@@ -120,46 +126,21 @@ done
 
 echo "========================================================================"
 echo "  Increase available virtual memory on manager nodes due to ELK stack"
-echo "  and setting hostname (reboot needed to register in DNS)"
 echo "========================================================================"
 
 for i in $(seq 1 $MANAGERS); do
+  # Set initial value
+  echo "-> Increasing virtual memory vm.max_map_count on node manager$i for elasticsearch"
+  docker-machine ssh $USERNAME-docker-manager$i "sudo sysctl -w vm.max_map_count=262144"
 
   if [ $DRIVER == "amazonec2" ]; then
-    echo "-> Increasing virtual memory vm.max_map_count on node manager$i for elasticsearch"
-    # Set initial value
-    docker-machine ssh $USERNAME-docker-manager$i "sudo sysctl -w vm.max_map_count=262144"
     # Add to conf so the setting is not lost after a reboot
     docker-machine ssh $USERNAME-docker-manager$i "echo sysctl -w vm.max_map_count=262144 | sudo tee -a /etc/sysctl.conf"
   else
-    echo "-> Increasing virtual memory vm.max_map_count on node manager$i for elasticsearch"
     # Add to boot2docker profile so the setting is not lost after a reboot
     docker-machine ssh $USERNAME-docker-manager$i "echo sysctl -w vm.max_map_count=262144 | sudo tee -a /var/lib/boot2docker/profile"
-
-    echo "-> Setting hostname to $USERNAME-docker-manager$i"
-    docker-machine ssh $USERNAME-docker-manager$i "sudo hostname $USERNAME-docker-manager$i"
-
-    echo "-> Restarting $USERNAME-docker-manager$i to register it in the DNS"
-    docker-machine restart $USERNAME-docker-manager$i
   fi
 
-done
-
-echo "========================================================================"
-echo "  Re-provisioning the nodes to make sure certificates and network is"
-echo "  set up properly"
-echo "========================================================================"
-
-for i in $(seq 1 $MANAGERS); do
-  node=$USERNAME-docker-manager$i
-  echo "-> Re-provisioning $node..."
-  docker-machine provision $node
-done
-
-for i in $(seq 1 $WORKERS); do
-  node=$USERNAME-docker-worker$i
-  echo "-> Re-provisioning $node..."
-  docker-machine provision $node
 done
 
 echo "========================================================================"

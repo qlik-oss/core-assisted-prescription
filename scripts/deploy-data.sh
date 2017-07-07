@@ -14,6 +14,10 @@ do
     -o)
     OVERWRITE="1"
     ;;
+    -u)
+    USERNAME="$2"
+    shift # past arg
+    ;;
   esac
   shift # past arg
 done

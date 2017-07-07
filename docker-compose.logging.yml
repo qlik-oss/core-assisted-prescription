@@ -1,4 +1,4 @@
-version: "3.1"
+version: "3.3"
 
 services:
   elasticsearch:
@@ -16,11 +16,12 @@ services:
         constraints: [node.role == manager]
 
   logstash:
-    # Logstash runs as one instance on each node in the cluster
-    # since it's using the UDP protocol. Pushes all its collected
-    # logs to the elasticsearch instance.
-    # See https://github.com/qlik-ea/qliktive-custom-analytics-logstash
-    image: qlikea/qliktive-custom-analytics-logstash:master-32
+    image: docker.elastic.co/logstash/logstash:5.2.2
+    configs:
+      - source: logstash-config
+        target: /usr/share/logstash/config/logstash.yml
+      - source: logstash-pipeline
+        target: /usr/share/logstash/pipeline/logstash.conf
     ports:
       - "12201:12201/udp"
     environment:
@@ -30,8 +31,10 @@ services:
 
   kibana:
     # Used for visualizing and viewing logs stored in elasticsearch.
-    # See https://github.com/qlik-ea/qliktive-kibana-custom-analytics
-    image: qlikea/qliktive-custom-analytics-kibana:master-3
+    image:  docker.elastic.co/kibana/kibana:5.2.2
+    configs:
+      - source: kibana-config
+        target: /usr/share/kibana/config/kibana.yml
     deploy:
       placement:
         constraints: [node.role == manager]
@@ -68,3 +71,11 @@ services:
       driver: "gelf"
       options:
         gelf-address: "udp://localhost:12201"
+
+configs:
+  logstash-config:
+    file: ./configs/logstash/logstash.yml
+  logstash-pipeline:
+    file: ./configs/logstash/logstash.conf
+  kibana-config:
+    file: ./configs/kibana/kibana.yml

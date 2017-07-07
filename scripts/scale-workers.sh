@@ -6,9 +6,10 @@ USERNAME=$(id -u -n)
 print_usage () {
   echo
   echo "Usage:"
-  echo "  scale-workers.sh [<total number of nodes>] | [up|down <number of nodes>]"
+  echo "  scale-workers.sh [<total number of nodes>] | [up|down <number of nodes>] [-u <username>]"
   echo "  [<total number of nodes>] - Scale swarm to <total number of nodes> nodes"
   echo "  [up|down <number of nodes>] - Scale swarm up or down with <number of nodes> nodes"
+  echo "  -u <username>   - Possibility to override the username in machinename."
   echo ""
   echo "  Choose to either scale swarm to a fixed number of nodes, or the number of nodes to scale up/down."
   echo "  The swarm should have atleast one worker node."
@@ -29,6 +30,9 @@ do
     ;;
     [0-9]) # numeric
     TOTAL_WORKERS="$1"
+    ;;
+    -u)
+    USERNAME="$2"
     shift # past arg
     ;;
     *)
@@ -94,7 +98,7 @@ elif [[ $TOTAL_WORKERS -gt $EXISTING_WORKERS ]]; then
 
   for i in $(seq $(($EXISTING_WORKERS+1)) 1 $TOTAL_WORKERS); do
     echo "-> Creating $USERNAME-docker-worker$i machine ..."
-    docker-machine create -d $DRIVER $SWITCH --engine-opt experimental=true --engine-label env=test $USERNAME-docker-worker$i &
+    docker-machine create -d $DRIVER $SWITCH --engine-opt experimental=true --engine-label env=qliktive $USERNAME-docker-worker$i &
   done
 
   wait # wait for new nodes to be up and running
@@ -112,7 +116,7 @@ elif [[ $TOTAL_WORKERS -gt $EXISTING_WORKERS ]]; then
   done
 
   # deploy data to all worker nodes so that it can be accessed locally
-  ./deploy-data.sh
+  ./deploy-data.sh -u $USERNAME
 
 # Scaling down
 elif [[ $TOTAL_WORKERS -lt $EXISTING_WORKERS ]]; then
