@@ -58,5 +58,5 @@ jobs:
           command: |
               curl -L https://github.com/docker/machine/releases/download/v0.12.0/docker-machine-`uname -s`-`uname -m` > /usr/local/bin/docker-machine
               chmod +x /usr/local/bin/docker-machine
-              ./deploy-stack.sh
+              ./deploy-stack.sh -u demo
           working_directory: ~/qliktive-custom-analytics/scripts
