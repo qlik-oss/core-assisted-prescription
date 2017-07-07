@@ -1,0 +1,103 @@
+version: "3.3"
+
+networks:
+  monitoring:
+
+services:
+  cadvisor:
+    image: google/cadvisor:v0.26.1
+    networks:
+      - monitoring
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock,readonly
+      - /:/rootfs
+      - /var/run:/var/run
+      - /sys:/sys
+      - /var/lib/docker/:/var/lib/docker
+    deploy:
+      mode: global
+      resources:
+        limits:
+          cpus: '0.10'
+          memory: 128M
+
+  node-exporter:
+    image: basi/node-exporter:${NODE_EXPORTER_VERSION:-v1.13.0}
+    networks:
+      - monitoring
+    volumes:
+      - /proc:/host/proc
+      - /sys:/host/sys
+      - /:/rootfs
+      - /etc/hostname:/etc/host_hostname
+    environment:
+      HOST_HOSTNAME: /etc/host_hostname
+    command: -collector.procfs "/host/proc" -collector.sysfs /host/sys -collector.textfile.directory /etc/node-exporter/ -collectors.enabled 'conntrack,diskstats,entropy,filefd,filesystem,loadavg,mdadm,meminfo,netdev,netstat,stat,textfile,time,vmstat,ipvs' -collector.filesystem.ignored-mount-points "^/(sys|proc|dev|host|etc)($$$$/)"
+    deploy:
+      mode: global
+      resources:
+        limits:
+          cpus: '0.10'
+          memory: 32M
+
+  docker-exporter:
+    image: basi/socat:${DOCKER_EXPORTER_VERSION:-v0.1.0}
+    networks:
+      - monitoring
+    deploy:
+      mode: global
+      resources:
+        limits:
+          cpus: '0.05'
+          memory: 6M
+
+  prometheus:
+    image: prom/prometheus:v1.7.1
+    networks:
+      - monitoring
+    configs:
+      - source: prometheus
+        target: /etc/prometheus/prometheus.yml
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 1024M
+
+  grafana:
+    image: grafana/grafana:4.3.2
+    ports:
+      - "3000:3000"
+    networks:
+      - monitoring
+    environment:
+      PROMETHEUS_ENDPOINT: http://prometheus:9090
+      #dashboards can be added on the form "id:revision,id:revision" and so on
+      DASHBOARDS_IMPORT: "179:5" 
+    entrypoint: /init_grafana
+    configs:
+      - source: init_grafana
+        mode: 100
+      - source: datasource_prometheus
+        mode: 100
+      - source: import_dashboards
+        mode: 100
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 64M
+
+configs:
+  init_grafana:
+    file: ./configs/grafana/init.sh
+  datasource_prometheus:
+    file: ./configs/grafana/datasource-prometheus.sh
+  import_dashboards:
+    file: ./configs/grafana/import-dashboards.sh
+  prometheus:
+    file: ./configs/prometheus/prometheus.yml
