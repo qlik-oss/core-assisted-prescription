@@ -1,13 +1,8 @@
 version: "3.3"
 
-networks:
-  monitoring:
-
 services:
   cadvisor:
     image: google/cadvisor:v0.26.1
-    networks:
-      - monitoring
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock,readonly
       - /:/rootfs
@@ -23,8 +18,6 @@ services:
 
   node-exporter:
     image: basi/node-exporter:${NODE_EXPORTER_VERSION:-v1.13.0}
-    networks:
-      - monitoring
     volumes:
       - /proc:/host/proc
       - /sys:/host/sys
@@ -42,8 +35,6 @@ services:
 
   docker-exporter:
     image: basi/socat:${DOCKER_EXPORTER_VERSION:-v0.1.0}
-    networks:
-      - monitoring
     deploy:
       mode: global
       resources:
@@ -53,8 +44,6 @@ services:
 
   prometheus:
     image: prom/prometheus:v1.7.1
-    networks:
-      - monitoring
     configs:
       - source: prometheus
         target: /etc/prometheus/prometheus.yml
@@ -68,11 +57,8 @@ services:
 
   grafana:
     image: grafana/grafana:4.3.2
-    ports:
-      - "3000:3000"
-    networks:
-      - monitoring
     environment:
+      GF_SERVER_ROOT_URL: /grafana
       PROMETHEUS_ENDPOINT: http://prometheus:9090
       #dashboards can be added on the form "id:revision,id:revision" and so on
       DASHBOARDS_IMPORT: "179:5" 
@@ -91,6 +77,11 @@ services:
         limits:
           cpus: '0.50'
           memory: 64M
+
+  openresty:
+    environment:
+      GRAFANA_HOST: grafana
+      GRAFANA_PORT: 3000
 
 configs:
   init_grafana:
