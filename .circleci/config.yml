@@ -30,7 +30,12 @@ jobs:
           name: Validate docker-compose files
           command: npm run validate:compose
           working_directory: ~/qliktive-custom-analytics/test
-      - setup_remote_docker
+      - run:
+          name: Install docker client
+          command: |
+            curl -fsSL get.docker.com -o get-docker.sh
+            sh get-docker.sh
+            docker version
       - run:
           name: Login to Dockerhub
           command: |
