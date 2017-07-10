@@ -11,7 +11,7 @@ if [ -d "$HOME/.docker/machine/machines/$FILENAME" ] ; then
 fi
 
 # cleanup
-rm -r /tmp/$FILENAME
+rm -rf /tmp/$FILENAME
 
 # extract
 unzip $TARGET -d /tmp/$FILENAME
@@ -26,6 +26,6 @@ mkdir -p $HOME/.docker/machine/machines/$FILENAME
 cp -r /tmp/$FILENAME $HOME/.docker/machine/machines/
 
 # update the stupid raw driver
-machine-driverfix $FILENAME
+#machine-driverfix $FILENAME
 
-echo "ok!"
+echo "Import of docker-machine $FILENAME was succesfull."
