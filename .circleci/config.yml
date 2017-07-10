@@ -62,5 +62,8 @@ jobs:
               apt-get update
               apt-get install unzip
               for i in ~/*-docker-*.zip; do ./import-machine.sh "$i"; done;
+              export DOCKER_HOST="tcp://54.229.164.168:2376"
+              export DOCKER_CERT_PATH="/root/.docker/machine/machines/demo-docker-manager1"
+              export DOCKER_MACHINE_NAME="demo-docker-manager1"
               ./deploy-stack.sh -u demo
           working_directory: ~/qliktive-custom-analytics/scripts
