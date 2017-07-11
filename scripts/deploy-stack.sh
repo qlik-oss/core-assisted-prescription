@@ -54,10 +54,11 @@ docker-compose -f docker-compose.yml -f docker-compose.logging.yml -f docker-com
 docker-compose -f docker-compose.yml -f docker-compose.logging.yml -f docker-compose.monitoring.yml config > docker-compose.prod.yml
 docker stack deploy -c ./docker-compose.prod.yml --with-registry-auth custom-analytics
 
-echo "\n$(docker service ls)"
-echo "${BYellow}\nThen all the replicas for the service is started (this may take several minutes) -${Reset}"
 echo
-echo "${BYellow}The following routes can be accessed:${Reset}"
+echo "$(docker service ls)"
+echo
+echo "Then all the replicas for the service is started (this may take several minutes) -"
+echo "The following routes can be accessed:"
 echo "CUSTOM ANALYTICS         - https://$MACHINEIP/"
 echo "KIBANA                   - https://$MACHINEIP/kibana/"
 echo "DOCKER SWARM VISUALIZER  - https://$MACHINEIP/viz/"

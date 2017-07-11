@@ -58,12 +58,12 @@ jobs:
           command: |
               curl -L https://github.com/docker/machine/releases/download/v0.12.0/docker-machine-`uname -s`-`uname -m` > /usr/local/bin/docker-machine
               chmod +x /usr/local/bin/docker-machine
-              scp -o StrictHostKeyChecking=no ubuntu@54.229.164.168:/home/ubuntu/*-docker-*.zip ~/
+              scp -o StrictHostKeyChecking=no ubuntu@${DOCKER_AWS_MANAGER_IP}:/home/ubuntu/*-docker-*.zip ~/
               apt-get update
               apt-get install unzip
               for i in ~/*-docker-*.zip; do ./import-machine.sh "$i"; done;
-              export DOCKER_HOST="tcp://54.229.164.168:2376"
-              export DOCKER_CERT_PATH="/root/.docker/machine/machines/demo-docker-manager1"
-              export DOCKER_MACHINE_NAME="demo-docker-manager1"
+              export DOCKER_HOST="tcp://${DOCKER_AWS_MANAGER_IP}:2376"
+              export DOCKER_CERT_PATH="/root/.docker/machine/machines/${DOCKER_AWS_MANAGER_NAME}"
+              export DOCKER_MACHINE_NAME=${DOCKER_AWS_MANAGER_NAME}
               ./deploy-stack.sh -u demo
           working_directory: ~/qliktive-custom-analytics/scripts

@@ -8,7 +8,7 @@ if [ -z "$NAME" ]; then
   exit 1
 fi
 
-echo "exporting $NAME"
+echo "Exporting $NAME:"
 
 # stay clean
 rm -rf /tmp/$NAME

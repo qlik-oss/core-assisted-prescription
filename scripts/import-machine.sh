@@ -6,7 +6,7 @@ filename=$(basename "$TARGET")
 FILENAME="${filename%.*}"
 
 if [ -d "$HOME/.docker/machine/machines/$FILENAME" ] ; then
-  echo "that machine already exists"
+  echo "A machine with that name already exists"
   exit 1
 fi
 
