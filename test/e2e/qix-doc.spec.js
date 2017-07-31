@@ -28,7 +28,7 @@ describe('QIX open doc in a swarm', () => {
   });
 
   it('http test', () => {
-    const loginUrl = '/login/local/callback?username=admin&password=password';
+    const loginUrl = '/login/local/callback?username=admin&password=passwor1d';
     http.get({
       host: getTestHost(),
       path: loginUrl,
