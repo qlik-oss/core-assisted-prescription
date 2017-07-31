@@ -1,4 +1,4 @@
-import * as https from 'http';
+import * as http from 'http';
 import enigma from 'enigma.js';
 import { getEnigmaBaseConfig, getTestHost } from '../utils/test-utils';
 
@@ -7,10 +7,10 @@ describe('QIX open doc in a swarm', () => {
 
   beforeEach(() => {
     let loginUrl = '/login/local/callback?username=admin&password=password';
-    https.get({ host: 'https://localhost', path: loginUrl }, (response) => { console.log(response.statusCode); }).end();
+    http.get({ host: getTestHost(), path: loginUrl }, (response) => { console.log(response.statusCode); }).end();
 
     loginUrl = '/login/local/callback?username=admin&password=pas1sword';
-    https.get({ host: 'https://localhost', path: loginUrl }, (response) => { console.log(response.statusCode); }).end();
+    http.get({ host: getTestHost(), path: loginUrl }, (response) => { console.log(response.statusCode); }).end();
 
     const enigmaConfig = getEnigmaBaseConfig();
 
