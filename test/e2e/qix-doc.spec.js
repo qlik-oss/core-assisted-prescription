@@ -7,10 +7,12 @@ describe('QIX open doc in a swarm', () => {
 
   beforeEach(() => {
     let loginUrl = '/login/local/callback?username=admin&password=password';
-    http.get({ host: getTestHost(), path: loginUrl }, (response) => { console.log(response.statusCode); }).end();
+    http.get({ host: getTestHost(),
+      path: loginUrl }, (response) => { console.log(response.statusCode); }).end();
 
     loginUrl = '/login/local/callback?username=admin&password=pas1sword';
-    http.get({ host: getTestHost(), path: loginUrl }, (response) => { console.log(response.statusCode); }).end();
+    http.get({ host: getTestHost(),
+      path: loginUrl }, (response) => { console.log(response.statusCode); }).end();
 
     const enigmaConfig = getEnigmaBaseConfig();
 
