@@ -27,12 +27,12 @@ describe('QIX open doc in a swarm', () => {
     });
   });
 
-  it('http test', () => {
-    const loginUrl = '/login/local/callback?username=admin&password=passwor1d';
+  it('http test', (done) => {
+    const loginUrl = '/login/local/callback?username=admin&password=password1';
     http.get({
       host: getTestHost(),
       path: loginUrl,
-    }, (response) => { expect(response.statusCode).to.equal(200); }).end();
+    }, (response) => { expect(response.statusCode).to.equal(200); done(); }).end();
   });
 
   it('and verify that the intended doc is opened', () => qixGlobal.getActiveDoc().then(app => app.getAppLayout().then((layout) => {
