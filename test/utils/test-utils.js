@@ -14,7 +14,7 @@ export function getEnigmaBaseConfig() {
   return {
     schema: qixSchema,
     mixins: enigmaMixin,
-    createSocket: url => new WebSocket(url, { rejectUnauthorized: false }),
+    createSocket: url => new WebSocket(url, { rejectUnauthorized: false, /*headers: { 'Set-Cookie': 'custom-analytics=11e6a0b1-17bb-4519-8398-c98e1bf56076'  }*/ }),
     listeners: {
       'notification:OnConnected': (params) => {
         console.log('OnConnected', params);
