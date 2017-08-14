@@ -12,10 +12,10 @@ jobs:
           name: Install dependencies
           command: npm install --quiet
           working_directory: ~/qliktive-custom-analytics/test
-      #- run:
-      #    name: Run ESLint
-      #    command: npm run lint
-      #    working_directory: ~/qliktive-custom-analytics/test
+      - run:
+          name: Run ESLint
+          command: npm run lint
+          working_directory: ~/qliktive-custom-analytics/test
       - save_cache:
           key: dependency-cache-{{ checksum "test/package.json" }}
           paths:

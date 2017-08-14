@@ -37,6 +37,6 @@ export async function getLoginCookie() {
     const fullUrl = `https://${getTestHost() + loginUrl}`;
     console.log(fullUrl);
     request(fullUrl, { followRedirect: false },
-      (error, response, body) => {console.log(response.headers); console.log(body); resolve(response.headers['set-cookie'][0].split(';')[0])});
+      (error, response) => resolve(response.headers['set-cookie'][0].split(';')[0]));
   });
 }
