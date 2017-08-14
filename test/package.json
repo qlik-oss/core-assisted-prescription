@@ -22,7 +22,6 @@
     "eslint-plugin-import": "2.3.0",
     "halyard.js": "1.1.0",
     "request": "^2.81.0",
-    "request-cookies": "^1.1.0",
     "ws": "2.2.3"
   }
 }
