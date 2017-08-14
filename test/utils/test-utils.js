@@ -36,6 +36,6 @@ export async function getLoginCookie() {
     const loginUrl = '/login/local/callback?username=admin&password=password';
     const fullUrl = `https://${getTestHost() + loginUrl}`;
     request(fullUrl, { followRedirect: false },
-      (error, response) => resolve(response.headers['set-cookie'][0].split(';')[0]));
+      (error, response) => {console.log(response.headers) ; resolve(response.headers['set-cookie'][0].split(';')[0])});
   });
 }
