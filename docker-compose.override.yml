@@ -13,6 +13,7 @@ services:
       GITHUB_CLIENT_SECRET_FILE: /secrets/GITHUB_CLIENT_SECRET
       JWT_SECRET_FILE: /secrets/JWT_SECRET
       COOKIE_SIGNING_FILE: /secrets/COOKIE_SIGNING
+      ACCOUNTS_FILE: /secrets/ACCOUNTS
     volumes:
       - secrets-volume:/secrets
 

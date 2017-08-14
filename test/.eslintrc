@@ -1,6 +1,7 @@
 {
   "env": {
-    "jasmine": true
+    "jasmine": true,
+    "mocha": true
   },
   "parserOptions": {
     "sourceType": "module"
