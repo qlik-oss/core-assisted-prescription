@@ -34,8 +34,7 @@ export async function getLoginCookie() {
   return new Promise((resolve) => {
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
     const loginUrl = '/login/local/callback?username=admin&password=password';
-    const fullUrl = `https://${getTestHost() + loginUrl}`;
-    console.log(fullUrl);
+    const fullUrl = `https://${getTestHost()}${loginUrl}`;
     request(fullUrl, { followRedirect: false },
       (error, response) => resolve(response.headers['set-cookie'][0].split(';')[0]));
   });
