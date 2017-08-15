@@ -33,17 +33,37 @@ jobs:
       - run:
           name: Install docker client
           command: |
-            curl -L -o /tmp/docker-17.05.0-ce.tgz https://get.docker.com/builds/Linux/x86_64/docker-17.05.0-ce.tgz
-            tar -xz -C /tmp -f /tmp/docker-17.05.0-ce.tgz
+            curl -L -o /tmp/docker-17.06.0-dev.tgz https://master.dockerproject.org/linux/x86_64/docker-17.06.0-dev.tgz
+            tar -xz -C /tmp -f /tmp/docker-17.06.0-dev.tgz
             mv /tmp/docker/* /usr/bin
       - setup_remote_docker
       - run:
-          name: Deploy to remote Docker space
+          name: Login to Dockerhub
           command: |
             docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
+      - run:
+          name: Deploy to remote Docker space
+          command: |
             ./deploy-local.sh
           working_directory: ~/qliktive-custom-analytics/scripts
       - run:
           name: Run E2E tests in remote Docker space
           command: ./run-e2e-tests-cci.sh
+          working_directory: ~/qliktive-custom-analytics/scripts
+      - deploy:
+          name: Deploy public demo to AWS
+          filters:
+            branches:
+              only: deployFromCCI
+          command: |
+              curl -L https://github.com/docker/machine/releases/download/v0.12.0/docker-machine-`uname -s`-`uname -m` > /usr/local/bin/docker-machine
+              chmod +x /usr/local/bin/docker-machine
+              scp -o StrictHostKeyChecking=no ubuntu@${DOCKER_AWS_MANAGER_IP}:/home/ubuntu/*-docker-*.zip ~/
+              apt-get update
+              apt-get install unzip
+              for i in ~/*-docker-*.zip; do ./import-machine.sh "$i"; done;
+              export DOCKER_HOST="tcp://${DOCKER_AWS_MANAGER_IP}:2376"
+              export DOCKER_CERT_PATH="/root/.docker/machine/machines/${DOCKER_AWS_MANAGER_NAME}"
+              export DOCKER_MACHINE_NAME=${DOCKER_AWS_MANAGER_NAME}
+              ./deploy-stack.sh -u demo
           working_directory: ~/qliktive-custom-analytics/scripts

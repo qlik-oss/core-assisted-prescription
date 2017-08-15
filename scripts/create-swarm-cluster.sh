@@ -94,7 +94,7 @@ for i in $(seq 1 $MANAGERS); do
 done
 
 for i in $(seq 1 $WORKERS); do
-   echo "== Creating $USERNAME-docker-worker$i machine ...";
+   echo "-> Creating $USERNAME-docker-worker$i machine ...";
    docker-machine create -d $DRIVER $SWITCH --engine-opt experimental=true --engine-opt metrics-addr=0.0.0.0:4999 --engine-label env=qliktive $USERNAME-docker-worker$i &
 done
 

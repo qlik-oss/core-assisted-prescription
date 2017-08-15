@@ -117,3 +117,39 @@ or with fixed set of nodes, regardless if scaling up or down:
 ```bash
 $ ./scripts/scale-workers.sh <total number of nodes>
 ```
+
+## Continuous Deployment
+
+This section will just explain one way how CD (Continuous Deployment) can be implemented using Circle CI and docker machine. It seems that docker-machine isn't designed to be exported between computers but this use case has some scripts to help you out with the needed certificates and configurations.
+
+The flow for CD will be as following:
+- Create a swarm cluster from local machine (create-swarm-cluster.sh)
+- Export and copy docker-machine configs to the swarm manager (deploy-docker-machine-conf.sh)
+- Implement a deploy step in your CI build pipeline (will be explained below and found in ./.cirecleci/config.yml)
+
+The CD steps requires some environment variables to be set:
+- DOCKER_AWS_MANAGER_IP
+- DOCKER_AWS_MANAGER_NAME
+These are used by docke
+
+The SSH key for the manager has also to be
+
+```
+# Download and install docker-machine
+curl -L https://github.com/docker/machine/releases/download/v0.12.0/docker-machine-`uname -s`-`uname -m` > /usr/local/bin/docker-machine
+chmod +x /usr/local/bin/docker-machine
+
+# Download and extract docker-machine configs from swarm manager
+scp -o StrictHostKeyChecking=no ubuntu@${DOCKER_AWS_MANAGER_IP}:/home/ubuntu/*-docker-*.zip ~/
+apt-get update
+apt-get install unzip
+for i in ~/*-docker-*.zip; do ./import-machine.sh "$i"; done;
+
+# "reseting docker variables since previous CI tasks overrides environment variables"
+export DOCKER_HOST="tcp://${DOCKER_AWS_MANAGER_IP}:2376"
+export DOCKER_CERT_PATH="/root/.docker/machine/machines/${DOCKER_AWS_MANAGER_NAME}"
+export DOCKER_MACHINE_NAME=${DOCKER_AWS_MANAGER_NAME}
+
+# Deploy stach with "prefix" demo
+./deploy-stack.sh -u demo
+```
