@@ -1,11 +1,16 @@
 import enigma from 'enigma.js';
-import { getEnigmaBaseConfig, getTestHost } from '../utils/test-utils';
+import { getEnigmaBaseConfig, getTestHost, getLoginCookie } from '../utils/test-utils';
 
 describe('QIX open doc in a swarm', () => {
   let qixGlobal;
+  let customAnalyticsCookie;
+
+  before(async () => {
+    customAnalyticsCookie = await getLoginCookie();
+  });
 
   beforeEach(() => {
-    const enigmaConfig = getEnigmaBaseConfig();
+    const enigmaConfig = getEnigmaBaseConfig(customAnalyticsCookie);
 
     enigmaConfig.session = {
       host: getTestHost(),
