@@ -44,6 +44,8 @@ jobs:
       - run:
           name: Deploy to remote Docker space
           command: |
+            echo $GITHUB_CLIENT_ID > ~/qliktive-custom-analytics/secrets/GITHUB_CLIENT_ID
+            echo $GITHUB_CLIENT_SECRET > ~/qliktive-custom-analytics/secrets/GITHUB_CLIENT_SECRET
             ./deploy-local.sh
           working_directory: ~/qliktive-custom-analytics/scripts
       - run:
