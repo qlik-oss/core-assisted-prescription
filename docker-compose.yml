@@ -56,7 +56,7 @@ services:
       SUCCESS_REDIRECT_URL: /#/app
       FAILURE_REDIRECT_URL: /
       AUTH_STRATEGY: github #change to 'local' to login via local username and password
-      #ACCOUNTS_FILE: /run/secrets/accounts_file
+      ACCOUNTS_FILE: /run/secrets/accounts_file
     deploy:
       placement:
         constraints: [node.role == manager]
