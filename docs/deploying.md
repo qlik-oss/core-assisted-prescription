@@ -130,9 +130,9 @@ The flow for CD will be as following:
 The CD steps requires some environment variables to be set:
 - DOCKER_AWS_MANAGER_IP
 - DOCKER_AWS_MANAGER_NAME
-These are used by docke
+These are used by docker in the CI deploy step
 
-The SSH key for the manager has also to be
+The SSH key for the manager has also to be added to SSH Permissions for the CircleCI build
 
 ```
 # Download and install docker-machine
