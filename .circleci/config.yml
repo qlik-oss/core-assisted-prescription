@@ -56,7 +56,7 @@ jobs:
           name: Deploy public demo to AWS
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              curl -L https://github.com/docker/machine/releases/download/v0.12.0/docker-machine-`uname -s`-`uname -m` > /usr/local/bin/docker-machine
+              curl -L https://github.com/docker/machine/releases/download/v0.12.2/docker-machine-`uname -s`-`uname -m` > /usr/local/bin/docker-machine
               chmod +x /usr/local/bin/docker-machine
               scp -o StrictHostKeyChecking=no ubuntu@${DOCKER_AWS_MANAGER_IP}:/home/ubuntu/*-docker-*.zip ~/
               apt-get update
