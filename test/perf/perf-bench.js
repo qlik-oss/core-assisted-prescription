@@ -2,6 +2,7 @@ const enigma = require('enigma.js');
 const WebSocket = require('ws');
 const qixSchema = require('../node_modules/enigma.js/schemas/qix/3.2/schema.json');
 const commandLineArgs = require('command-line-args');
+const request = require('request');
 
 const optionDefinitions = [
   { name: 'gateway', alias: 'g', type: String },
@@ -9,6 +10,18 @@ const optionDefinitions = [
   { name: 'duration', alias: 'd', type: Number },
 ];
 const args = commandLineArgs(optionDefinitions, { partial: true });
+
+async function getLoginCookie() {
+  return new Promise((resolve) => {
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+    const loginUrl = '/login/local/callback?username=admin&password=password';
+    const fullUrl = `https://${args.gateway}${loginUrl}`;
+    request(fullUrl, { followRedirect: false },
+      (error, response) => {
+        resolve(response.headers['set-cookie'][0].split(';')[0]);
+      });
+  });
+}
 
 function generateGUID() {
   /* eslint-disable no-bitwise */
@@ -20,7 +33,7 @@ function generateGUID() {
   /* eslint-enable no-bitwise */
 }
 
-function getEnigmaConfig(gateway, id) {
+function getEnigmaConfig(gateway, id, cookie) {
   return {
     session: {
       host: gateway,
@@ -29,7 +42,12 @@ function getEnigmaConfig(gateway, id) {
       identity: id,
     },
     schema: qixSchema,
-    createSocket: url => new WebSocket(url, { rejectUnauthorized: false }),
+    createSocket: url => new WebSocket(url, {
+      rejectUnauthorized: false,
+      headers: {
+       Cookie: cookie
+      }
+    }),
   };
 }
 
@@ -39,19 +57,25 @@ async function sleep(delay) {
   });
 }
 
-async function connect(gateway, numConnections, duration) {
-  return new Promise((resolve) => {
+async function connect(gateway, numConnections, duration, cookie) {
+  return new Promise((resolve, reject) => {
     const sessions = [];
     const delay = (duration * 1000) / numConnections;
     let count = 0;
     async function addSession() {
-      const qix = await enigma.getService('qix', getEnigmaConfig(gateway, generateGUID()));
-      sessions.push(qix);
-      count += 1;
-      if (count === numConnections) {
-        resolve(sessions);
-      } else {
-        setTimeout(addSession, delay);
+      try{
+        const qix = await enigma.getService('qix', getEnigmaConfig(gateway, generateGUID(), cookie));
+        sessions.push(qix);
+        count += 1;
+        console.log(count);
+        if (count === numConnections) {
+          resolve(sessions);
+        } else {
+          setTimeout(addSession, delay);
+        }
+      }
+      catch(e){
+        reject(e);
       }
     }
     setTimeout(addSession, delay);
@@ -115,10 +139,15 @@ process.on('unhandledRejection', onUnhandledError);
   console.log(` Duration to peak: ${duration}`);
   console.log('================================================================================');
 
+  //Get login cookie
+  const loginCookie = await getLoginCookie().then((result) => {console.log(result); return result;});
+
+  console.log(loginCookie);
+
   console.log('Connecting users');
-  const sessions = await connect(gateway, maxNumUsers, duration);
+  const sessions = await connect(gateway, maxNumUsers, duration, loginCookie);
   console.log('Verifying connections');
-  await verify(sessions);
+ // await verify(sessions);
   console.log('Disconnecting users');
   await disconnect(sessions, duration);
   console.log('Done');
