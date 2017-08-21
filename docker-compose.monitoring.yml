@@ -58,10 +58,11 @@ services:
   grafana:
     image: grafana/grafana:4.3.2
     environment:
+      GF_AUTH_ANONYMOUS_ENABLED: 'true'
       GF_SERVER_ROOT_URL: /grafana
       PROMETHEUS_ENDPOINT: http://prometheus:9090
       #dashboards can be added on the form "id:revision,id:revision" and so on
-      DASHBOARDS_IMPORT: "179:5" 
+      DASHBOARDS_IMPORT: "179:5"
     entrypoint: /init_grafana
     configs:
       - source: init_grafana
