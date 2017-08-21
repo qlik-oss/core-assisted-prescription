@@ -147,7 +147,7 @@ process.on('unhandledRejection', onUnhandledError);
   console.log('Connecting users');
   const sessions = await connect(gateway, maxNumUsers, duration, loginCookie);
   console.log('Verifying connections');
- // await verify(sessions);
+  await verify(sessions);
   console.log('Disconnecting users');
   await disconnect(sessions, duration);
   console.log('Done');
