@@ -7,7 +7,7 @@ cd "$(dirname "$0")"
 cd ..
 
 docker-compose -f docker-compose.yml -f docker-compose.monitoring.yml config > docker-compose.local.yml
-docker-compose -f ./docker-compose.local.yml up -d dummy-data
+docker-compose -f ./docker-compose.local.yml up -d
 
 docker cp ./data/csv/. dummy-data:/data
 docker cp ./data/doc/. dummy-data:/doc
