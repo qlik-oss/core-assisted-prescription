@@ -91,7 +91,7 @@ services:
     # cluster, and is the service we primarily want to scale up in
     # this use-case.
     image: qlikea/engine:12.42.0
-    command: -S EnableTTL=1
+    command: -S EnableTTL=1 -S ValidateJsonWebTokens=2 -S JsonWebTokenSecret=${JWT_SECRET}
     volumes:
       - /home/docker/data/csv:/data
       - /home/docker/data/doc:/doc
