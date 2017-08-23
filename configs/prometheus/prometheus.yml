@@ -41,3 +41,10 @@ scrape_configs:
       - 'tasks.docker-exporter'
       type: 'A'
       port: 4999
+
+  - job_name: 'qlik-engine'
+    dns_sd_configs:
+    - names:
+      - 'tasks.qix-engine'
+      type: 'A'
+      port: 9090
