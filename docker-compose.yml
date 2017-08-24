@@ -5,7 +5,7 @@ services:
     # This is our externally-facing gateway, exposing the configured
     # things for all end-users. It has the Analytics UI bundled into it.
     # See https://github.com/qlik-ea/qliktive-custom-analytics-openresty
-    image: qlikea/qliktive-custom-analytics-openresty:master-251
+    image: qlikea/qliktive-custom-analytics-openresty:master-258
     restart: always
     ports:
       - "443:443"
@@ -90,8 +90,8 @@ services:
     # QIX Engine is configured to run on all worker nodes in the
     # cluster, and is the service we primarily want to scale up in
     # this use-case.
-    image: qlikea/engine:12.45.0
-    command: -S EnableTTL=1
+    image: qlikea/engine:12.46.0
+    command: -S EnableTTL=1 -S ValidateJsonWebTokens=2 -S JsonWebTokenSecret=${JWT_SECRET}
     volumes:
       - /home/docker/data/csv:/data
       - /home/docker/data/doc:/doc
@@ -105,7 +105,7 @@ services:
     # QIX Engines. Uses Mira to find appropriate containers
     # to place the session on.
     # See https://github.com/qlik-ea/qliktive-qix-session-service
-    image: qlikea/qliktive-qix-session-service:0.0.1-26
+    image: qlikea/qliktive-qix-session-service:0.0.1-41
     deploy:
       placement:
         constraints: [node.role == manager]
