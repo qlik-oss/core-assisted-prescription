@@ -5,7 +5,7 @@
 : ${GF_SECURITY_ADMIN_PASSWORD:=admin}
 
 if [ ${DASHBOARDS_IMPORT} ]; then
-
+    #Import all dashboards set in enviroment variable
     dashboard=$(echo $DASHBOARDS_IMPORT | tr "," "\n")
     for dash in $dashboard
     do
@@ -21,5 +21,15 @@ set -ex
             -X POST -H 'Content-Type: application/json;charset=UTF-8' \
             -d @/tmp/dashboard_data3.json \
             "http://${GF_SECURITY_ADMIN_USER}:${GF_SECURITY_ADMIN_PASSWORD}@localhost:3000/api/dashboards/db"
+        
     done
+
+        #Import local dashboard
+
+        echo "{ \"dashboard\": $(cat /dashboard/engine_dashboard.json), \"overwrite\":true }" > /tmp/engine_dashboard.json
+        sed -i "s@\${DS_PROMETHEUS}@Prometheus@g" /tmp/engine_dashboard.json
+        curl \
+          -X POST -H 'Content-Type: application/json;charset=UTF-8' \
+          -d @/tmp/engine_dashboard.json \
+          "http://${GF_SECURITY_ADMIN_USER}:${GF_SECURITY_ADMIN_PASSWORD}@localhost:3000/api/dashboards/db"
 fi
