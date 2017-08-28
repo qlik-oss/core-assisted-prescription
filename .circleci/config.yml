@@ -67,8 +67,7 @@ jobs:
               export DOCKER_CERT_PATH="/root/.docker/machine/machines/${DOCKER_AWS_MANAGER_NAME}"
               export DOCKER_MACHINE_NAME=${DOCKER_AWS_MANAGER_NAME}
 
-              echo $DEPLOY_SSL_CERT > ~/qliktive-custom-analytics/secrets/DEPLOY_SSL_CERT
-              echo $DEPLOY_SSL_KEY > ~/qliktive-custom-analytics/secrets/DEPLOY_SSL_KEY
+              scp -o StrictHostKeyChecking=no ubuntu@${DOCKER_AWS_MANAGER_IP}:/home/ubuntu/DEPLOT_SSL_*.zip ~/qliktive-custom-analytics/secrets/
 
               docker-compose -f ../docker-compose.yml -f ../docker-compose.pregen-ssl.yml config > ../docker-compose.merged.yml
               \cp ../docker-compose.merged.yml ../docker-compose.yml
