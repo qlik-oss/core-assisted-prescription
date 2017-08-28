@@ -70,8 +70,8 @@ jobs:
               echo $DEPLOY_SSL_CERT > ~/qliktive-custom-analytics/secrets/DEPLOY_SSL_CERT
               echo $DEPLOY_SSL_KEY > ~/qliktive-custom-analytics/secrets/DEPLOY_SSL_KEY
 
-              docker-compose -f docker-compose.yml -f docker-compose.pregen-ssl.yml config > docker-compose.merged.yml
-              \cp docker-compose.merged.yml docker-compose.yml
+              docker-compose -f ../docker-compose.yml -f ../docker-compose.pregen-ssl.yml config > ../docker-compose.merged.yml
+              \cp ../docker-compose.merged.yml ../docker-compose.yml
               less docker-cpompose.yml
               # ./deploy-stack.sh -u demo
             fi
