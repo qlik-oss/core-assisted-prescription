@@ -5,9 +5,9 @@ services:
     secrets:
       - cert_file
       - cert_key
-    # environment:
-      # CERT_FILE: /run/secrets/cert_file
-      # CERT_KEY: /run/secrets/cert_key
+    environment:
+      CERT_FILE: /run/secrets/cert_file
+      CERT_KEY: /run/secrets/cert_key
 
 secrets:
   cert_file:
