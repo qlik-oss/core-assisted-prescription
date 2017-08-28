@@ -2,9 +2,12 @@ version: "3.3"
 
 services:
   openresty:
+    secrets:
+      - cert_file
+      - cert_key
     environment:
-      CERT_FILE: cert_file
-      CERT_KEY: cert_key
+      CERT_FILE: /run/secrets/cert_file
+      CERT_KEY: /run/secrets/cert_key
 
 secrets:
   cert_file:
