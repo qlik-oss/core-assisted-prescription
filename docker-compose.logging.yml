@@ -43,10 +43,10 @@ services:
     environment:
       KIBANA_HOST: kibana
       KIBANA_PORT: 5601
-    logging:
-      driver: "gelf"
-      options:
-        gelf-address: "udp://localhost:12201"
+    # logging:
+    #   driver: "gelf"
+    #   options:
+    #     gelf-address: "udp://localhost:12201"
 
   auth:
     logging:
