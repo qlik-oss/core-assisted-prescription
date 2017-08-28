@@ -1,0 +1,13 @@
+version: "3.3"
+
+services:
+  openresty:
+    environment:
+      CERT_FILE: cert_file
+      CERT_KEY: cert_key
+
+secrets:
+  cert_file:
+    file: ./secrets/DEPLOY_SSL_CERT
+  cert_key:
+    file: ./secrets/DEPLOY_SSL_KEY
