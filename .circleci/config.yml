@@ -72,7 +72,6 @@ jobs:
 
               docker-compose -f ../docker-compose.yml -f ../docker-compose.pregen-ssl.yml config > ../docker-compose.merged.yml
               \cp ../docker-compose.merged.yml ../docker-compose.yml
-              echo "$(<../docker-compose.yml)"
-              # ./deploy-stack.sh -u demo
+              ./deploy-stack.sh -u demo
             fi
           working_directory: ~/qliktive-custom-analytics/scripts
