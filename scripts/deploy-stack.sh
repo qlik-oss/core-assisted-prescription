@@ -44,9 +44,12 @@ MACHINEIP=$(docker-machine ip $MACHINE)
 # deploy data to all worker nodes so that it can be accessed locally:
 ./scripts/deploy-data.sh $OVERWRITE -u $USERNAME
 
-# Set Env. variable used as JWT secret. 
-JWT_SECRET_FILE="../secrets/JWT_SECRET"
-export JWT_SECRET=$(cat "$JWT_SECRET_FILE")
+if [ -z "$JWT_SECRET" ]; then
+  # Set Env. variable used as JWT secret. 
+  JWT_SECRET_FILE="./secrets/JWT_SECRET"
+  export JWT_SECRET=$(cat "$JWT_SECRET_FILE")
+fi
+
 
 echo
 echo "========================================================================"
