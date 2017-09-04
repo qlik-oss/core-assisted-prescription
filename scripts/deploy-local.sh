@@ -9,7 +9,6 @@ cd ..
 if [ -z "$JWT_SECRET" ]; then
   # Set Env. variable used as JWT secret. 
   JWT_SECRET_FILE="./secrets/JWT_SECRET"
-  echo setting JWT
   export JWT_SECRET=$(cat "$JWT_SECRET_FILE")
 fi
 
