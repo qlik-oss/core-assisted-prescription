@@ -6,6 +6,10 @@ set -e
 cd "$(dirname "$0")"
 cd ..
 
+# Set Env. variable used as JWT secret. 
+JWT_SECRET_FILE="./secrets/JWT_SECRET"
+export JWT_SECRET=$(cat "$JWT_SECRET_FILE")
+
 docker-compose up -d dummy-data
 
 docker cp ./data/csv/. dummy-data:/data
