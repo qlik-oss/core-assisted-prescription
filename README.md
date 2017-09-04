@@ -31,7 +31,7 @@ Swarm setup guide can be found [here](https://github.com/qlik-ea/qliktive-custom
 
 ### Live Environment
 
-Try out our live application [--TODO INSERT LINK--](http://broken.link). This is hosted on AWS and is a deployment of our latest master build.
+Try out our live application [here](https://ca.qliktive.com/). This is hosted on AWS and is a deployment of our latest master build.
 
 ## Details
 

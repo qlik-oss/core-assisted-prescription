@@ -135,7 +135,7 @@ for i in $(seq 1 $MANAGERS); do
 
   if [ $DRIVER == "amazonec2" ]; then
     # Add to conf so the setting is not lost after a reboot
-    docker-machine ssh $USERNAME-docker-manager$i "echo sysctl -w vm.max_map_count=262144 | sudo tee -a /etc/sysctl.conf"
+    docker-machine ssh $USERNAME-docker-manager$i "echo vm.max_map_count = 262144 | sudo tee -a /etc/sysctl.conf"
   else
     # Add to boot2docker profile so the setting is not lost after a reboot
     docker-machine ssh $USERNAME-docker-manager$i "echo sysctl -w vm.max_map_count=262144 | sudo tee -a /var/lib/boot2docker/profile"
