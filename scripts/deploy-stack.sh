@@ -44,13 +44,6 @@ MACHINEIP=$(docker-machine ip $MACHINE)
 # deploy data to all worker nodes so that it can be accessed locally:
 ./scripts/deploy-data.sh $OVERWRITE -u $USERNAME
 
-if [ -z "$JWT_SECRET" ]; then
-  # Set Env. variable used as JWT secret. 
-  JWT_SECRET_FILE="./secrets/JWT_SECRET"
-  export JWT_SECRET=$(cat "$JWT_SECRET_FILE")
-fi
-
-
 echo
 echo "========================================================================"
 echo "  Deploying stack to docker swarm"
@@ -58,7 +51,7 @@ echo "========================================================================"
 
 eval $(docker-machine env $MACHINE)
 docker-compose -f docker-compose.yml -f docker-compose.logging.yml -f docker-compose.monitoring.yml pull
-docker-compose -f docker-compose.yml -f docker-compose.logging.yml -f docker-compose.monitoring.yml config > docker-compose.prod.yml
+JWT_SECRET=$(cat ./secrets/JWT_SECRET) docker-compose -f docker-compose.yml -f docker-compose.logging.yml -f docker-compose.monitoring.yml config > docker-compose.prod.yml
 docker stack deploy -c ./docker-compose.prod.yml --with-registry-auth custom-analytics
 
 echo
