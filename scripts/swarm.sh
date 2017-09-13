@@ -69,18 +69,18 @@ function deploy_stack() {
   while read -r manager; do
     ip=$(docker-machine ip $manager)
     eval $(docker-machine env $manager)
-    docker-compose -f docker-compose.yml -f docker-compose.logging.yml -f docker-compose.monitoring.yml pull
     JWT_SECRET=$(cat ./secrets/JWT_SECRET) docker-compose -f docker-compose.yml -f docker-compose.logging.yml -f docker-compose.monitoring.yml config > docker-compose.prod.yml
+    docker-compose -f docker-compose.prod.yml pull
     docker stack deploy -c ./docker-compose.prod.yml --with-registry-auth custom-analytics
     echo
     echo "$(docker service ls)"
     echo
     echo "Then all the replicas for the service is started (this may take several minutes) -"
     echo "The following routes can be accessed:"
-    echo "CUSTOM ANALYTICS         - https://$MACHINEIP/"
-    echo "KIBANA                   - https://$MACHINEIP/kibana/"
-    echo "DOCKER SWARM VISUALIZER  - https://$MACHINEIP/viz/"
-    echo "GRAFANA                  - https://$MACHINEIP/grafana/"
+    echo "CUSTOM ANALYTICS         - https://$ip/"
+    echo "KIBANA                   - https://$ip/kibana/"
+    echo "DOCKER SWARM VISUALIZER  - https://$ip/viz/"
+    echo "GRAFANA                  - https://$ip/grafana/"
   done <<< "$managers"
 }
 
