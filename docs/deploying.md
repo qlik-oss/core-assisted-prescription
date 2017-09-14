@@ -46,7 +46,7 @@ The AMIs could differ between different AWS zones but could be found using [Amaz
 
 In `swarm.env`:
 
-Set `DOCKER_DRIVER=amazonec2` and modify the `AWS_` environment variables to match your setup. For a list of _all_ all AWS variables you can use, please see the [Docker documentation](https://docs.docker.com/machine/drivers/aws/).
+Set `DOCKER_DRIVER=amazonec2` and modify the `AWS_` environment variables to match your setup. For a list of _all_ AWS variables you can use, please see the [Docker documentation](https://docs.docker.com/machine/drivers/aws/).
 
 This deployment has been verified with:
 
