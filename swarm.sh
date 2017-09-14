@@ -21,15 +21,15 @@ exit_trap () {
 
 trap exit_trap EXIT
 
-if [ "$SKIP_SWARM_ENV" == "true" ]; then
+# Move to project root to simplify execution context for processes.
+cd "$(dirname "$0")"
+
+if [ "$SKIP_SWARM_ENV" != "true" ]; then
   # Read environment variables configuration from swarm.env.
-  set -o allexport; source $(dirname "$0")/swarm.env; set +o allexport
+  set -o allexport; source ./swarm.env; set +o allexport
 fi
 
 set -e
-
-# Move to project root to simplify execution context for processes.
-cd "$(dirname "$0")/.."
 
 command=$1
 rest=${@:2}
@@ -40,7 +40,7 @@ machines=
 managers=
 workers=
 
-# Override default node name prefix if .
+# Override default node name prefix if the user wants to.
 if [ "$DOCKER_PREFIX" != "" ]; then
   machine_prefix=$DOCKER_PREFIX
 fi

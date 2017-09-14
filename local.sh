@@ -2,8 +2,8 @@
 
 set -e
 
-# move into git root:
-cd "$(dirname "$0")/.."
+# move into project root:
+cd "$(dirname "$0")"
 
 command=$1
 
