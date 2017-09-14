@@ -47,8 +47,7 @@ jobs:
             echo $GITHUB_CLIENT_ID > ~/qliktive-custom-analytics/secrets/GITHUB_CLIENT_ID
             echo $GITHUB_CLIENT_SECRET > ~/qliktive-custom-analytics/secrets/GITHUB_CLIENT_SECRET
             echo $JWT_SECRET > ~/qliktive-custom-analytics/secrets/JWT_SECRET
-            ./deploy-local.sh
-          working_directory: ~/qliktive-custom-analytics/scripts
+            ./local.sh deploy
       - run:
           name: Run E2E tests in remote Docker space
           command: ./run-e2e-tests-cci.sh
@@ -71,6 +70,6 @@ jobs:
 
               docker-compose -f ../docker-compose.yml -f ../docker-compose.pregen-ssl.yml config > ../docker-compose.merged.yml
               \cp ../docker-compose.merged.yml ../docker-compose.yml
-              ./deploy-stack.sh -u demo
+              SKIP_SWARM_ENV="true" DOCKER_PREFIX="demo-docker-" DOCKER_DRIVER="amazonec2" ../swarm.sh deploy
             fi
           working_directory: ~/qliktive-custom-analytics/scripts

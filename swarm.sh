@@ -1,6 +1,14 @@
 #!/bin/bash
 # Add -x above to debug.
 
+# We require a swarm.env file defining the environment variables needed to manage a swarm.
+# If SKIP_SWARM_ENV is defined as 'true' however, we rely on those variables already
+# being set in the environment.
+if [ "$SKIP_SWARM_ENV" != "true" ] && [ ! -f $(dirname "$0")/swarm.env ]; then
+  echo "You need to create a swarm.env file (or set SKIP_SWARM_ENV=true). Check swarm.env.example in the project root."
+  exit 1
+fi
+
 # This trap is executed whenever a process exits within this script, we use it
 # to output the exact command that failed to find potential issues faster.
 exit_trap () {
@@ -13,8 +21,11 @@ exit_trap () {
 
 trap exit_trap EXIT
 
-# Read environment variables configuration from swarm.env.
-set -o allexport; source $(dirname "$0")/swarm.env; set +o allexport
+if [ "$SKIP_SWARM_ENV" == "true" ]; then
+  # Read environment variables configuration from swarm.env.
+  set -o allexport; source $(dirname "$0")/swarm.env; set +o allexport
+fi
+
 set -e
 
 # Move to project root to simplify execution context for processes.
@@ -28,6 +39,11 @@ switches="--driver=$DOCKER_DRIVER --engine-opt experimental=true --engine-opt me
 machines=
 managers=
 workers=
+
+# Override default node name prefix if .
+if [ "$DOCKER_PREFIX" != "" ]; then
+  machine_prefix=$DOCKER_PREFIX
+fi
 
 # Some parts of this script may need to refresh our swarm node list (e.g. when creating
 # or removing nodes), this function simplifies it.
@@ -147,6 +163,7 @@ function create() {
   workers 2
 }
 
+# Remove all nodes related to this project.
 function remove() {
   if [ -z "$machines" ]; then
     echo "No qliktive nodes to remove."
@@ -156,9 +173,12 @@ function remove() {
   docker-machine rm $machines
 }
 
+# Set the number of worker nodes. Requires a number to be passed in, e.g.
+# `./swarm.sh workers 4` to set total number of workers to 4.
 function workers() {
   if [ -z "$rest" ]; then
-    echo "Please supply the total number of worker nodes you need: swarm.sh workers <number of total nodes>"
+    echo "Please supply the total number of worker nodes you need:"
+    echo "swarm.sh workers <number of total nodes>"
     exit 0
   fi
 
@@ -189,11 +209,11 @@ function workers() {
 
 refresh_nodes
 
-if [ "$command" == "deploy" ]; then deploy_data && deploy_stack
-elif [ "$command" == "clean" ]; then clean
+if   [ "$command" == "deploy" ];   then deploy_data && deploy_stack
+elif [ "$command" == "clean" ];    then clean
 elif [ "$command" == "validate" ]; then validate
-elif [ "$command" == "create" ]; then create
-elif [ "$command" == "remove" ]; then remove
-elif [ "$command" == "workers" ]; then workers
+elif [ "$command" == "create" ];   then create
+elif [ "$command" == "remove" ];   then remove
+elif [ "$command" == "workers" ];  then workers
 
 else echo "Invalid option: $command - please use one of: deploy, clean, validate, create, remove, workers"; fi
