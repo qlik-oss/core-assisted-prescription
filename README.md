@@ -16,7 +16,7 @@ This repository contains the service stack and various scripts and tools to depl
 
 Run the script: 
 ```sh
-$ ./local.sh
+$ ./local.sh deploy
 ```
 Now you will have the application running locally and can be accessed at https://localhost/
 Login on the page with: "admin" and "password". Read more about our secret handling [here](https://github.com/qlik-ea/qliktive-custom-analytics/blob/master/docs/secrets.md#docker-secrets)
@@ -62,4 +62,4 @@ The terminology used in this documentation with regards to technologies, tools, 
 * [Developing](./docs/developing.md) - Information on the development environment for the use case.
 * [Testing](./docs/testing.md) - Information on how the use case is tested and how to run tests.
 * [Deploying](./docs/deploying.md) - Information on deploying the use case, both to AWS and to other Docker Swarm clusters.
-* [Performance banchmarking](./docs/performance.md) - Information on how to do performance benchmarking on a deployment of the use case.
+* [Performance benchmarking](./docs/performance.md) - Information on how to do performance benchmarking on a deployment of the use case.
