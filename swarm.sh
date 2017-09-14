@@ -5,7 +5,7 @@
 # If SKIP_SWARM_ENV is defined as 'true' however, we rely on those variables already
 # being set in the environment.
 if [ "$SKIP_SWARM_ENV" != "true" ] && [ ! -f $(dirname "$0")/swarm.env ]; then
-  echo "You need to create a swarm.env file (or set SKIP_SWARM_ENV=true). Check swarm.env.example in the project root."
+  echo "You need to create a swarm.env file (or set SKIP_SWARM_ENV=true). Check docs/deploying.md for more information how to create and modify this file."
   exit 1
 fi
 
@@ -51,6 +51,7 @@ function refresh_nodes() {
   machines=$(docker-machine ls --filter label=env=qliktive -q)
   managers=$(echo "$machines" | grep -i 'manager' || true)
   workers=$(echo "$machines" | grep -i 'worker' || true)
+  echo "Workers: '$workers'"
 }
 
 # Deploy the data we need to all worker nodes for easy directory mapping
@@ -116,6 +117,8 @@ function clean() {
 # Simple validation checking if all services has the correct number of replicas
 # running in the swarm.
 function validate() {
+  error=0
+
   while read -r manager; do
     replicas=$(docker-machine ssh $manager docker service ls --format \"{{.Name}}/{{.Replicas}}\")
     while read -r replica; do
@@ -123,12 +126,15 @@ function validate() {
       running=$(echo $replica | cut -d \/ -f 2)
       total=$(echo $replica | cut -d \/ -f 3)
       if [ "$running" != "$total" ]; then
-        echo "$name does not have to correct number of replicas running ($running running but expected $total)."
-        return 1
+        echo "$name does not have the correct number of replicas running ($running running but expected $total)."
+        error=1
       fi
     done <<< "$replicas"
   done <<< "$managers"
-  echo "All services are running with the correct number of replicas."
+
+  if [ "$error" == "0" ]; then
+    echo "All services are running with the correct number of replicas."
+  fi
 }
 
 # Create nodes (1 manager, 2 workers) and join them as a swarm.
@@ -160,7 +166,9 @@ function create() {
   fi
 
   refresh_nodes
-  workers 2
+
+  rest=2
+  workers
 }
 
 # Remove all nodes related to this project.
@@ -182,13 +190,13 @@ function workers() {
     exit 0
   fi
 
-  if [ -z "$machines" ]; then
-    echo "No qliktive nodes to remove."
+  if [ -z "$managers" ]; then
+    echo "No manager node available, please create a swarm."
     exit 0
   fi
 
   total_workers=$rest
-  current_workers=$(echo "$workers" | wc -l | tr -d ' ')
+  current_workers=$(echo "$workers" | grep '[^ ]' | wc -l | tr -d ' ')
   delta=$(($total_workers - $current_workers))
 
   function reduce_workers() {
@@ -198,7 +206,7 @@ function workers() {
       echo "Removing $worker"
       docker-machine ssh $worker "sudo docker swarm leave"
       docker-machine ssh $manager "sudo docker node rm -f $worker"
-      docker-machine rm -y $worker
+      docker-machine rm -f -y $worker
     done
   }
 
@@ -213,7 +221,7 @@ function workers() {
     eval $(docker-machine env $manager)
     token=$(docker swarm join-token -q worker)
 
-    for i in $(eval echo "{$((current_workers + 1))..${total_workers}}"); do
+    for i in $(eval echo "{$(($current_workers + 1))..${total_workers}}"); do
       name="${machine_prefix}-worker$i"
       docker-machine create $switches $name
       docker-machine ssh $name "sudo docker swarm join --token $token $ip:2377"
@@ -231,6 +239,18 @@ function workers() {
   done <<< "$managers"
 }
 
+function list() {
+  echo "Managers:"
+  echo "$managers"
+  echo ""
+  echo "Workers:"
+  echo "$workers"
+  echo ""
+  while read -r manager; do
+    docker-machine ssh $manager docker service ls
+  done <<< "$managers"
+}
+
 refresh_nodes
 
 if   [ "$command" == "deploy" ];   then deploy_data && deploy_stack
@@ -239,5 +259,6 @@ elif [ "$command" == "validate" ]; then validate
 elif [ "$command" == "create" ];   then create
 elif [ "$command" == "remove" ];   then remove
 elif [ "$command" == "workers" ];  then workers
+elif [ "$command" == "ls" ];  then list
 
 else echo "Invalid option: $command - please use one of: deploy, clean, validate, create, remove, workers"; fi

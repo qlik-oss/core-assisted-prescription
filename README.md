@@ -44,7 +44,7 @@ This use case is primarily about consuming a UI-based analytics website, and we 
 * **Analytics UI** - `/`, the default UI.
 * **Kibana Dashboard** - `/kibana/`, used to view logs from the different services — only available if the logging stack is included during deployment.
 * **Swarm Visualizer** - `/viz/`, used to see an overview of the deployment, and where services are running. Only available in Swarm mode.
-* **Grafana** - `/grafana/`, used to see an overview of monitoring and performance of the deployed services. Only available if the monitoirng stack is included during deployment.
+* **Grafana** - `/grafana/`, used to see an overview of monitoring and performance of the deployed services. Only available if the monitoring stack is included during deployment.
 
 ### Ports
 
