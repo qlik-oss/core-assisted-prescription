@@ -12,7 +12,7 @@ There is a set of basic end-to-end tests for verifying QIX Engine using [enigma.
 
 ### Without Docker Swarm
 
-To execute the same sanity E2E tests as on CCI, on a local setup without Swarm (i.e. using ```deploy-local.sh```), run:
+To execute the same sanity E2E tests as on CCI, on a local setup without Swarm (i.e. using `./local.sh deploy`), run:
 
 ```sh
 $ ./scripts/run-e2e-tests-cci.sh
@@ -20,7 +20,7 @@ $ ./scripts/run-e2e-tests-cci.sh
 
 ### With Docker Swarm
 
-To execute test in a Swarm deployment using the default naming convention from the ```create-swarm-cluster.sh```, run:
+To execute test in a Swarm deployment using the default naming convention from the `./swarm.sh create`, run:
 
 ```sh
 $ cd test

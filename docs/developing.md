@@ -25,7 +25,7 @@ For development purposes, the stack can be run on a developer machine using the 
 You can easily start this use case locally on a developer machine, without any Swarm cluster, with:
 
 ```sh
-$ ./scripts/deploy-local.sh
+$ ./local.sh deploy
 ```
 
 The script uses `docker-compose` and the application can now be accessed at https://localhost/.
@@ -33,7 +33,7 @@ The script uses `docker-compose` and the application can now be accessed at http
 To bring the system down, run:
 
 ```sh
-$ ./scripts/remove-local.sh
+$ ./local.sh remove
 ```
 
 ### With Docker Swarm
