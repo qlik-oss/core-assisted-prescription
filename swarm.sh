@@ -188,8 +188,22 @@ function workers() {
   fi
 
   total_workers=$rest
+  current_workers=$(echo "$workers" | wc -l | tr -d ' ')
+  delta=$(($total_workers - $current_workers))
 
-  while read -r manager; do
+  function reduce_workers() {
+    echo "Scaling workers to $total_workers by removing $(($delta * -1))"
+    for i in $(seq $(($total_workers + 1)) 1 $current_workers); do		
+      worker="${machine_prefix}-worker$i"
+      echo "Removing $worker"
+      docker-machine ssh $worker "sudo docker swarm leave"
+      docker-machine ssh $manager "sudo docker node rm -f $worker"
+      docker-machine rm -y $worker
+    done
+  }
+
+  function increase_workers() {
+    echo "Scaling workers to $total_workers by adding $delta"
     ip=$(docker-machine inspect --format '{{.Driver.PrivateIPAddress}}' $manager)
 
     if [ "$ip" == "<no value>" ]; then
@@ -199,11 +213,21 @@ function workers() {
     eval $(docker-machine env $manager)
     token=$(docker swarm join-token -q worker)
 
-    for i in $(eval echo "{1..${total_workers}}"); do
+    for i in $(eval echo "{$((current_workers + 1))..${total_workers}}"); do
       name="${machine_prefix}-worker$i"
       docker-machine create $switches $name
       docker-machine ssh $name "sudo docker swarm join --token $token $ip:2377"
     done
+  }
+
+  while read -r manager; do
+    if [[ $delta -lt 0 ]]; then
+      reduce_workers
+    elif [[ $delta -gt 0 ]]; then
+      increase_workers
+    else
+      echo "There already are $total_workers worker node(s)."
+    fi
   done <<< "$managers"
 }
 
