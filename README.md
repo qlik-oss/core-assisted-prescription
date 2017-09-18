@@ -2,9 +2,7 @@
 
 [![CircleCI](https://circleci.com/gh/qlik-ea/qliktive-custom-analytics.svg?style=svg&circle-token=087152b4808d5373a8dcbbe82c2ff352e463a3a2)](https://circleci.com/gh/qlik-ea/qliktive-custom-analytics)
 
-**Warning**: This repo is under heavy development. We cannot guarantee that it works as described yet. Use at your own risk.
-
-To run this use case it's required to use Docker stable version 17.06 or latest.
+To run this use case it's required to use Docker stable version 17.06 or later.
 
 ## Introduction
 
@@ -18,7 +16,7 @@ This repository contains the service stack and various scripts and tools to depl
 
 Run the script: 
 ```sh
-$ ./scripts/deploy-local.sh
+$ ./local.sh deploy
 ```
 Now you will have the application running locally and can be accessed at https://localhost/
 Login on the page with: "admin" and "password". Read more about our secret handling [here](https://github.com/qlik-ea/qliktive-custom-analytics/blob/master/docs/secrets.md#docker-secrets)
@@ -46,7 +44,7 @@ This use case is primarily about consuming a UI-based analytics website, and we 
 * **Analytics UI** - `/`, the default UI.
 * **Kibana Dashboard** - `/kibana/`, used to view logs from the different services — only available if the logging stack is included during deployment.
 * **Swarm Visualizer** - `/viz/`, used to see an overview of the deployment, and where services are running. Only available in Swarm mode.
-* **Grafana** - `/grafana/`, used to see an overview of monitoring and performance of the deployed services. Only available if the monitoirng stack is included during deployment.
+* **Grafana** - `/grafana/`, used to see an overview of monitoring and performance of the deployed services. Only available if the monitoring stack is included during deployment.
 
 ### Ports
 
@@ -64,4 +62,4 @@ The terminology used in this documentation with regards to technologies, tools, 
 * [Developing](./docs/developing.md) - Information on the development environment for the use case.
 * [Testing](./docs/testing.md) - Information on how the use case is tested and how to run tests.
 * [Deploying](./docs/deploying.md) - Information on deploying the use case, both to AWS and to other Docker Swarm clusters.
-* [Performance banchmarking](./docs/performance.md) - Information on how to do performance benchmarking on a deployment of the use case.
+* [Performance benchmarking](./docs/performance.md) - Information on how to do performance benchmarking on a deployment of the use case.

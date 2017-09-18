@@ -47,8 +47,7 @@ jobs:
             echo $GITHUB_CLIENT_ID > ~/qliktive-custom-analytics/secrets/GITHUB_CLIENT_ID
             echo $GITHUB_CLIENT_SECRET > ~/qliktive-custom-analytics/secrets/GITHUB_CLIENT_SECRET
             echo $JWT_SECRET > ~/qliktive-custom-analytics/secrets/JWT_SECRET
-            ./deploy-local.sh
-          working_directory: ~/qliktive-custom-analytics/scripts
+            ./local.sh deploy
       - run:
           name: Run E2E tests in remote Docker space
           command: ./run-e2e-tests-cci.sh
@@ -67,10 +66,10 @@ jobs:
               export DOCKER_CERT_PATH="/root/.docker/machine/machines/${DOCKER_AWS_MANAGER_NAME}"
               export DOCKER_MACHINE_NAME=${DOCKER_AWS_MANAGER_NAME}
 
-              scp -o StrictHostKeyChecking=no ubuntu@${DOCKER_AWS_MANAGER_IP}:/home/ubuntu/DEPLOY_SSL_* ~/qliktive-custom-analytics/secrets/
-
-              docker-compose -f ../docker-compose.yml -f ../docker-compose.pregen-ssl.yml config > ../docker-compose.merged.yml
-              \cp ../docker-compose.merged.yml ../docker-compose.yml
-              ./deploy-stack.sh -u demo
+              scp -o StrictHostKeyChecking=no ubuntu@${DOCKER_AWS_MANAGER_IP}:/home/ubuntu/DEPLOY_SSL_* ~/qliktive-custom-analytics/secrets/              
+              cd ..
+              docker-compose -f docker-compose.yml -f docker-compose.pregen-ssl.yml config > docker-compose.merged.yml
+              \cp docker-compose.merged.yml docker-compose.yml
+              SKIP_SWARM_ENV="true" DOCKER_PREFIX="demo-docker-" DOCKER_DRIVER="amazonec2" ./swarm.sh deploy
             fi
           working_directory: ~/qliktive-custom-analytics/scripts

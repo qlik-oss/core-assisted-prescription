@@ -6,117 +6,106 @@ Deployment of the use case can be done both to the AWS environments and to a Swa
 
 * `docker-machine` installed on host i.e. computer executing the deployment script
 * Git bash/cmd running in administrator mode
+* Copied [swarm.env.example](/swarm.env.example) to `swarm.env`
 
-### Additional prerequisites for local deployment in Windows
+## Creating the swarm
+
+By default the script will spin up `1 manager` node and `2 worker` nodes. When all nodes are up and running the script will finish by listing all the nodes.
+
+Once you have `swarm.env` configured for your preferred deployment (see sections below), run:
+
+```bash
+$ ./swarm.sh create
+```
+
+### Using Hyper-V (Windows only)
 
 1. Open Hyper-V Manager desktop app
 2. In top right corner under 'Actions' choose Virtual Switch Manager
 3. If you don't have a virtual network switch you should create a new one. Choose external connection and give it a proper name. The name of the network switch will be used when spinning up the local environment.
 
-### Additional prerequisites for local deployment in OS X
+In `swarm.env`:
+
+Set `DOCKER_DRIVER=hyperv` and modify the `HYPERV_` environment variables to match your setup (ensure `HYPERV_VIRTUAL_NETWORK_SWITCH` is set to the name you gave it in the steps above).
+
+### Using VirtualBox
 
 1. Install [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 
-### Additional prerequisites for vSphere deployment
+### Using VMWare VSphere
 
-There are a number of environment variables needed to deploy using vSphere e.g. username, passwords and network specific configurations. The needed variables are listed in the [Docker documentation](https://docs.docker.com/machine/drivers/vsphere/). In our setup we resolve it by exporting the environment variables using a `.bash_profile`.
+In `swarm.env`:
 
-### Additional prerequisites for AWS deployment
+Set `DOCKER_DRIVER=vmwarevsphere` and modify the `VSPHERE_` environment variables to match your setup. For a list of _all_ VSphere variables you can use, please see the [Docker documentation](https://docs.docker.com/machine/drivers/vsphere/).
 
-There are a number of environment variables needed to deploy using amazonec2. The needed variables are listed in the [Docker documentation](https://docs.docker.com/machine/drivers/aws/). In our setup we resolve it by exporting the environment variables using a `.bash_profile`.
-The AMIs could differ between different AWS zones  but could be found using [Amazon EC2 AMI Locator](https://cloud-images.ubuntu.com/locator/ec2/).
-The deployment has been verified with:
+### Using AWS EC2
+
+Please note that after deploying to AWS you need to open the https/443 port for external IPs and at least the ports specified in [Open protocols and ports between the hosts](https://docs.docker.com/engine/swarm/swarm-tutorial/#open-protocols-and-ports-between-the-hosts). This is done through *AWS Console > EC2 > Security Groups (Select security group created by 'docker-machine') > Inbound (tab)*
+
+The AMIs could differ between different AWS zones but could be found using [Amazon EC2 AMI Locator](https://cloud-images.ubuntu.com/locator/ec2/).
+
+In `swarm.env`:
+
+Set `DOCKER_DRIVER=amazonec2` and modify the `AWS_` environment variables to match your setup. For a list of _all_ AWS variables you can use, please see the [Docker documentation](https://docs.docker.com/machine/drivers/aws/).
+
+This deployment has been verified with:
+
 ```
 export AWS_DEFAULT_REGION=eu-west-1
 export AWS_AMI=ami-6c101b0a
 export AWS_INSTANCE_TYPE=t2.medium
 ```
-After deploying to AWS you need to open the https/443 for external IPs and at least the ports specified in [Open protocols and ports between the hosts](https://docs.docker.com/engine/swarm/swarm-tutorial/#open-protocols-and-ports-between-the-hosts). This is done through *AWS Console > EC2 > Security Groups (Select security group created by 'docker-machine') > Inbound (tab)*
 
-## Deploy
+## Deploying the services
 
-Step-by-step:
-
-1. To spin up an environment, use the script [create-swarm-cluster.sh](../scripts/create-swarm-cluster.sh).
-
-    Windows local environment:
-    ```bash
-    $ ./scripts/create-swarm-cluster.sh -d local -v <virtual network switch name>
-    ```
-    Mac OS X local environment using VirtualBox:
-    ```bash
-    $ ./scripts/create-swarm-cluster.sh -d local
-    ```
-    vSphere:
-    ```bash
-    $ ./scripts/create-swarm-cluster.sh -d vsphere
-    ```
-    Amazon EC2:
-    ```bash
-    $ ./scripts/create-swarm-cluster.sh -d amazonec2
-    ```
-    By default the script will spin up `1 manager` node and `2 worker` nodes. When all nodes are up and running the script will finish by listing all the nodes.
-
-2. Now there are three VMs available in the setup, and the environment is ready for deployment.
-    ```bash
-    $ ./scripts/deploy-stack.sh
-    ```
-    The bash script will deploy the services defined in [docker-compose.yml](../docker-compose.yml).
-
-3. To remove the deployed stack, use the following script.
-    ```bash
-    $ ./scripts/remove-stack.sh
-    ```
-    Note that this does not remove any Docker volumes on the nodes.
-
-4. To bring down the VMs (including services) you can use the script [remove-swarm-cluster.sh](../scripts/remove-swarm-cluster.sh). This script will work regardless if running a local or vSphere deployment.
-    ```bash
-    $ ./scripts/remove-swarm-cluster.sh
-    ```
-
-### Updating your deployed stack
-
-If you make updates to the stack and want to update the deployment you just run the ```deploy-stack``` script again.
+To deploy/update services in the pre-existing swarm (see previous step how to create a swarm), simply run:
 
 ```bash
-$ ./scripts/deploy-stack.sh
-```
-If you have made changes to the data that should be mounted in the containers, you need supply an additional switch.
-```bash
-$ ./scripts/deploy-stack.sh -o
+$ ./swarm.sh deploy
 ```
 
-### Validating your deployment
+The bash script will deploy the services defined in [docker-compose.yml](../docker-compose.yml) as well as the [logging](../docker-compose.logging.yml) and [monitoring](../docker-compose.monitoring.yml) stacks.
 
-There is a small set of tests in [validate-swarm-cluster.sh](../scripts/validate-swarm-cluster.sh) that can validate a running deployment that services etc. are deployed and running on correct nodes. This script will work regardless if running a local or vSphere deployment.
+## Cleaning/removing a deployment
+
+Cleaning up all deployed services (_excluding_ volumes created):
 
 ```bash
-$ ./scripts/validate-swarm-cluster.sh
+$ ./swarm.sh clean
+```
+
+To completely remove the nodes (including services):
+
+```bash
+$ ./swarm.sh remove
 ```
 
 ## Scale
 
-Assuming that a swarm has been [created](#deploy) with a fixed set of manager and worker nodes, there might be a need for scaling the swarm either up or down in size. For this use-case the scaling is focused on the availability of nodes running with qix engine containers, hence we should scale worker nodes. New worker nodes that are joining the swarm will spin up a QIX Engine automatically, due to global mode set on QIX Engine service in [docker-compose.yml](../docker-compose.yml).
+Assuming that a swarm has been [created](#deploy) with a fixed set of manager and worker nodes, there might be a need for scaling the swarm either up or down in size. For this use-case the scaling is focused on the availability of nodes running with QIX Engine containers, hence we should scale worker nodes. New worker nodes that are joining the swarm will spin up a QIX Engine automatically, due to global mode set on QIX Engine service in [docker-compose.yml](../docker-compose.yml).
 
 There is no logic handling of active sessions on nodes being scaled down, so in that case a refresh is needed to retrieve a new session from one of the remaining nodes.
 
-To scale nodes up:
+Scaling is done by defining the total number of workers needed (i.e. how many QIX Engines you need). If you pass in a value lower than current number of workers, it will remove top bottom workers until the new value has been reached.
+
+Set total workers to two:
 
 ```bash
-$ ./scripts/scale-workers.sh up <number of nodes>
+$ ./swarm.sh workers 2
 ```
 
-or down:
+Example:
 
-```bash
-$ ./scripts/scale-workers.sh down <number of nodes>
+Your current deployment exists of four workers:
+
+```
+ca-worker1
+ca-worker2
+ca-worker3
+ca-worker4
 ```
 
-or with fixed set of nodes, regardless if scaling up or down:
-
-```bash
-$ ./scripts/scale-workers.sh <total number of nodes>
-```
+If you do `./swarm.sh workers 2`, workers `3` and `4` will be removed.
 
 ## Continuous Deployment
 
@@ -150,6 +139,6 @@ export DOCKER_HOST="tcp://${DOCKER_AWS_MANAGER_IP}:2376"
 export DOCKER_CERT_PATH="/root/.docker/machine/machines/${DOCKER_AWS_MANAGER_NAME}"
 export DOCKER_MACHINE_NAME=${DOCKER_AWS_MANAGER_NAME}
 
-# Deploy stach with "prefix" demo
-./deploy-stack.sh -u demo
+# Deploy stack
+./swarm.sh deploy
 ```
