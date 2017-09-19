@@ -1,4 +1,4 @@
-FROM node:7
+FROM node:8-alpine
 
 # Create test directory
 RUN mkdir -p /usr/src/test
