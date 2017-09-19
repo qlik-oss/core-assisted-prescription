@@ -31,7 +31,8 @@ services:
 
   mira:
     # On CCI, run Mira in 'local' mode instead of default 'swarm' mode.
-    command: --mode=local
+    environment:
+     - MIRA_MODE=local
 
   dummy-data:
     # Dummy container just to hold data that is needed in CCI remote docker space.
