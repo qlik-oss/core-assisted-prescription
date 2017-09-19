@@ -89,7 +89,7 @@ services:
     # QIX Engine is configured to run on all worker nodes in the
     # cluster, and is the service we primarily want to scale up in
     # this use-case.
-    image: qlikea/engine:12.51.0
+    image: qlikea/engine:12.59.0
     command: -S ValidateJsonWebTokens=2 -S JsonWebTokenSecret=${JWT_SECRET}
     labels:
       qix-engine: ""
@@ -107,7 +107,7 @@ services:
     # QIX Engines. Uses Mira to find appropriate containers
     # to place the session on.
     # See https://github.com/qlik-ea/qliktive-qix-session-service
-    image: qlikea/qliktive-qix-session-service:0.0.1-46
+    image: qlikea/qliktive-qix-session-service:0.0.1-54
     deploy:
       placement:
         constraints: [node.role == manager]
