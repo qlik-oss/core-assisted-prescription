@@ -47,13 +47,15 @@ services:
     configs:
       - source: prometheus
         target: /etc/prometheus/prometheus.yml
+    command:
+      - '-storage.local.target-heap-size=1073741824'
     deploy:
       placement:
         constraints: [node.role == manager]
       resources:
         limits:
           cpus: '0.50'
-          memory: 2048M
+          memory: 1024M
 
   grafana:
     image: grafana/grafana:4.3.2
