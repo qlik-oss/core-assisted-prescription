@@ -49,6 +49,7 @@ services:
         target: /etc/prometheus/prometheus.yml
     command:
       - '-storage.local.target-heap-size=1073741824'
+      - '-config.file=/etc/prometheus/prometheus.yml'
     deploy:
       placement:
         constraints: [node.role == manager]
