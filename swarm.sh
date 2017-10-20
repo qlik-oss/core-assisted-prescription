@@ -61,17 +61,18 @@ function deploy_data() {
     exit 0
   fi
 
-  while read -r worker; do
-    echo "Deploying data to $worker"
-    driver=$(docker-machine inspect --format '{{.DriverName}}' $worker)
+  for worker in $workers
+  do
+      echo "Deploying data to $worker"
+          driver=$(docker-machine inspect --format '{{.DriverName}}' $worker)
 
-    if [ $driver == "amazonec2" ]; then
-      # Creating '/home/docker' on aws nodes.
-      docker-machine ssh $worker "sudo install -g ubuntu -o ubuntu -d /home/docker"
-    fi
+          if [ $driver == "amazonec2" ]; then
+            # Creating '/home/docker' on aws nodes.
+            docker-machine ssh $worker "sudo install -g ubuntu -o ubuntu -d /home/docker"
+          fi
 
-    docker-machine scp -r ./data $worker:/home/docker/
-  done <<< "$workers"
+          docker-machine scp -r ./data $worker:/home/docker/
+  done
 }
 
 # Deploy the full swarm stack, including logging and monitoring stacks to the
@@ -200,7 +201,7 @@ function workers() {
 
   function reduce_workers() {
     echo "Scaling workers to $total_workers by removing $(($delta * -1))"
-    for i in $(seq $(($total_workers + 1)) 1 $current_workers); do		
+    for i in $(seq $(($total_workers + 1)) 1 $current_workers); do
       worker="${machine_prefix}-worker$i"
       echo "Removing $worker"
       docker-machine ssh $worker "sudo docker swarm leave"
