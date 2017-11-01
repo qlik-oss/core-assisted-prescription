@@ -55,7 +55,7 @@ jobs:
       - deploy:
           name: Deploy public demo to AWS
           command: |
-            # if [ "${CIRCLE_BRANCH}" == "master" ]; then
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
               curl -L https://github.com/docker/machine/releases/download/v0.12.2/docker-machine-`uname -s`-`uname -m` > /usr/local/bin/docker-machine
               chmod +x /usr/local/bin/docker-machine
               scp -o StrictHostKeyChecking=no ubuntu@${DOCKER_AWS_MANAGER_IP}:/home/ubuntu/qliktive-*.zip ~/
@@ -71,5 +71,5 @@ jobs:
               docker-compose -f docker-compose.yml -f docker-compose.pregen-ssl.yml config > docker-compose.merged.yml
               \cp docker-compose.merged.yml docker-compose.yml
               SKIP_SWARM_ENV="true" DOCKER_PREFIX="qliktive-prod" DOCKER_DRIVER="amazonec2" ./swarm.sh deploy
-            # fi
+            fi
           working_directory: ~/qliktive-custom-analytics/scripts
