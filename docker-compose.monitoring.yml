@@ -48,7 +48,8 @@ services:
       - source: prometheus
         target: /etc/prometheus/prometheus.yml
     command:
-      - '-storage.local.target-heap-size=1073741824'
+      - '-storage.local.target-heap-size=715827882'
+      - '-storage.local.retention=720h'
       - '-config.file=/etc/prometheus/prometheus.yml'
     deploy:
       placement:
