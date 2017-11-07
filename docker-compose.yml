@@ -5,12 +5,10 @@ services:
     # This is our externally-facing gateway, exposing the configured
     # things for all end-users. It has the Analytics UI bundled into it.
     # See https://github.com/qlik-ea/qliktive-custom-analytics-openresty
-    image: qlikea/qliktive-custom-analytics-openresty:master-308
+    image: qlikea/qliktive-custom-analytics-openresty:docs-311
     restart: always
     ports:
       - "443:443"
-    # uncomment for HTTP access:
-    #  - "80:80"
     environment:
       SESSION_COOKIE_NAME: custom-analytics
       # kibana is defined in docker-compose.logging.yml, this is just here to
@@ -25,6 +23,8 @@ services:
       QIX_SESSION_PORT: 9455
       AUTH_HOST: auth
       AUTH_PORT: 3000
+    volumes:
+      - /home/docker/docs:/usr/local/openresty/nginx/html/docs
     deploy:
       placement:
         constraints: [node.role == manager]
