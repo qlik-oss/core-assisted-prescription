@@ -2,12 +2,12 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:8
+      - image: node:7
     working_directory: ~/qliktive-custom-analytics
     steps:
       - checkout
       - restore_cache:
-          key: npm-dependency-cache-{{ checksum "test/package.json" }}
+          key: dependency-cache-{{ checksum "test/package.json" }}
       - run:
           name: Install dependencies
           command: npm install --quiet
@@ -17,13 +17,25 @@ jobs:
           command: npm run lint
           working_directory: ~/qliktive-custom-analytics/test
       - save_cache:
-          key: npm-dependency-cache-{{ checksum "test/package.json" }}
+          key: dependency-cache-{{ checksum "test/package.json" }}
           paths:
             - test/node_modules
+      - run:
+          name: Install Docker Compose
+          command: |
+            set -x
+            curl -L https://github.com/docker/compose/releases/download/1.15.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+            chmod +x /usr/local/bin/docker-compose
       - run:
           name: Validate docker-compose files
           command: npm run validate:compose
           working_directory: ~/qliktive-custom-analytics/test
+      - run:
+          name: Install docker client
+          command: |
+            curl -L -o /tmp/docker-17.06.0-dev.tgz https://master.dockerproject.org/linux/x86_64/docker-17.06.0-dev.tgz
+            tar -xz -C /tmp -f /tmp/docker-17.06.0-dev.tgz
+            mv /tmp/docker/* /usr/bin
       - setup_remote_docker
       - run:
           name: Login to Dockerhub
@@ -44,10 +56,11 @@ jobs:
           name: Deploy public demo to AWS
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              curl -Lo docker-machine https://github.com/docker/machine/releases/download/v0.12.2/docker-machine-`uname -s`-`uname -m` && chmod +x docker-machine && sudo mv docker-machine /usr/local/bin/
+              curl -L https://github.com/docker/machine/releases/download/v0.12.2/docker-machine-`uname -s`-`uname -m` > /usr/local/bin/docker-machine
+              chmod +x /usr/local/bin/docker-machine
               scp -o StrictHostKeyChecking=no ubuntu@${DOCKER_AWS_MANAGER_IP}:/home/ubuntu/qliktive-*.zip ~/
-              sudo apt-get update
-              sudo apt-get install unzip
+              apt-get update
+              apt-get install unzip
               for i in ~/qliktive-*.zip; do ./import-machine.sh "$i"; done;
               export DOCKER_HOST="tcp://${DOCKER_AWS_MANAGER_IP}:2376"
               export DOCKER_CERT_PATH="/root/.docker/machine/machines/${DOCKER_AWS_MANAGER_NAME}"
