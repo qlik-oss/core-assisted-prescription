@@ -2,12 +2,12 @@ version: 2
 jobs:
   build:
     docker:
-      - image: node:7
+      - image: circleci/node:8
     working_directory: ~/qliktive-custom-analytics
     steps:
       - checkout
       - restore_cache:
-          key: dependency-cache-{{ checksum "test/package.json" }}
+          key: npm-dependency-cache-{{ checksum "test/package.json" }}
       - run:
           name: Install dependencies
           command: npm install --quiet
@@ -17,25 +17,13 @@ jobs:
           command: npm run lint
           working_directory: ~/qliktive-custom-analytics/test
       - save_cache:
-          key: dependency-cache-{{ checksum "test/package.json" }}
+          key: npm-dependency-cache-{{ checksum "test/package.json" }}
           paths:
             - test/node_modules
-      - run:
-          name: Install Docker Compose
-          command: |
-            set -x
-            curl -L https://github.com/docker/compose/releases/download/1.15.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
-            chmod +x /usr/local/bin/docker-compose
       - run:
           name: Validate docker-compose files
           command: npm run validate:compose
           working_directory: ~/qliktive-custom-analytics/test
-      - run:
-          name: Install docker client
-          command: |
-            curl -L -o /tmp/docker-17.06.0-dev.tgz https://master.dockerproject.org/linux/x86_64/docker-17.06.0-dev.tgz
-            tar -xz -C /tmp -f /tmp/docker-17.06.0-dev.tgz
-            mv /tmp/docker/* /usr/bin
       - setup_remote_docker
       - run:
           name: Login to Dockerhub
