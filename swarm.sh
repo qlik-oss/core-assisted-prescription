@@ -51,6 +51,11 @@ function refresh_nodes() {
   machines=$(docker-machine ls --filter label=env=qliktive -q)
   managers=$(echo "$machines" | grep -i 'manager' || true)
   workers=$(echo "$machines" | grep -i 'worker' || true)
+
+  echo "Managers found:\n$managers"
+  echo 
+  echo "Workers found:\n$workers"
+  echo 
 }
 
 # Deploy the data we need to all worker nodes for easy directory mapping

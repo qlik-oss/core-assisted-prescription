@@ -55,7 +55,7 @@ jobs:
       - deploy:
           name: Deploy public demo to AWS
           command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+            # if [ "${CIRCLE_BRANCH}" == "master" ]; then
               curl -L https://github.com/docker/machine/releases/download/v0.12.2/docker-machine-`uname -s`-`uname -m` > /usr/local/bin/docker-machine
               chmod +x /usr/local/bin/docker-machine
               scp -o StrictHostKeyChecking=no ubuntu@${DOCKER_AWS_MANAGER_IP}:/home/ubuntu/qliktive-*.zip ~/
@@ -75,5 +75,5 @@ jobs:
               # create the documentation site volume (deployed to the manager node from the qlik-ea/info CI):
               docker volume create -d local-persist -o mountpoint=/home/ubuntu/docs --name=docs-folder 2>&1
               docker service update --mount-add type=volume,source=docs-folder,target=/usr/local/openresty/nginx/html/docs custom-analytics_openresty
-            fi
+            # fi
           working_directory: ~/qliktive-custom-analytics/scripts
