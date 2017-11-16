@@ -51,6 +51,11 @@ function refresh_nodes() {
   machines=$(docker-machine ls --filter label=env=qliktive -q)
   managers=$(echo "$machines" | grep -i 'manager' || true)
   workers=$(echo "$machines" | grep -i 'worker' || true)
+
+  echo "Managers found:"
+  echo "$managers"
+  echo "Workers found:"
+  echo "$workers"
 }
 
 # Deploy the data we need to all worker nodes for easy directory mapping
@@ -61,7 +66,8 @@ function deploy_data() {
     exit 0
   fi
 
-  while read -r worker; do
+  for worker in $workers
+  do
     echo "Deploying data to $worker"
     driver=$(docker-machine inspect --format '{{.DriverName}}' $worker)
 
@@ -71,7 +77,7 @@ function deploy_data() {
     fi
 
     docker-machine scp -r ./data $worker:/home/docker/
-  done <<< "$workers"
+  done
 }
 
 # Deploy the full swarm stack, including logging and monitoring stacks to the
@@ -82,7 +88,8 @@ function deploy_stack() {
     exit 0
   fi
 
-  while read -r manager; do
+  for manager in $managers
+  do
     ip=$(docker-machine ip $manager)
     eval $(docker-machine env $manager)
     JWT_SECRET=$(cat ./secrets/JWT_SECRET) docker-compose -f docker-compose.yml -f docker-compose.logging.yml -f docker-compose.monitoring.yml config > docker-compose.prod.yml
@@ -97,7 +104,7 @@ function deploy_stack() {
     echo "KIBANA                   - https://$ip/kibana/"
     echo "DOCKER SWARM VISUALIZER  - https://$ip/viz/"
     echo "GRAFANA                  - https://$ip/grafana/"
-  done <<< "$managers"
+  done
 }
 
 # Clean a deployed stack from the qliktive swarm nodes.
@@ -107,10 +114,11 @@ function clean() {
     exit 0
   fi
 
-  while read -r manager; do
+  for manager in $managers
+  do
     eval $(docker-machine env $manager)
     docker stack rm custom-analytics
-  done <<< "$managers"
+  done
 }
 
 # Simple validation checking if all services has the correct number of replicas
@@ -118,9 +126,11 @@ function clean() {
 function validate() {
   error=0
 
-  while read -r manager; do
+  for manager in $managers
+  do
     replicas=$(docker-machine ssh $manager docker service ls --format \"{{.Name}}/{{.Replicas}}\")
-    while read -r replica; do
+    for replica in $replicas
+    do
       name=$(echo $replica | cut -d \/ -f 1)
       running=$(echo $replica | cut -d \/ -f 2)
       total=$(echo $replica | cut -d \/ -f 3)
@@ -128,8 +138,8 @@ function validate() {
         echo "$name does not have the correct number of replicas running ($running running but expected $total)."
         error=1
       fi
-    done <<< "$replicas"
-  done <<< "$managers"
+    done
+  done
 
   if [ "$error" == "0" ]; then
     echo "All services are running with the correct number of replicas."
@@ -227,7 +237,8 @@ function workers() {
     done
   }
 
-  while read -r manager; do
+  for manager in $managers
+  do
     if [[ $delta -lt 0 ]]; then
       reduce_workers
     elif [[ $delta -gt 0 ]]; then
@@ -235,7 +246,7 @@ function workers() {
     else
       echo "There already are $total_workers worker node(s)."
     fi
-  done <<< "$managers"
+  done
 }
 
 function list() {
@@ -245,9 +256,10 @@ function list() {
   echo "Workers:"
   echo "$workers"
   echo ""
-  while read -r manager; do
+  for manager in $managers
+  do
     docker-machine ssh $manager docker service ls
-  done <<< "$managers"
+  done
 }
 
 refresh_nodes
