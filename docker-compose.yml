@@ -74,7 +74,7 @@ services:
     # APIs to list (or query) all available QIX Engine containers
     # in the cluster.
     # See https://github.com/qlik-ea/mira
-    image: qlikea/mira:0.0.7
+    image: qlikea/mira:0.0.8
     environment:
      - MIRA_MODE=swarm
     volumes:
@@ -87,7 +87,7 @@ services:
     # QIX Engine is configured to run on all worker nodes in the
     # cluster, and is the service we primarily want to scale up in
     # this use-case.
-    image: qlikea/engine:12.97.0
+    image: qlikea/engine:12.99.0
     command: -S ValidateJsonWebTokens=2 -S JsonWebTokenSecret=${JWT_SECRET}
     labels:
       qix-engine: ""
