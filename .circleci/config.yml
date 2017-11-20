@@ -69,6 +69,15 @@ jobs:
               cd ..
               docker-compose -f docker-compose.yml -f docker-compose.pregen-ssl.yml config > docker-compose.merged.yml
               \cp docker-compose.merged.yml docker-compose.yml
+
+              # Check if configs was changed. If so we need to remove stack before deploying to force an update.
+              CONFIGS_CHANGED=$(git log --name-status HEAD~1..HEAD configs)
+
+              if [[ -n $CONFIGS_CHANGED ]]; then
+                echo "Configuration files was changed in the last commit. Removing and redeploying stack"
+                SKIP_SWARM_ENV="true" DOCKER_PREFIX="qliktive-prod" DOCKER_DRIVER="amazonec2" ./swarm.sh clean
+              fi
+
               SKIP_SWARM_ENV="true" DOCKER_PREFIX="qliktive-prod" DOCKER_DRIVER="amazonec2" ./swarm.sh deploy
               # wait a little bit to let the manager node breath:
               sleep 5
