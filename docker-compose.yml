@@ -53,7 +53,7 @@ services:
       COOKIE_SIGNING_FILE: /run/secrets/cookie_signing
       SUCCESS_REDIRECT_URL: /#/app
       FAILURE_REDIRECT_URL: /
-      AUTH_STRATEGY: github #change to 'local' to login via local username and password
+      AUTH_STRATEGY: ${AUTH_STRATEGY:-local}
       ACCOUNTS_FILE: /run/secrets/accounts_file
     deploy:
       placement:

@@ -69,7 +69,7 @@ jobs:
               cd ..
               docker-compose -f docker-compose.yml -f docker-compose.pregen-ssl.yml config > docker-compose.merged.yml
               \cp docker-compose.merged.yml docker-compose.yml
-              SKIP_SWARM_ENV="true" DOCKER_PREFIX="qliktive-prod" DOCKER_DRIVER="amazonec2" ./swarm.sh deploy
+              AUTH_STRATEGY=github SKIP_SWARM_ENV="true" DOCKER_PREFIX="qliktive-prod" DOCKER_DRIVER="amazonec2" ./swarm.sh deploy
               # wait a little bit to let the manager node breath:
               sleep 5
               # create the documentation site volume (deployed to the manager node from the qlik-ea/info CI):

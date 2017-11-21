@@ -5,7 +5,7 @@
 # If SKIP_SWARM_ENV is defined as 'true' however, we rely on those variables already
 # being set in the environment.
 if [ "$SKIP_SWARM_ENV" != "true" ] && [ ! -f $(dirname "$0")/swarm.env ]; then
-  echo "You need to create a swarm.env file (or set SKIP_SWARM_ENV=true). Check docs/deploying.md for more information how to create and modify this file."
+  echo "You need to create a swarm.env file (or set SKIP_SWARM_ENV=true). Check docs/deploying-swarm.md for more information how to create and modify this file."
   exit 1
 fi
 
