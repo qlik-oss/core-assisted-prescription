@@ -54,7 +54,7 @@ specified in
 This is done through *AWS Console > EC2 > Security Groups (Select security group created by 'docker-machine') >
 Inbound (tab)*
 
-The AMIs could differ between different AWS zones but could be found using
+The AMIs can differ between different AWS zones and can be found using
 [Amazon EC2 AMI Locator](https://cloud-images.ubuntu.com/locator/ec2/).
 
 In `swarm.env`:
@@ -107,14 +107,14 @@ are:
 - `AUTH_STRATEGY=local` - With this strategy, the `auth` service will authenticate logins against
     accounts defined in the Docker secret provided in the [ACCOUNTS](../secrets/ACCOUNTS) file.
 - `AUTH_STRATEGY=github` - With this strategy, the `auth` service will authenticate logins against GitHub, where users
-    are required to be members of the `qlik-ea` organization. For this, two additional secrets must be configured
-    correctly, `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` (see below).
+    are required to be members of the `qlik-ea` or `qlik-trial` organizations. For this, two additional secrets must be
+    configured correctly, `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` (see below).
 
 The `local` strategy is the default, and used if the `AUTH_STRATEGY` environment variable is not set.
 
 If the `github` strategy is used, the secrets `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` must be configured
-accordingly. When deploying the stack to the AWS live environment the `github` strategy is set in the Circle CI job, and
-the Circle CI environment is configured with the necessary information to set up these secrets.
+accordingly. When deploying the stack to the AWS live environment the `github` strategy is set in the CircleCI job,
+and it is configured with the necessary information to set up these secrets.
 
 More information on Docker Secrets management is available [here](./secrets.md).
 
@@ -153,7 +153,7 @@ If you do `./swarm.sh workers 2`, workers `3` and `4` will be removed.
 
 ## Continuous Deployment
 
-This section will just explain one way how CD (Continuous Deployment) can be implemented using Circle CI and
+This section will just explain one way how CD (Continuous Deployment) can be implemented using CircleCI and
 `docker-machine`. It seems that docker-machine isn't designed to be exported between computers but this use case has
 some scripts to help you out with the needed certificates and configurations.
 

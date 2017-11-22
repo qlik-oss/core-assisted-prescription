@@ -25,7 +25,7 @@ the following secrets:
 | cert_key | SSL key used by the web server to provide a secure connection |
 
 **NOTE**: These two secrets are not provided as files in this repository. Instead, they reside in the AWS environment,
-and copied into the Circle CI build environment before deploying back to AWS.
+and copied into the CircleCI build environment before deploying back to AWS.
 
 If the secrets are not provided, the `openresty` service will create a self-signed certificate which is convenient in
 a development environment.
