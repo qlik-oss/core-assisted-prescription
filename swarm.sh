@@ -92,7 +92,7 @@ function deploy_stack() {
   do
     ip=$(docker-machine ip $manager)
     eval $(docker-machine env $manager)
-    JWT_SECRET=$(cat ./secrets/JWT_SECRET) docker-compose -f docker-compose.yml -f docker-compose.logging.yml -f docker-compose.monitoring.yml config > docker-compose.prod.yml
+    AUTH_STRATEGY=$AUTH_STRATEGY JWT_SECRET=$(cat ./secrets/JWT_SECRET) docker-compose -f docker-compose.yml -f docker-compose.logging.yml -f docker-compose.monitoring.yml config > docker-compose.prod.yml
     docker-compose -f docker-compose.prod.yml pull
     docker stack deploy -c ./docker-compose.prod.yml --with-registry-auth custom-analytics
     echo
