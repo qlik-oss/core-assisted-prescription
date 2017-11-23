@@ -5,7 +5,7 @@
 # If SKIP_SWARM_ENV is defined as 'true' however, we rely on those variables already
 # being set in the environment.
 if [ "$SKIP_SWARM_ENV" != "true" ] && [ ! -f $(dirname "$0")/swarm.env ]; then
-  echo "You need to create a swarm.env file (or set SKIP_SWARM_ENV=true). Check docs/deploying.md for more information how to create and modify this file."
+  echo "You need to create a swarm.env file (or set SKIP_SWARM_ENV=true). Check docs/deploying-swarm.md for more information how to create and modify this file."
   exit 1
 fi
 
@@ -96,7 +96,7 @@ function deploy_stack() {
   do
     ip=$(docker-machine ip $manager)
     eval $(docker-machine env $manager)
-    JWT_SECRET=$(cat ./secrets/JWT_SECRET) docker-compose -f docker-compose.yml -f docker-compose.logging.yml -f docker-compose.monitoring.yml config > docker-compose.prod.yml
+    AUTH_STRATEGY=$AUTH_STRATEGY JWT_SECRET=$(cat ./secrets/JWT_SECRET) docker-compose -f docker-compose.yml -f docker-compose.logging.yml -f docker-compose.monitoring.yml config > docker-compose.prod.yml
     docker-compose -f docker-compose.prod.yml pull
     docker stack deploy -c ./docker-compose.prod.yml --with-registry-auth custom-analytics
     echo

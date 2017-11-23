@@ -1,47 +1,60 @@
-# Docker secrets
+# Docker Secrets
 
-## How docker secrets work.
+## Secrets Used
 
-This use case uses docker secrets to handle secretive information needed by the different services running in the swarm.
+The application uses several Docker secrets to handle secretive information needed by the different services.
 
-The files used to populate our secrets can be found under `/secrets` with one file per secret.
+The [docker-compose.yml](../docker-compose.yml) file declares the following secrets:
 
-These are added to the docker-compose like this 
-```secrets:
+| Secret | File | Purpose |
+| ------ | ---- | ------- |
+| accounts_file | [ACCOUNTS](../secrets/ACCOUNTS) | Accounts used by the `auth` service if `AUTH_STRATEGY=local` |
+| github_client_id | [GITHUB_CLIENT_ID](../secrets/GITHUB_CLIENT_ID) | GitHub client id used by the `auth` service if `AUTH_STRATEGY=github` |
+| github_client_secret | [GITHUB_CLIENT_SECRET](../secrets/GITHUB_CLIENT_SECRET) | GitHub client secret used by `auth` service if `AUTH_STRATEGY=github` |
+| cookie_signing | [COOKIE_SIGNING](../secrets/COOKIE_SIGNING) | Used for session cookie signing. Value shall be set to a long GUID |
+| jwt_secret | [JWT_SECRET](../secrets/JWT_SECRET) | Used to sign the JWT sent to services behind the gateway. Value shall be set to a long GUID or other password |
+
+More info on authentication can be found in [Authentication Strategies](./deploying-swarm.md#authentication-strategies).
+
+In addition to the secrets above, the [docker-compose.pregen-ssl.yml](../docker-compose.pregen-ssl.yml) file declares
+the following secrets:
+
+| Secret | Purpose |
+| ------ | ------- |
+| cert_file | SSL certificate used by the web server to provide a secure connection |
+| cert_key | SSL key used by the web server to provide a secure connection |
+
+**NOTE**: These two secrets are not provided as files in this repository. Instead, they reside in the AWS environment,
+and copied into the CircleCI build environment before deploying back to AWS.
+
+If the secrets are not provided, the `openresty` service will create a self-signed certificate which is convenient in
+a development environment.
+
+## How Docker Secrets Work
+
+Secrets are specified in a docker-compose or stack file like this:
+
+```yml
+secrets:
   first_secret:
     file: ./secrets/FIRST_SECRET
   second_secret:
     file: ./secrets/SECOND_SECRET
 ```
 
-A service can then reference a secret like this 
+A service can then reference a secret like this:
 
+```yml
+service-example:
+  image: example-org/service-example:latest
+  secrets:
+    - first_secret
+  environment:
+    FIRST_SECRET_FILE: /run/secrets/first_secret
 ```
-  ...
-  service-example:
-    image: example-org/service-example:latest
-    secrets:
-      - first_secret
-    environment:
-      FIRST_SECRET_FILE: /run/secrets/first_secret
-  ...
-```
-The secret will then be available to the service during runtime under the path `/run/secrets/secret_name`. The service will only get access to the secrets that it's given access to in the docker-compose and not all the defined secrets. IE `first_secret` would  be available for the service `service-example` but not `second_secret`
 
-More info on how docker swarm handles secrets can be found [here](https://docs.docker.com/engine/swarm/secrets/)
+The secret will then be available to the service during runtime under the path `/run/secrets/secret_name`.
+A service can only access secrets that it has been given access to in the docker-compose file.
+In the example above, `first_secret` would  be available to the service `service-example` but not `second_secret`.
 
-## Secrets we are using
-
-We are using the secrets `acounts_file` to load the authenticated accounts to the auth service if it is started with the environment variable `AUTH_STRATEGY` set to `local`. Otherwise the auth service uses the secrets `github_client_id` and `github_client_secret` to provice its authentication to github.
-
-If you are using the github auth method you will have to populate the `GITHUB_CLIENT_ID` and the `GITHUB_CLIENT_SECRET` files with your own client id and client secret to authenticate your service to github.
-
-The secrets `cert-gateway.crt` and `cert-gateway.key` are the ssl certificate and key used by the webserver to provide a secure connection.
-
-The secret `cookie_signing` is used to sign the session cookie and the value in the `COOKIE_SIGNING` file should be changed to a long GUID.
-
-The secret `JWT_SECRET` are used to sign the JWT sent to the services behind the gateway and the value in the `JWT_SECRET` file should be changed to a long GUID or other password.
-
-
-
-
+More info on how Docker Swarm handles secrets can be found [here](https://docs.docker.com/engine/swarm/secrets/)

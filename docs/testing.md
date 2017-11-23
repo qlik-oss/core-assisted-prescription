@@ -1,14 +1,20 @@
 # Testing
 
-End-to-end tests on the use case are configured to run periodically on the staging environment. Promotion to the production environment only takes place after all tests successfully pass in staging. (_This is not implemented yet_)
+End-to-end tests on the use case are configured to run periodically on the staging environment. Promotion to the
+production environment only takes place after all tests successfully pass in staging. (_This is not implemented yet_)
 
-Note that according the [Qlik Elastic Testing Strategy](https://github.com/qlik-ea/info/blob/master/docs/testing-strategy.md), it is assumed that all services and components are fully tested in their own scope, before integrating them into a use case like this, or into a larger solution.
+Note that according the
+[Qlik Elastic Testing Strategy](https://github.com/qlik-ea/info/blob/master/docs/testing-strategy.md),
+it is assumed that all services and components are fully tested in their own scope, before integrating them into a use
+case like this, or into a larger solution.
 
-Testing on the use case/system level shall ensure that the collaboration of services in the stack fulfill the requirements of the use case.
+Testing on the use case/system level shall ensure that the collaboration of services in the stack fulfill the
+requirements of the use case.
 
 ## E2E tests
 
-There is a set of basic end-to-end tests for verifying QIX Engine using [enigma.js](https://github.com/qlik-oss/enigma.js/).
+There is a set of basic end-to-end tests for verifying QIX Engine using
+[enigma.js](https://github.com/qlik-oss/enigma.js/).
 
 ### Without Docker Swarm
 
@@ -33,9 +39,11 @@ Or, by setting the environment variable `GATEWAY_IP_ADDR` to a specific manager 
 $ GATEWAY_IP_ADDR=<IP address or hostname> npm run test:e2e:swarm
 ```
 
-### Circle CI
+### CircleCI
 
-Circle CI makes use of remote docker spaces, hence the tests and data mounts must be containerized to be able to be executed from the job pipeline. To set up the environment and execute the test cases in the same scenario as performed in Circle CI just run:
+CircleCI makes use of remote docker spaces, hence the tests and data mounts must be containerized to be able to be
+executed from the job pipeline. To set up the environment and execute the test cases in the same scenario as performed
+in CircleCI just run:
 
 ```sh
 $ ./scripts/run-e2e-tests-cci.sh
