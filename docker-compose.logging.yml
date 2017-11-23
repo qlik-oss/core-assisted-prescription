@@ -13,7 +13,9 @@ services:
       xpack.watcher.enabled: "false"
     deploy:
       placement:
-        constraints: [node.role == manager]
+        constraints:
+          - node.role == worker
+          - engine.labels.elk == true
 
   logstash:
     image: docker.elastic.co/logstash/logstash:5.2.2
@@ -37,7 +39,9 @@ services:
         target: /usr/share/kibana/config/kibana.yml
     deploy:
       placement:
-        constraints: [node.role == manager]
+        constraints:
+          - node.role == worker
+          - engine.labels.elk == true
 
   openresty:
     environment:
