@@ -247,7 +247,7 @@ function engine-workers() {
 
     for i in $(eval echo "{$(($current_workers + 1))..${total_workers}}"); do
       name="${machine_prefix}-engine-worker$i"
-      docker-machine create $switches --engine-label elk=false $name
+      docker-machine create $switches --engine-label qix-engine=true $name
       docker-machine ssh $name "sudo docker swarm join --token $token $ip:2377"
     done
   }
