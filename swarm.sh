@@ -38,7 +38,8 @@ machine_prefix="${user}-ca"
 switches="--driver=$DOCKER_DRIVER --engine-opt experimental=true --engine-opt metrics-addr=0.0.0.0:4999 --engine-label env=qliktive"
 machines=
 managers=
-workers=
+engine_workers=
+elk_workers=
 
 # Override default node name prefix if the user wants to.
 if [ "$DOCKER_PREFIX" != "" ]; then
@@ -50,33 +51,36 @@ fi
 function refresh_nodes() {
   machines=$(docker-machine ls --filter label=env=qliktive -q)
   managers=$(echo "$machines" | grep -i 'manager' || true)
-  workers=$(echo "$machines" | grep -i 'worker' || true)
+  engine_workers=$(echo "$machines" | grep -i 'engine-worker' || true)
+  elk_workers=$(echo "$machines" | grep -i 'elk-worker' || true)
 
   echo "Managers found:"
   echo "$managers"
-  echo "Workers found:"
-  echo "$workers"
+  echo "ELK workers found:"
+  echo "$elk_workers"
+  echo "Engine workers found:"
+  echo "$engine_workers"
 }
 
 # Deploy the data we need to all worker nodes for easy directory mapping
 # into the QIX Engine containers.
 function deploy_data() {
-  if [ -z "$workers" ]; then
+  if [ -z "$engine_workers" ]; then
     echo "No qliktive worker nodes to deploy data against."
     exit 0
   fi
 
-  for worker in $workers
+  for engine_worker in $engine_workers
   do
-    echo "Deploying data to $worker"
-    driver=$(docker-machine inspect --format '{{.DriverName}}' $worker)
+    echo "Deploying data to $engine_worker"
+    driver=$(docker-machine inspect --format '{{.DriverName}}' $engine_worker)
 
     if [ $driver == "amazonec2" ]; then
       # Creating '/home/docker' on aws nodes.
-      docker-machine ssh $worker "sudo install -g ubuntu -o ubuntu -d /home/docker"
+      docker-machine ssh $engine_worker "sudo install -g ubuntu -o ubuntu -d /home/docker"
     fi
 
-    docker-machine scp -r ./data $worker:/home/docker/
+    docker-machine scp -r ./data $engine_worker:/home/docker/
   done
 }
 
@@ -146,7 +150,7 @@ function validate() {
   fi
 }
 
-# Create nodes (1 manager, 2 workers) and join them as a swarm.
+# Create nodes (1 manager, 1 elk-worker, 2 engine-workers) and join them as a swarm.
 function create() {
   if [ "$machines" ]; then
     echo "There are existing qliktive nodes, please remove them and try again."
@@ -164,6 +168,12 @@ function create() {
   eval $(docker-machine env $name)
   echo "docker swarm init --advertise-addr $ip --listen-addr $ip:2377:"
   docker swarm init --advertise-addr $ip --listen-addr $ip:2377
+
+  function create-elk-worker() {
+  token=$(docker swarm join-token -q worker) 
+  
+  name="${machine_prefix}-elk-worker"
+  docker-machine create $switches --engine-label elk=true $name
   docker-machine ssh $name "sudo sysctl -w vm.max_map_count=262144"
 
   if [ $DOCKER_DRIVER == "amazonec2" ]; then
@@ -174,10 +184,15 @@ function create() {
     docker-machine ssh $name "echo sysctl -w vm.max_map_count=262144 | sudo tee -a /var/lib/boot2docker/profile"
   fi
 
+  docker-machine ssh $name "sudo docker swarm join --token $token $ip:2377"
+  }
+
+  create-elk-worker
+
   refresh_nodes
 
   rest=2
-  workers
+  engine-workers
 }
 
 # Remove all nodes related to this project.
@@ -190,12 +205,12 @@ function remove() {
   docker-machine rm $machines
 }
 
-# Set the number of worker nodes. Requires a number to be passed in, e.g.
-# `./swarm.sh workers 4` to set total number of workers to 4.
-function workers() {
+# Set the number of engine-worker nodes. Requires a number to be passed in, e.g.
+# `./swarm.sh engine-workers 4` to set total number of engine-workers to 4.
+function engine-workers() {
   if [ -z "$rest" ]; then
-    echo "Please supply the total number of worker nodes you need:"
-    echo "swarm.sh workers <number of total nodes>"
+    echo "Please supply the total number of engine-worker nodes you need:"
+    echo "swarm.sh engine-workers <number of total nodes>"
     exit 0
   fi
 
@@ -205,22 +220,22 @@ function workers() {
   fi
 
   total_workers=$rest
-  current_workers=$(echo "$workers" | grep '[^ ]' | wc -l | tr -d ' ')
+  current_workers=$(echo "$engine_workers" | grep '[^ ]' | wc -l | tr -d ' ')
   delta=$(($total_workers - $current_workers))
 
   function reduce_workers() {
-    echo "Scaling workers to $total_workers by removing $(($delta * -1))"
+    echo "Scaling engine-workers to $total_workers by removing $(($delta * -1))"
     for i in $(seq $(($total_workers + 1)) 1 $current_workers); do		
-      worker="${machine_prefix}-worker$i"
-      echo "Removing $worker"
-      docker-machine ssh $worker "sudo docker swarm leave"
-      docker-machine ssh $manager "sudo docker node rm -f $worker"
-      docker-machine rm -f -y $worker
+      engine_worker="${machine_prefix}-engine-worker$i"
+      echo "Removing $engine_worker"
+      docker-machine ssh $engine_worker "sudo docker swarm leave"
+      docker-machine ssh $manager "sudo docker node rm -f $engine_worker"
+      docker-machine rm -f -y $engine_worker
     done
   }
 
   function increase_workers() {
-    echo "Scaling workers to $total_workers by adding $delta"
+    echo "Scaling engine-workers to $total_workers by adding $delta"
     ip=$(docker-machine inspect --format '{{.Driver.PrivateIPAddress}}' $manager)
 
     if [ "$ip" == "<no value>" ]; then
@@ -231,8 +246,8 @@ function workers() {
     token=$(docker swarm join-token -q worker)
 
     for i in $(eval echo "{$(($current_workers + 1))..${total_workers}}"); do
-      name="${machine_prefix}-worker$i"
-      docker-machine create $switches $name
+      name="${machine_prefix}-engine-worker$i"
+      docker-machine create $switches --engine-label qix-engine=true $name
       docker-machine ssh $name "sudo docker swarm join --token $token $ip:2377"
     done
   }
@@ -244,7 +259,7 @@ function workers() {
     elif [[ $delta -gt 0 ]]; then
       increase_workers
     else
-      echo "There already are $total_workers worker node(s)."
+      echo "There already are $total_workers engine-worker node(s)."
     fi
   done
 }
@@ -253,8 +268,11 @@ function list() {
   echo "Managers:"
   echo "$managers"
   echo ""
-  echo "Workers:"
-  echo "$workers"
+  echo "ELK-Workers:"
+  echo "$elk_workers"
+  echo ""
+  echo "Engine-Workers:"
+  echo "$engine_workers"
   echo ""
   for manager in $managers
   do
@@ -269,7 +287,7 @@ elif [ "$command" == "clean" ];    then clean
 elif [ "$command" == "validate" ]; then validate
 elif [ "$command" == "create" ];   then create
 elif [ "$command" == "remove" ];   then remove
-elif [ "$command" == "workers" ];  then workers
+elif [ "$command" == "engine-workers" ];  then engine-workers
 elif [ "$command" == "ls" ];  then list
 
-else echo "Invalid option: $command - please use one of: deploy, clean, validate, create, remove, workers"; fi
+else echo "Invalid option: $command - please use one of: deploy, clean, validate, create, remove, engine-workers"; fi

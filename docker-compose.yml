@@ -98,7 +98,7 @@ services:
     deploy:
       mode: global
       placement:
-        constraints: [node.role == worker]
+        constraints: [node.role == worker, engine.labels.qix-engine == true]
 
   qix-session:
     # This service handles preparation of sessions against
