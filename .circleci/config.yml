@@ -49,7 +49,7 @@ jobs:
             echo $JWT_SECRET > ~/qliktive-custom-analytics/secrets/JWT_SECRET
             ./local.sh deploy
             # Give deployment some time to come up.
-            sleep 1
+            sleep 10
       - run:
           name: Run E2E tests in remote Docker space
           command: ./run-e2e-tests-cci.sh
