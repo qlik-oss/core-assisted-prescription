@@ -14,5 +14,4 @@ GATEWAY_IP_ADDR=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.Gatew
 echo "GATEWAY_IP_ADDR=$GATEWAY_IP_ADDR"
 
 echo "### Execute tests"
-sleep 30
 docker run --rm -e "GATEWAY_IP_ADDR=$GATEWAY_IP_ADDR" test/qliktive-custom-analytics-test test:e2e:swarm
