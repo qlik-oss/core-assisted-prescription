@@ -1,16 +1,24 @@
 version: "3.3"
 
 services:
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:6.0.0
+    configs:
+      - source: filebeat-config
+        target: /usr/share/filebeat/filebeat.yml
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/containers:/hostfs/var/lib/docker/containers:rw
+    user: root
+    deploy:
+      mode: global
+
   elasticsearch:
     # This service only runs as one instance in our stack and is
     # used by Kibana (consuming) and Logstash (storing).
-    image: docker.elastic.co/elasticsearch/elasticsearch:5.2.2
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.0.0
     environment:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
-      xpack.security.enabled: "false"
-      xpack.monitoring.enabled: "false"
-      xpack.graph.enabled: "false"
-      xpack.watcher.enabled: "false"
     deploy:
       placement:
         constraints:
@@ -18,22 +26,23 @@ services:
           - engine.labels.elk == true
 
   logstash:
-    image: docker.elastic.co/logstash/logstash:5.2.2
+    image: docker.elastic.co/logstash/logstash-oss:6.0.0
     configs:
-      - source: logstash-config
-        target: /usr/share/logstash/config/logstash.yml
       - source: logstash-pipeline
         target: /usr/share/logstash/pipeline/logstash.conf
-    ports:
-      - "12201:12201/udp"
     environment:
+      LOG_LEVEL: warn
+      LOG_FORMAT: json
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     deploy:
-      mode: global
+      placement:
+        constraints:
+          - node.role == worker
+          - engine.labels.elk == true
 
   kibana:
     # Used for visualizing and viewing logs stored in elasticsearch.
-    image:  docker.elastic.co/kibana/kibana:5.2.2
+    image:  docker.elastic.co/kibana/kibana-oss:6.0.0
     configs:
       - source: kibana-config
         target: /usr/share/kibana/config/kibana.yml
@@ -47,38 +56,10 @@ services:
     environment:
       KIBANA_HOST: kibana
       KIBANA_PORT: 5601
-    logging:
-      driver: "gelf"
-      options:
-        gelf-address: "udp://localhost:12201"
-
-  auth:
-    logging:
-      driver: "gelf"
-      options:
-        gelf-address: "udp://localhost:12201"
-
-  mira:
-    logging:
-      driver: "gelf"
-      options:
-        gelf-address: "udp://localhost:12201"
-
-  qix-engine:
-    logging:
-      driver: "gelf"
-      options:
-        gelf-address: "udp://localhost:12201"
-
-  qix-session:
-    logging:
-      driver: "gelf"
-      options:
-        gelf-address: "udp://localhost:12201"
 
 configs:
-  logstash-config:
-    file: ./configs/logstash/logstash.yml
+  filebeat-config:
+    file: ./configs/filebeat/filebeat.yml
   logstash-pipeline:
     file: ./configs/logstash/logstash.conf
   kibana-config:

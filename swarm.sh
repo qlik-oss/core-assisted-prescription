@@ -35,7 +35,7 @@ command=$1
 rest=${@:2}
 user=$(id -u -n)
 machine_prefix="${user}-ca"
-switches="--driver=$DOCKER_DRIVER --engine-opt experimental=true --engine-opt metrics-addr=0.0.0.0:4999 --engine-label env=qliktive"
+switches="--driver=$DOCKER_DRIVER --engine-opt log-opt="max-size=10m" --engine-opt experimental=true --engine-opt metrics-addr=0.0.0.0:4999 --engine-label env=qliktive"
 machines=
 managers=
 engine_workers=
