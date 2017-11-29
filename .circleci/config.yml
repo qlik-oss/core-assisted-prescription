@@ -50,17 +50,20 @@ jobs:
             ./local.sh deploy
       - run:
           name: Wait for deployment to come up
-          command: |
-            sleep 10
-            # CONTAINER_ID=$(docker ps -aqf "name=openresty")
-            # GATEWAY_IP=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.Gateway}}{{end}}' "$CONTAINER_ID")
-            # echo "GATEWAY_IP=$GATEWAY_IP"
-            # IS_DOWN="true"
-            # while [ "$IS_DOWN" == "true" ]; do
-            #   IS_DOWN=$(curl https://$GATEWAY_IP -k -s -f -o /dev/null || echo "true")
-            #   echo -n "."
-            #   sleep 1
-            # done
+          command: |            
+            CONTAINER_ID=$(docker ps -aqf "name=openresty")
+            set +e
+            RETRIES=0
+            while [[ "$STATUS" != "healthy" && $RETRIES -le 30 ]]; do
+              STATUS=$(docker inspect -f '{{.State.Health.Status}}' "$CONTAINER_ID")
+              echo -n "."
+              sleep 1
+              RETRIES=$[$RETRIES+1]
+            done
+            if [ "$STATUS" != "healthy" ]; then
+              echo "Gateway (Openresty) did not reach status healthy"
+              exit 1
+            fi
       - run:
           name: Run E2E tests in remote Docker space
           command: ./run-e2e-tests-cci.sh
