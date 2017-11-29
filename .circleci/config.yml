@@ -54,14 +54,14 @@ jobs:
             CONTAINER_ID=$(docker ps -aqf "name=openresty")
             set +e
             RETRIES=0
-            while [[ "$STATUS" != "healthy" && $RETRIES -le 30 ]]; do
-              STATUS=$(docker inspect -f '{{.State.Health.Status}}' "$CONTAINER_ID")
+            while [[ "$STATUS" != "running" && $RETRIES -le 30 ]]; do
+              STATUS=$(docker inspect -f '{{.State.Status}}' "$CONTAINER_ID")
               echo -n "."
               sleep 1
               RETRIES=$[$RETRIES+1]
             done
-            if [ "$STATUS" != "healthy" ]; then
-              echo "Gateway (Openresty) did not reach status healthy"
+            if [ "$STATUS" != "running" ]; then
+              echo "Gateway (Openresty) did not reach running state."
               exit 1
             fi
       - run:
