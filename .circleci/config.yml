@@ -50,7 +50,7 @@ jobs:
             ./local.sh deploy
       - run:
           name: Wait for deployment to come up
-          command: |            
+          command: |
             CONTAINER_ID=$(docker ps -aqf "name=openresty")
             set +e
             RETRIES=0
