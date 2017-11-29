@@ -48,8 +48,16 @@ jobs:
             echo $GITHUB_CLIENT_SECRET > ~/qliktive-custom-analytics/secrets/GITHUB_CLIENT_SECRET
             echo $JWT_SECRET > ~/qliktive-custom-analytics/secrets/JWT_SECRET
             ./local.sh deploy
-            # Give deployment some time to come up.
-            sleep 10
+      - run:
+          name: Wait for deployment to come up
+          command: |
+            CONTAINER_ID=$(docker ps -aqf "name=openresty")
+            GATEWAY_IP=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.Gateway}}{{end}}' "$CONTAINER_ID")
+            IS_DOWN="true"
+            while [ "$IS_DOWN" == "true" ]; do
+              IS_DOWN=$(curl https://$GATEWAY_IP -k -s -f -o /dev/null || echo "true")
+              sleep 1
+            done
       - run:
           name: Run E2E tests in remote Docker space
           command: ./run-e2e-tests-cci.sh
