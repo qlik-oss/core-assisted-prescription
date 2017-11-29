@@ -53,9 +53,11 @@ jobs:
           command: |
             CONTAINER_ID=$(docker ps -aqf "name=openresty")
             GATEWAY_IP=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.Gateway}}{{end}}' "$CONTAINER_ID")
+            echo "GATEWAY_IP=$GATEWAY_IP"
             IS_DOWN="true"
             while [ "$IS_DOWN" == "true" ]; do
               IS_DOWN=$(curl https://$GATEWAY_IP -k -s -f -o /dev/null || echo "true")
+              echo -n "."
               sleep 1
             done
       - run:
