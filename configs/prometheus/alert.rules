@@ -1,0 +1,78 @@
+#
+# Node Alerts
+#
+
+ALERT high_cpu_usage_on_node
+  IF (sum(rate(process_cpu_seconds_total[5m])) by (instance) * 100 > 70) * ON(instance) GROUP_LEFT(host) host * ON(instance) GROUP_LEFT(node) host
+  FOR 5m
+  ANNOTATIONS {
+      summary = "HIGH CPU USAGE WARNING ON '{{ $labels.host }}'",
+      description = "{{ $labels.host }} ({{ $labels.node }}) is using a LOT of CPU. CPU usage is {{ humanize $value}}%.",
+  }
+
+ALERT high_memory_usage_on_node
+  IF (((node_memory_MemTotal-node_memory_MemAvailable)/node_memory_MemTotal)*100 > 80) * ON(instance) GROUP_LEFT(host) host * ON(instance) GROUP_LEFT(node) host
+  FOR 5m
+  ANNOTATIONS {
+      summary = "HIGH MEMORY USAGE WARNING TASK ON '{{ $labels.host }}'",
+      description = "{{ $labels.host }} ({{ $labels.node }}) is using a LOT of MEMORY. MEMORY usage is over {{ humanize $value}}%.",
+  }
+
+ALERT high_la_usage_on_node
+  IF (node_load5 > 5) * ON(instance) GROUP_LEFT(host) host * ON(instance) GROUP_LEFT(node) host
+  FOR 5m
+  ANNOTATIONS {
+      summary = "HIGH LOAD AVERAGE WARNING ON '{{ $labels.host }}'",
+      description = "{{ $labels.host }} ({{ $labels.node }}) has a high load average. Load Average 5m is {{ humanize $value}}.",
+  }
+
+ALERT monitoring_service_down
+  IF (up == 0) * ON(instance) GROUP_LEFT(host) host * ON(instance) GROUP_LEFT(node) host
+  FOR 5m
+  ANNOTATIONS {
+      summary = "MONITORING SERVICE DOWN WARNING: NODE '{{ $labels.host }}'",
+      description = "The monitoring service '{{ $labels.job }}' is down in host {{ $labels.host }} ({{ $labels.node }}).",
+  }
+
+ALERT node_running_out_of_disk_space
+  IF ((node_filesystem_size{mountpoint="/"} - node_filesystem_free{mountpoint="/"}) * 100/ node_filesystem_size{mountpoint="/"} > 80) * ON(instance) GROUP_LEFT(host) host * ON(instance) GROUP_LEFT(node) host
+  FOR 5m
+  ANNOTATIONS {
+      summary = "LOW DISK SPACE WARING: NODE '{{ $labels.host }}'",
+      description = "More than 80% of disk used in {{ $labels.host }} ({{ $labels.node }}). Disk usage {{ humanize $value }}%.",
+  }
+
+ALERT disk_will_fill_in_8_hours
+   IF (predict_linear(node_filesystem_free{mountpoint="/"}[1h], 8*3600) < 0) * ON(instance) GROUP_LEFT(host) host * ON(instance) GROUP_LEFT(node) host
+   FOR 5m
+   ANNOTATIONS {
+       summary = "DISK SPACE FULL IN 8 HOURS: NODE '{{ $labels.host }}'",
+       description = "{{ $labels.host }} ({{ $labels.node }}) is writing a lot.",
+   }
+
+#
+# Alerts Containers
+#
+ALERT high_cpu_usage_on_container
+  IF sum(rate(container_cpu_usage_seconds_total{container_label_com_docker_swarm_task_name=~".+"}[5m])) by (container_label_com_docker_swarm_task_name,container_label_com_docker_swarm_node_id) * 100 > 200
+  FOR 5m
+  ANNOTATIONS {
+      summary = "HIGH CPU USAGE WARNING: TASK '{{ $labels.container_label_com_docker_swarm_task_name }}' on '{{ $labels.container_label_com_docker_swarm_node_id }}'",
+      description = "{{ $labels.container_label_com_docker_swarm_task_name }} is using a LOT of CPU in node {{ $labels.container_label_com_docker_swarm_node_id }}. CPU usage is {{ humanize $value}}%.",
+  }
+
+ALERT container_eating_memory
+  IF sum(container_memory_rss{container_label_com_docker_swarm_task_name=~".+"}) by (container_label_com_docker_swarm_task_name,container_label_com_docker_swarm_node_id) > 2500000000
+  FOR 5m
+  ANNOTATIONS {
+      summary = "HIGH MEMORY USAGE WARNING: TASK '{{ $labels.container_label_com_docker_swarm_task_name }}' on '{{ $labels.container_label_com_docker_swarm_node_id }}'",
+      description = "{{ $labels.container_label_com_docker_swarm_task_name }} is eating up a LOT of memory. Memory consumption in node {{ $labels.container_label_com_docker_swarm_node_id }} is at {{ humanize $value}}.",
+  }
+
+ALERT container_not_in_running_state
+  IF sum(container_tasks_state{state!="running"}) by (container_label_com_docker_stack_namespace) > 0
+  FOR 1m
+  ANNOTATIONS {
+      summary = "Container not in running state in stack '{{ $labels.container_label_com_docker_swarm_task_name }}' on '{{ $labels.instance }}'",
+      description = "{{ $labels.container_label_com_docker_swarm_task_name }} has a container not in running state on {{ $labels.instance }}"
+  }

@@ -1,0 +1,17 @@
+route:
+  # The default receiver
+  receiver: 'slack'
+  # When alert sent, wait until resending
+  repeat_interval: 3h
+  routes:
+  - receiver: 'slack'
+
+receivers:
+  - name: 'slack'
+    slack_configs:
+      - send_resolved: true
+        username: 'Alerts - Custom Analytics'
+        text: '{{ .CommonAnnotations.summary }} ---> {{ .CommonAnnotations.description }}'
+        icon_emoji: ':information_source:'
+        # Will be set from Env. variable in init script.
+        api_url: <slackapi>
