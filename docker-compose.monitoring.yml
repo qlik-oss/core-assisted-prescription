@@ -30,6 +30,7 @@ services:
       - '--path.sysfs=/host/sys'
       - '--collector.textfile.directory=/etc/node-exporter/'
       - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
+      - '--no-collector.ipvs'
     deploy:
       mode: global
       resources:
@@ -38,7 +39,8 @@ services:
           memory: 32M
 
   docker-exporter:
-    image: basi/socat:v0.1.0
+    image: alpine/socat:1.0.1
+    command: -d TCP-L:4999,fork TCP:172.18.0.1:4999
     deploy:
       mode: global
       resources:
