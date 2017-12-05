@@ -44,8 +44,6 @@ services:
 
   prometheus:
     image: prom/prometheus:v1.7.1
-    ports:
-     - "9090:9090"
     configs:
       - source: prometheus
         target: /etc/prometheus/prometheus.yml
@@ -67,26 +65,23 @@ services:
   alertmanager:
     image: prom/alertmanager:v0.11.0
     entrypoint: /init_alertmanager
+    secrets:
+      - slack_webhook
     configs:
       - source: alertmanager
         target: /tmp/config.yml
       - source: init_alertmanager
         mode: 100
-    ports:
-     - "9093:9093"
-    environment:
-      SLACK_API: ${AUTH_STRATEGY:-https://hooks.slack.com/services/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}
     command: -config.file=/etc/alertmanager/config.yml
     deploy:
-      mode: replicated
       replicas: 1
       resources:
         limits:
-          cpus: '0.01'
-          memory: 32M
+          cpus: '0.15'
+          memory: 64M
         reservations:
-          cpus: '0.01'
-          memory: 16M
+          cpus: '0.05'
+          memory: 32M
 
   grafana:
     image: grafana/grafana:4.3.2
@@ -137,3 +132,7 @@ configs:
     file: ./configs/alertmanager/config.yml
   init_alertmanager:
     file: ./configs/alertmanager/init.sh
+
+secrets:
+  slack_webhook:
+    file: ./secrets/SLACK_WEBHOOK

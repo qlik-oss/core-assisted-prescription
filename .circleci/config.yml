@@ -47,6 +47,7 @@ jobs:
             echo $GITHUB_CLIENT_ID > ~/qliktive-custom-analytics/secrets/GITHUB_CLIENT_ID
             echo $GITHUB_CLIENT_SECRET > ~/qliktive-custom-analytics/secrets/GITHUB_CLIENT_SECRET
             echo $JWT_SECRET > ~/qliktive-custom-analytics/secrets/JWT_SECRET
+            echo $SLACK_WEBHOOK > ~/qliktive-custom-analytics/secrets/SLACK_WEBHOOK
             ./local.sh deploy
       - run:
           name: Run E2E tests in remote Docker space

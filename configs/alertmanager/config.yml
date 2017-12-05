@@ -13,5 +13,5 @@ receivers:
         username: 'Alerts - Custom Analytics'
         text: '{{ .CommonAnnotations.summary }} ---> {{ .CommonAnnotations.description }}'
         icon_emoji: ':information_source:'
-        # Will be set from Env. variable in init script.
+        # Will be set from docker secrets from the init script.
         api_url: <slackapi>
