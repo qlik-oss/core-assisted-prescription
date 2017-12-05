@@ -2,13 +2,13 @@ version: "3.3"
 
 services:
   cadvisor:
-    image: google/cadvisor:v0.26.1
+    image: google/cadvisor:v0.27.2
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock,readonly
-      - /:/rootfs
-      - /var/run:/var/run
-      - /sys:/sys
-      - /var/lib/docker/:/var/lib/docker
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /dev/disk/:/dev/disk:ro
+      - /var/lib/docker/:/var/lib/docker:ro
     deploy:
       mode: global
       resources:
@@ -17,7 +17,7 @@ services:
           memory: 128M
 
   node-exporter:
-    image: basi/node-exporter:${NODE_EXPORTER_VERSION:-v1.13.0}
+    image: basi/node-exporter:v1.15.0
     volumes:
       - /proc:/host/proc
       - /sys:/host/sys
@@ -25,7 +25,12 @@ services:
       - /etc/hostname:/etc/host_hostname
     environment:
       HOST_HOSTNAME: /etc/host_hostname
-    command: -collector.procfs "/host/proc" -collector.sysfs /host/sys -collector.textfile.directory /etc/node-exporter/ -collectors.enabled 'conntrack,diskstats,entropy,filefd,filesystem,loadavg,mdadm,meminfo,netdev,netstat,stat,textfile,time,vmstat,ipvs' -collector.filesystem.ignored-mount-points "^/(sys|proc|dev|host|etc)($$$$/)"
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.textfile.directory=/etc/node-exporter/'
+      - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
+      - '--no-collector.ipvs'
     deploy:
       mode: global
       resources:
@@ -34,7 +39,8 @@ services:
           memory: 32M
 
   docker-exporter:
-    image: basi/socat:${DOCKER_EXPORTER_VERSION:-v0.1.0}
+    image: alpine/socat:1.0.1
+    command: -d TCP-L:4999,fork TCP:172.18.0.1:4999
     deploy:
       mode: global
       resources:

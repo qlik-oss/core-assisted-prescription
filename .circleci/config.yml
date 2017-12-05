@@ -24,7 +24,7 @@ jobs:
           name: Install Docker Compose
           command: |
             set -x
-            curl -L https://github.com/docker/compose/releases/download/1.15.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+            curl -L https://github.com/docker/compose/releases/download/1.16.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
             chmod +x /usr/local/bin/docker-compose
       - run:
           name: Validate docker-compose files
@@ -49,6 +49,22 @@ jobs:
             echo $JWT_SECRET > ~/qliktive-custom-analytics/secrets/JWT_SECRET
             echo $SLACK_WEBHOOK > ~/qliktive-custom-analytics/secrets/SLACK_WEBHOOK
             ./local.sh deploy
+      - run:
+          name: Wait for deployment to come up
+          command: |
+            CONTAINER_ID=$(docker ps -aqf "name=openresty")
+            set +e
+            RETRIES=0
+            while [[ "$STATUS" != "running" && $RETRIES -le 30 ]]; do
+              STATUS=$(docker inspect -f '{{.State.Status}}' "$CONTAINER_ID")
+              echo -n "."
+              sleep 1
+              RETRIES=$[$RETRIES+1]
+            done
+            if [ "$STATUS" != "running" ]; then
+              echo "Gateway (Openresty) did not reach running state."
+              exit 1
+            fi
       - run:
           name: Run E2E tests in remote Docker space
           command: ./run-e2e-tests-cci.sh

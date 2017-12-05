@@ -5,7 +5,7 @@ services:
     # This is our externally-facing gateway, exposing the configured
     # things for all end-users. It has the Analytics UI bundled into it.
     # See https://github.com/qlik-ea/qliktive-custom-analytics-openresty
-    image: qlikea/qliktive-custom-analytics-openresty:master-312
+    image: qlikea/qliktive-custom-analytics-openresty:master-328
     restart: always
     ports:
       - "443:443"
@@ -62,7 +62,7 @@ services:
   viz:
     # A swarm visualizer, enables us to view what the cluster
     # looks like, which services are running on which nodes etc.
-    image: dockersamples/visualizer:latest
+    image: dockersamples/visualizer:stable
     volumes:
      - /var/run/docker.sock:/var/run/docker.sock
     deploy:
@@ -87,7 +87,7 @@ services:
     # QIX Engine is configured to run on all worker nodes in the
     # cluster, and is the service we primarily want to scale up in
     # this use-case.
-    image: qlikea/engine:12.99.0
+    image: qlikea/engine:12.105.0
     command: -S ValidateJsonWebTokens=2 -S JsonWebTokenSecret=${JWT_SECRET}
     labels:
       qix-engine: ""
@@ -98,7 +98,7 @@ services:
     deploy:
       mode: global
       placement:
-        constraints: [node.role == worker]
+        constraints: [node.role == worker, engine.labels.qix-engine == true]
 
   qix-session:
     # This service handles preparation of sessions against

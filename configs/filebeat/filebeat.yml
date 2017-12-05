@@ -1,0 +1,16 @@
+filebeat.prospectors:
+- type: log
+  paths:
+    - /hostfs/var/lib/docker/containers/*/*.log
+  json.message_key: log
+  json.keys_under_root: true
+  processors:
+    - add_docker_metadata:
+        match_fields: ["source"]
+        match_source_index: 5
+
+output.logstash:
+  hosts: ["logstash:5044"]
+
+logging.json: true
+logging.level: warning
