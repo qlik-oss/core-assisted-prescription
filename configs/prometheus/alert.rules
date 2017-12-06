@@ -51,7 +51,7 @@ ALERT disk_will_fill_in_8_hours
    }
 
 #
-# Alerts Containers
+# Container Alerts
 #
 ALERT high_cpu_usage_on_container
   IF sum(rate(container_cpu_usage_seconds_total{container_label_com_docker_swarm_task_name=~".+"}[5m])) by (container_label_com_docker_swarm_task_name,container_label_com_docker_swarm_node_id) * 100 > 200
