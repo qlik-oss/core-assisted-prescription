@@ -3,3 +3,5 @@
 
 # Treat QVF documents as binaries.
 *.qvf binary
+# PNGs are binary
+*.png binary
