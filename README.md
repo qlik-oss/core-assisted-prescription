@@ -11,7 +11,7 @@ sudden epidemic events can affect the traffic.
 
 ## How Frontira Is Used
 
-Tha application has a custom visualization web UI built by Qliktive. The application uses Frontira on the backend to
+Tha application has a custom visualization web UI. The application uses Frontira on the backend to
 serve multiple users with medical analysis capabilities using one single QIX Engine document. To balance the load,
 multiple QIX Engine instances serve the same document, and users are allocated to different QIX Engine instances using
 simple round-robin load balancing.
@@ -22,11 +22,12 @@ The application is hosted on AWS and uses Docker Swarm for container orchestrati
 
 This repository contains
 
-- Documentation on how to develop, test, and deploy Qliktive Assisted Prescription
+- Background information and rationale for the Qliktive Assisted Prescription application.
+- Documentation on how to develop, test, and deploy Qliktive Assisted Prescription.
 - The backend service stack built on Frontira, with additional services to host the web application, handle
-  authentication, and to provide logging and monitoring capabilities
+  authentication, and to provide logging and monitoring capabilities.
 - Various scripts and tools to deploy the stack to AWS, and to enable developing and testing locally on a developer
-  machine
+  machine.
 
 ## Getting Started
 
@@ -42,7 +43,7 @@ It uses `docker-compose`. Run:
 $ ./local.sh deploy
 ```
 
-The application can now be accessed at https://localhost/. Login in with: "admin" and "password".
+The application can now be accessed at https://localhost. Login in with: "admin" and "password".
 
 ### Deploying to Docker Swarm
 
@@ -51,8 +52,8 @@ deploy to Docker Swarm can be found [here](./docs/deploying-swarm.md).
 
 ### Live Environment
 
-Try out live application [here](https://ca.qliktive.com/). It is hosted on AWS and is a deployment of the latest
-master build.
+Try out the live demo of the application at [ca.qliktive.com](https://ca.qliktive.com/). It is hosted on AWS and is a
+deployment of the latest master build. A GitHub account is needed to sign in to live demo application.
 
 ### Services
 
@@ -75,20 +76,21 @@ Docker Compose files defining different parts of the stack:
 
 The application provides a few different endpoints, serving different purposes:
 
-- **Assisted Prescription UI** - `/`, the default UI to be consumed by the end user.
-- **Kibana Dashboard** - `/kibana/`, used to view logs from the different services — only available if the logging
+- `/` - The Assisted Prescriptions main UI to be consumed by the end user.
+- `/kibana` - The Kibana dashboard used to view logs from the different services — only available if the logging
   stack is included during deployment. Mainly to be consumed by sys admins.
-- **Swarm Visualizer** - `/viz/`, used to see an overview of the deployment, and where services are running.
+- `/viz` - The Docker Swarm visualizer used to see an overview of the deployment, and where services are running.
   Only available in Swarm mode. Manly to be consumed by sys admins.
-- **Grafana** - `/grafana/`, used to see an overview of monitoring and performance of the deployed services.
-  Only available if the monitoring stack is included during deployment. Mainly to be consumed by sys admins.
+- `/grafana` - The metrics dashboard towards Promethues. Used to see an overview of monitoring and performance of the
+  deployed services. Only available if the monitoring stack is included during deployment. Mainly to be consumed by sys
+  admins.
 
 Since OpenResty serves the application over HTTPS, port 443 is used. To host the application, the firewall must allow
 access to this port.
 
 ## Further Reading
 
-More detailed informaion on the Qliktive Assisted Prescription application is given in:
+More detailed informatin and background on the Qliktive Assisted Prescription application is given in:
 
 - [Assisted Prescription Requirements](./docs/assisted-prescription-requirements.md)
 - [Assisted Prescription Design](./docs/assisted-prescription-design.md)
