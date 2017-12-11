@@ -58,7 +58,7 @@ jobs:
             GATEWAY_ID=$(docker ps -aqf "name=openresty")
             RETRIES=0
             while [[ "$GATEWAY_STATUS" != "running" && $RETRIES -le 30 ]]; do
-              STATUS=$(docker inspect -f '{{.State.Status}}' "$GATEWAY_ID")
+              GATEWAY_STATUS=$(docker inspect -f '{{.State.Status}}' "$GATEWAY_ID")
               echo "Gateway status is $GATEWAY_STATUS"
               sleep 1
               RETRIES=$[$RETRIES+1]
