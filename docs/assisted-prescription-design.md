@@ -2,8 +2,8 @@
 
 This use case is about scaling the QIX Engine in a configuration of
 
-* One document
-* Multiple users
+- One document
+- Multiple users
 
 Scaling up QIX Engine needs to be done only to reduce load as a consequence of multiple users access the system
 simultaneously. All QIX Engine instances are equivalent and there is no need to have a certain QIX Engine instance

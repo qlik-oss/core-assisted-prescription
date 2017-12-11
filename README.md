@@ -80,28 +80,29 @@ Docker Compose files defining different parts of the stack:
 
 The application provides a few different endpoints, serving different purposes:
 
-* **Assisted Prescription UI** - `/`, the default UI to be consumed by the end user.
-* **Kibana Dashboard** - `/kibana/`, used to view logs from the different services — only available if the logging
-    stack is included during deployment. Mainly to be consumed by sys admins.
-* **Swarm Visualizer** - `/viz/`, used to see an overview of the deployment, and where services are running.
-    Only available in Swarm mode. Manly to be consumed by sys admins.
-* **Grafana** - `/grafana/`, used to see an overview of monitoring and performance of the deployed services.
-    Only available if the monitoring stack is included during deployment. Mainly to be consumed by sys admins.
+- **Assisted Prescription UI** - `/`, the default UI to be consumed by the end user.
+- **Kibana Dashboard** - `/kibana/`, used to view logs from the different services — only available if the logging
+  stack is included during deployment. Mainly to be consumed by sys admins.
+- **Swarm Visualizer** - `/viz/`, used to see an overview of the deployment, and where services are running.
+  Only available in Swarm mode. Manly to be consumed by sys admins.
+- **Grafana** - `/grafana/`, used to see an overview of monitoring and performance of the deployed services.
+  Only available if the monitoring stack is included during deployment. Mainly to be consumed by sys admins.
 
-Since Openresty serves the application over HTTPS, port 443 is used. To host the application, the firewall must allow
+Since OpenResty serves the application over HTTPS, port 443 is used. To host the application, the firewall must allow
 access to this port.
 
 ## Further Reading
 
-More detailed informaion on the Qliktive Assisted Prescription application is given in these sections:
+More detailed informaion on the Qliktive Assisted Prescription application is given in:
 
 - [Assisted Prescription Requirements](./docs/assisted-prescription-requirements.md)
-- []
+- [Assisted Prescription Design](./docs/assisted-prescription-design.md)
 
+Further information on development aspects of the application can be found in:
 
-* [Developing](./docs/developing.md) - Information on the development environment.
-* [Testing](./docs/testing.md) - Information on how the application is tested and how to run tests.
-* [Deploying](./docs/deploying-swarm.md) - Information on deploying the application to Docker Swarm clusters,
-    including AWS.
-* [Performance benchmarking](./docs/performance.md) - Information on how to do performance benchmarking on a deployment
-    of the application.
+- [Developing](./docs/developing.md) - Information on the development environment.
+- [Testing](./docs/testing.md) - Information on how the application is tested and how to run tests.
+- [Deploying](./docs/deploying-swarm.md) - Information on deploying the application to Docker Swarm clusters,
+  including AWS.
+- [Performance benchmarking](./docs/performance.md) - Information on how to do performance benchmarking on a deployment
+  of the application.
