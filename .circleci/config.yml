@@ -57,7 +57,7 @@ jobs:
             RETRIES=0
             while [[ "$STATUS" != "running" && $RETRIES -le 30 ]]; do
               STATUS=$(docker inspect -f '{{.State.Status}}' "$CONTAINER_ID")
-              echo -n "."
+              echo "Gateway status is $STATUS"
               sleep 1
               RETRIES=$[$RETRIES+1]
             done
