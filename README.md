@@ -67,8 +67,6 @@ end-user.
 The following ports are exposed externally. Make sure you update your firewall to allow/decline access to these!
 
 * **443** - Openresty, the externally facing gateway.
-* **12201** - Logstash UDP input (temporarily needed since logdriver uses host network stack) -
-    should not be accessible externally.
 
 ## Further reading
 
