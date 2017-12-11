@@ -52,17 +52,33 @@ jobs:
       - run:
           name: Wait for deployment to come up
           command: |
-            CONTAINER_ID=$(docker ps -aqf "name=openresty")
             set +e
+
+            # Check that openresty is up and running
+            GATEWAY_ID=$(docker ps -aqf "name=openresty")
             RETRIES=0
-            while [[ "$STATUS" != "running" && $RETRIES -le 30 ]]; do
-              STATUS=$(docker inspect -f '{{.State.Status}}' "$CONTAINER_ID")
-              echo -n "."
+            while [[ "$GATEWAY_STATUS" != "running" && $RETRIES -le 30 ]]; do
+              GATEWAY_STATUS=$(docker inspect -f '{{.State.Status}}' "$GATEWAY_ID")
+              echo "Gateway status is $GATEWAY_STATUS"
               sleep 1
               RETRIES=$[$RETRIES+1]
             done
-            if [ "$STATUS" != "running" ]; then
-              echo "Gateway (Openresty) did not reach running state."
+
+            # Check that Engine is running
+            ENGINE_ID=$(docker ps -aqf "name=qix-engine")
+            echo "Engine container id is $ENGINE_ID"
+
+            RETRIES=0
+
+            while [[ "$ENGINE_STATUS" != "running" && $RETRIES -le 30 ]]; do
+              ENGINE_STATUS=$(docker inspect -f '{{.State.Status}}' "$ENGINE_ID")
+              echo "Engine status is $ENGINE_STATUS"
+              sleep 2
+              RETRIES=$[$RETRIES+1]
+            done
+
+            if [[ "$GATEWAY_STATUS" != "running" || "$ENGINE_STATUS" != "running"  ]]; then
+              echo "Services did not reach running state."
               exit 1
             fi
       - run:
