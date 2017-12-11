@@ -90,7 +90,7 @@ access to this port.
 
 ## Further Reading
 
-More detailed informatin and background on the Qliktive Assisted Prescription application is given in:
+More detailed information and background on the Qliktive Assisted Prescription application is given in:
 
 - [Assisted Prescription Requirements](./docs/assisted-prescription-requirements.md)
 - [Assisted Prescription Design](./docs/assisted-prescription-design.md)
@@ -102,5 +102,5 @@ Further information on development aspects of the application can be found in:
 - [Secrets](./docs/secrets.md) - Docker secrets and options for secret management in the application.
 - [Deploying](./docs/deploying-swarm.md) - Information on deploying the application to Docker Swarm clusters,
   including AWS.
-- [Performance benchmarking](./docs/performance.md) - Information on how to do performance benchmarking on a deployment
+- [Performance Benchmarking](./docs/performance-benchmarking.md) - Information on how to do performance benchmarking on a deployment
   of the application.
