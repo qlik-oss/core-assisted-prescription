@@ -44,11 +44,6 @@ $ ./local.sh deploy
 
 The application can now be accessed at https://localhost/. Login in with: "admin" and "password".
 
-More information:
-
-- [Developing](./docs/developing.md) - Developing and running the application on a developer machine.
-- [Secret handling](./docs/secrets.md) - Docker secrets and options for secret management in the application.
-
 ### Deploying to Docker Swarm
 
 The stack can also be deployed to Docker Swarm using the [swarm.sh](./swarm.sh) script. More information on how to
@@ -100,8 +95,9 @@ More detailed informaion on the Qliktive Assisted Prescription application is gi
 
 Further information on development aspects of the application can be found in:
 
-- [Developing](./docs/developing.md) - Information on the development environment.
+- [Developing](./docs/developing.md) - Developing and running the application on a developer machine.
 - [Testing](./docs/testing.md) - Information on how the application is tested and how to run tests.
+- [Secrets](./docs/secrets.md) - Docker secrets and options for secret management in the application.
 - [Deploying](./docs/deploying-swarm.md) - Information on deploying the application to Docker Swarm clusters,
   including AWS.
 - [Performance benchmarking](./docs/performance.md) - Information on how to do performance benchmarking on a deployment
