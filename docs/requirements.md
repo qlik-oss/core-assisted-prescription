@@ -9,7 +9,7 @@ This section lists the requirements set by the Qliktive company on the Assisted 
 The application shall:
 
 - Use Docker and Docker Swarm in the backend implementation.
-- Be deployed to AWS as cloud provider, although is should be possible to move to another provider or to an on-prem
+- Be deployed to AWS as cloud provider, although it should be possible to move to another provider or to an on-prem
   deployment with minimal efforts.
 - Rely on JWTs in the backend implementatin as the means of authentication.
 - Use a third party identity provider.
@@ -21,7 +21,7 @@ The system shall:
 - Support peak traffic of around 10.000 simultaneous connections and an average of 500 on the given
   data model.
 - Support updates without interruption of the service.
-- Be be possible to scale up or down with respect to the number of nodes hosting QIX Engine instances.
+- Be possible to scale up or down with respect to the number of nodes hosting QIX Engine instances.
 - Support manually scaling by invoking a single command or script.
 - Be designed with the assumption that later, fully automated scaling strategy can be implemented.
 
@@ -44,7 +44,7 @@ Monitoring and logging of the system shall:
 The system/application shall be tested as follows:
 
 - Basic automated end-to-end tests shall pass before updates are deployed to the production environment.
-- Stress tests shall exist (need not be automatied), so that it is possible to find out the limits of the given setup
+- Stress tests shall exist (need not be automated), so that it is possible to find out the limits of the given setup
   (machines & number of distributed services). Examples of such limits may be:
   - Max requests/hits handled per sec
   - Failure rate / Errors per second
@@ -62,7 +62,7 @@ The system/application shall be tested as follows:
 The end user shall:
 
 - Have easy access to a user interface tailored for quickly finding insights for prescriptions.
-- Be provided with effecient means to narrow analysis based on advanced collection of demographic criteria (gender,
+- Be provided with efficient means to narrow analysis based on advanced collection of demographic criteria (gender,
   weight, origin etc.).
 - Be presented with information in four main tabs focusing on:
   - Filters
