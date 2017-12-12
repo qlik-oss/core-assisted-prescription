@@ -2,7 +2,7 @@
 
 The image below shows a schematic overview of services and deployment on different nodes.
 
-![Data model](../images/system-overview.svg)
+![Data model](../images/system-overview.png)
 
 (This diagram is created using [draw.io](https://www.draw.io/) with the diagram source available
 [here](../images/system-overview.xml).)
