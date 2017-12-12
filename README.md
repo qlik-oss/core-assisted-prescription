@@ -90,12 +90,15 @@ access to this port.
 
 ## Further Reading
 
-More detailed information and background on the Qliktive Assisted Prescription application is given in:
+Requirements on the Assisted Prescription application are given in:
 
-- [Assisted Prescription Requirements](./docs/assisted-prescription-requirements.md)
-- [Assisted Prescription Design](./docs/assisted-prescription-design.md)
+- [Requirements](./docs/requirements.md)
 
-Further information on development aspects of the application can be found in:
+A system design overview is given in:
+
+- [System Overview](./docs/system-design/system-overview.md)
+
+More information related to development can be found in:
 
 - [Developing](./docs/developing.md) - Developing and running the application on a developer machine.
 - [Testing](./docs/testing.md) - Information on how the application is tested and how to run tests.

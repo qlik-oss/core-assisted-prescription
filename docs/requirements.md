@@ -11,6 +11,8 @@ The application shall:
 - Use Docker and Docker Swarm in the backend implementation.
 - Be deployed to AWS as cloud provider, although is should be possible to move to another provider or to an on-prem
   deployment with minimal efforts.
+- Rely on JWTs in the backend implementatin as the means of authentication.
+- Use a third party identity provider.
 
 ### Operation
 
@@ -67,7 +69,18 @@ The end user shall:
   - Prescription visualization/table
   - Side effects/Reactions visualization/table
   - Report
+- Be able to log in.
+- Be able to log out.
 - Be able to stay logged in so that the portal can be accessed conveniently.
+
+
+
+* It should be possible to login.
+* It should be possible to logout.
+* All back-end services depends on JWTs as the means of authentication.
+* WebSockets MUST work (i.e. we cannot depend on being able to set headers on the HTTP upgrade request).
+
+
 
 ## Assumptions
 
