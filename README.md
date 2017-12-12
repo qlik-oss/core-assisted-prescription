@@ -11,12 +11,12 @@ sudden epidemic events can affect the traffic.
 
 ## How Frontira Is Used
 
-Tha application has a custom visualization web UI. The application uses Frontira on the backend to
+The application has a custom visualization web UI. The application uses Frontira on the backend to
 serve multiple users with medical analysis capabilities using one single QIX Engine document. To balance the load,
-multiple QIX Engine instances serve the same document, and users are allocated to different QIX Engine instances using
-simple round-robin load balancing.
+multiple QIX Engine instances serve the same document, and users are assigned a QIX Engine instance based on a simple round-robin load balancer.
 
-The application is hosted on AWS and uses Docker Swarm for container orchestration.
+The application is hosted on AWS and uses Docker Swarm for container orchestration, but it could also be deployed to
+other cloud providers if needed.
 
 ## Repository Contents
 
@@ -26,12 +26,12 @@ This repository contains
 - Documentation on how to develop, test, and deploy Qliktive Assisted Prescription.
 - The backend service stack built on Frontira, with additional services to host the web application, handle
   authentication, and to provide logging and monitoring capabilities.
-- Various scripts and tools to deploy the stack to AWS, and to enable developing and testing locally on a developer
+- Various scripts and tools to deploy the stack, and to enable developing and testing locally on a developer
   machine.
 
 ## Getting Started
 
-To run the stack, Docker stable version 17.06 or later is requried. Development is supported on both Docker for
+To run the stack, Docker stable version 17.06 or later is required. Development is supported on both Docker for
 Windows and Docker for Mac.
 
 ### Deploying to Local Docker Engine
@@ -63,14 +63,15 @@ Docker Compose files defining different parts of the stack:
 - [docker-compose.yml](./docker-compose.yml) contains all mandatory services. This includes the Frontira services,
   the web server and gateway, and some other essential services.
 - [docker-compose.override.yml](./docker-compose.override.yml) provides some overrides to
-  [docker-compose.yml](./docker-compose.yml) for running the stack in a non-Docker Swarm environment.
+  [docker-compose.yml](./docker-compose.yml) for running the stack on the local Docker engine.
 - [docker-compose.logging.yml](./docker-compose.logging.yml) contains services for logging, which is the ELK stack
   together with Filebeat.
 - [docker-compose.monitoring.yml](./docker-compose.monitoring.yml) contains services for monitoring, which is
-  Promethues, Alertmanager, and Grafana, together with some assisting services to extract metrics from different parts
+  Prometheus, Alertmanager, and Grafana, together with some assisting services to extract metrics from different parts
   of the deployment.
 - [docker-compose.pregen-ssl.yml](./docker-compose.pregen-ssl.yml) contains secrets provided to the OpenResty web server
-  for HTTPS communication.
+  for HTTPS communication. This is only used if the user has a "real" certificate signed by a root CA and does not use
+  the self-signed certificate that OpenResty generates.
 
 ### Routes
 
@@ -81,7 +82,7 @@ The application provides a few different endpoints, serving different purposes:
   stack is included during deployment. Mainly to be consumed by sys admins.
 - `/viz` - The Docker Swarm visualizer used to see an overview of the deployment, and where services are running.
   Only available in Swarm mode. Manly to be consumed by sys admins.
-- `/grafana` - The metrics dashboard towards Promethues. Used to see an overview of monitoring and performance of the
+- `/grafana` - The metrics dashboard towards Prometheus. Used to see an overview of monitoring and performance of the
   deployed services. Only available if the monitoring stack is included during deployment. Mainly to be consumed by sys
   admins.
 
