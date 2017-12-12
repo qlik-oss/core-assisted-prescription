@@ -32,6 +32,6 @@ impacting QIX Engine performance negatively.
 
 Different design aspects of the system are covered in separate sections:
 
-- [Authentication](./system-design/authentication.md)
-- [QIX Engine Sessions](./system-design/qix-engine-sessions.md)
-- [Monitoring](./system-design/monitoring.md)
+- [Authentication](./authentication.md)
+- [QIX Engine Sessions](./qix-engine-sessions.md)
+- [Monitoring](./monitoring.md)
