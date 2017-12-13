@@ -80,6 +80,8 @@ services:
         mode: 100
     command: -config.file=/etc/alertmanager/config.yml
     deploy:
+      placement:
+        constraints: [node.role == manager]
       replicas: 1
       resources:
         limits:
