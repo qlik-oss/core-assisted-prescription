@@ -1,5 +1,5 @@
 # Unix line endings in all text files.
 *     text     eol=lf
 
-# Treat QVF documents as binaries.
 *.qvf binary
+*.png binary

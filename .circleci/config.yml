@@ -9,9 +9,13 @@ jobs:
       - restore_cache:
           key: dependency-cache-{{ checksum "test/package.json" }}
       - run:
-          name: Install dependencies
+          name: Install Dependencies - Test
           command: npm install --quiet
           working_directory: ~/qliktive-custom-analytics/test
+      - run:
+          name: Install Dependencies - Performance Benchmarking
+          command: npm install --quiet
+          working_directory: ~/qliktive-custom-analytics/perf-bench
       - run:
           name: Run ESLint
           command: npm run lint
