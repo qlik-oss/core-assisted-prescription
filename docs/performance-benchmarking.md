@@ -7,22 +7,32 @@ A performance benchmarking tool is provided to simulate such a peak in user conn
 capability of a deployment of the use case. The tool does not include loading of browser content, instead it focuses on
 making QIX Engine connections through the gateway.
 
-The tool can be run directly as a Node.js command line tool, but the recommended way is to run it as a Docker container.
-To do so, run the following:
+## Setup
+
+Running the performance benchmarking requires that a deployment of the Qliktive Assisted Prescription application exists
+at a known URL.
 
 ```sh
-$ ./scripts/run-perf-bench.sh -g localhost -m 1000 -d 60
+cd test/perf
+npm install
 ```
 
-This launches performance benchmarking against the gateway assumed to be reachable on `localhost` (`-g` option) with a
-user peak of 1000 users (`-m` option). The number of connections grows linearly and reaches the peak after the provided
-duration (`-d` option). A simple verification of the connections is made and then the users are disconnected and reaches
-zero users, also after the same duration of time.
+## Running
 
-_The performance benchmarking tool is under development._
+Supported options:
 
-Currently, there are a number of limitations:
+```sh
+ -g <URL to Assisted Prescription deployment> 
+ -m <max number of users per thread>
+ -d <delay between each added user>
+ -t <number of threads to run on, (-1 will check os and return number of cores)>
+ -s <number of ms between each round of new selections>
+ -r <ratio of users that will perform a selection each round (ie 0.1 for 10% of the users>
+ ```
 
-- The tool does not yet make any real data manipulations towards the QIX Engine connections, to simulate actual user
-  behavior.
-- The tool does not yet provide any performance metrics of the deployment.
+Example, running with max 100 users per thread:
+
+```sh
+cd test/perf
+node src/cluster.js -m 100
+```

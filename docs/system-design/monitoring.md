@@ -15,7 +15,7 @@ freed up for other things.
 The system clock on the backend nodes must be set to the UTC 00:00 timezone (a.k.a Zulu), and events must be logged in
 this timezone.
 
-### Components
+### Collaborating Components
 
 #### Gateway
 

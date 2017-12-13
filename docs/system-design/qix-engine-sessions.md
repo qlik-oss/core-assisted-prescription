@@ -1,4 +1,4 @@
-# QIX Sessions
+# QIX Engine Sessions
 
 QIX Engine session requests from the web browser needs to be routed to one of the available QIX Engine instances.
 
@@ -14,7 +14,7 @@ Since scheduling the WebSocket request to one of the available QIX Engine instan
 context of the upgrade request, the actions needed to find and schedule the session are carried out by the
 QIX Session Service, using Mira to find which QIX Engine instances that are available.
 
-## Components
+## Collaborating Components
 
 #### Web Browser
 

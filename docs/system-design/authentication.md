@@ -15,7 +15,7 @@ client. If a JWT is leaked into client space, there is no way of revoking the JW
 
 Logout is done by removing the session from the Session Database.
 
-## Components
+## Collaborating Components
 
 #### Web Browser
 

@@ -106,5 +106,5 @@ More information related to development can be found in:
 - [Secrets](./docs/secrets.md) - Docker secrets and options for secret management in the application.
 - [Deploying](./docs/deploying-swarm.md) - Information on deploying the application to Docker Swarm clusters,
   including AWS.
-- [Performance Benchmarking](./docs/performance-benchmarking.md) - Information on how to do performance benchmarking on a deployment
-  of the application.
+- [Performance Benchmarking](./docs/performance-benchmarking.md) - Information on how to do performance benchmarking on
+  a deployment of the application.
