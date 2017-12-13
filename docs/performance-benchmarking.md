@@ -30,7 +30,7 @@ Supported options:
  -r <ratio of users that will perform a selection each round (ie 0.1 for 10% of the users>
  ```
 
-Example, running with max 100 users per thread:
+Running with max 100 users per thread:
 
 ```sh
 cd test/perf
