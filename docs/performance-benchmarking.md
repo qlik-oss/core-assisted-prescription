@@ -13,7 +13,7 @@ Running the performance benchmarking requires that a deployment of the Qliktive 
 at a known URL.
 
 ```sh
-cd test/perf
+cd test
 npm install
 ```
 
@@ -22,7 +22,7 @@ npm install
 Supported options:
 
 ```sh
- -g <URL to Assisted Prescription deployment> 
+ -g <URL to Assisted Prescription deployment>
  -m <max number of users per thread>
  -d <delay between each added user>
  -t <number of threads to run on, (-1 will check os and return number of cores)>
@@ -34,5 +34,5 @@ Running with max 100 users per thread:
 
 ```sh
 cd test/perf
-node src/cluster.js -m 100
+node cluster.js -m 100
 ```

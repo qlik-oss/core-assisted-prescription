@@ -54,5 +54,5 @@ exports.getScenario = async (session) => {
   await app.createSessionObject(sessionObjectDef('Reaction Therapy Stop', 'Count(Demographic_Caseid)')).then((x) => { x.getLayout(); });
   await app.createSessionObject(sessionObjectDef('Manufacturer Code Name', 'Count(Drug_caseID)')).then((x) => { x.getLayout(); });
   await app.createSessionObject(sessionObjectDef('Reaction Therapy Stop', 'Count(Demographic_Caseid)')).then((x) => { x.getLayout(); });
-  await app.createSessionObject(sessionObjectDef('Patient Age Group', 'Count({<[Drug Role Event] = {\'Primary Suspect Drug\'},[Medical Description Reaction] = {\'Death\'} >}Demographic_Caseid)')).then((x) => { x.getLayout() });
+  await app.createSessionObject(sessionObjectDef('Patient Age Group', 'Count({<[Drug Role Event] = {\'Primary Suspect Drug\'},[Medical Description Reaction] = {\'Death\'} >}Demographic_Caseid)')).then((x) => { x.getLayout(); });
 };

@@ -60,8 +60,8 @@ async function getFieldNames(app) {
       },
       qFieldListDef: {
         qShowSemantic: true,
-      }
-    }
+      },
+    },
   );
 
   const sessionLayout = await sessionObject.getLayout();
@@ -103,7 +103,7 @@ async function sleep(delay) {
   });
 }
 
-function displayConnections(sessions, errorCount){
+function displayConnections(sessions, errorCount) {
   console.log('---------------------------------------');
   console.log(' Process id: ', process.pid);
   console.log(' Connection count: ', sessions.length);
@@ -119,7 +119,7 @@ async function makeRandomSelection(sessions) {
     const firstApp = await sessions[0].getActiveDoc();
     const fieldNames = await getFieldNames(firstApp);
 
-    for (let i = 0; i < nrOfSelections; i = i + 1) {
+    for (let i = 0; i < nrOfSelections; i += 1) {
       const qix = sessions[getRandomNumberBetween(0, sessions.length)];
 
       /* eslint-disable no-await-in-loop */

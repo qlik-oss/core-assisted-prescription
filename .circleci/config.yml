@@ -13,10 +13,6 @@ jobs:
           command: npm install --quiet
           working_directory: ~/qliktive-custom-analytics/test
       - run:
-          name: Install Dependencies - Performance Benchmarking
-          command: npm install --quiet
-          working_directory: ~/qliktive-custom-analytics/perf-bench
-      - run:
           name: Run ESLint
           command: npm run lint
           working_directory: ~/qliktive-custom-analytics/test
