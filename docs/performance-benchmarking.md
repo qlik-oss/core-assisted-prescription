@@ -34,5 +34,5 @@ Running with max 100 users per thread:
 
 ```sh
 cd test/perf
-node perf-bench.js -m 100
+node cluster.js -m 100
 ```
