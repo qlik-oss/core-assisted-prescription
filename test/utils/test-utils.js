@@ -1,8 +1,7 @@
-import enigmaMixin from 'halyard.js/dist/halyard-enigma-mixin';
-import request from 'request';
-import WebSocket from 'ws';
-import fs from 'fs';
-
+const enigmaMixin = require('halyard.js/dist/halyard-enigma-mixin');
+const request = require('request');
+const WebSocket = require('ws');
+const fs = require('fs');
 const qixSchema = require('enigma.js/schemas/12.20.0.json');
 
 function getSwarmManagerIP() {
