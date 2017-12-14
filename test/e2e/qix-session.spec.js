@@ -1,50 +1,39 @@
-import Halyard from 'halyard.js';
-import enigma from 'enigma.js';
-import { getEnigmaBaseConfig, getTestHost, getLoginCookie } from '../utils/test-utils';
+const Halyard = require('halyard.js');
+const enigma = require('enigma.js');
+const { getEnigmaBaseConfig, getLoginCookie } = require('../utils/test-utils');
 
 describe('QIX Session in a swarm', () => {
-  let qixGlobal;
-  let sessionApp;
+  let qix;
+  let session;
   let customAnalyticsCookie;
 
   before(async () => {
     customAnalyticsCookie = await getLoginCookie();
   });
 
-  beforeEach(() => {
-    const enigmaConfig = getEnigmaBaseConfig(customAnalyticsCookie);
+  beforeEach(async () => {
+    const enigmaConfig = getEnigmaBaseConfig(customAnalyticsCookie, '/doc/session-doc');
 
-    enigmaConfig.session = {
-      host: getTestHost(),
-      route: '/doc/session-doc',
-    };
-
-    return enigma.getService('qix', enigmaConfig).then((qix) => {
-      qixGlobal = qix.global;
-      return qixGlobal.getActiveDoc().then((app) => {
-        sessionApp = app;
-      });
-    }).catch((err) => {
-      console.log(`error: ${err}`);
-    });
+    session = enigma.create(enigmaConfig);
+    qix = await session.open();
   });
 
-  afterEach(() => {
-    qixGlobal.session.on('error', () => { });
-    return qixGlobal.session.close().then(() => {
-      qixGlobal = null;
-    });
+  afterEach(async () => {
+    await session.close();
   });
 
-  it('get engine component version', () => qixGlobal.engineVersion().then((resp) => {
-    expect(resp.qComponentVersion).to.match(/^(\d+\.)?(\d+\.)?(\*|\d+)$/);
-  }));
+  it('get engine component version', async () => {
+    const response = await qix.engineVersion();
+    expect(response.qComponentVersion).to.match(/^(\d+\.)?(\d+\.)?(\*|\d+)$/);
+  });
 
-  it('verify that a session app is opened', () => sessionApp.getAppLayout().then((layout) => {
+  it('verify that a session app is opened', async () => {
+    const app = await qix.getActiveDoc();
+    const layout = await app.getAppLayout();
     expect(layout.qTitle).to.match(/SessionApp_[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i); // title should be 'SessionApp_<GUID>'
-  }));
+  });
 
-  it('load data into session app using halyard', () => {
+  it('load data into session app using halyard', async () => {
     const halyard = new Halyard();
     const filePathMovie = '/data/movies.csv';
     const tableMovie = new Halyard.Table(filePathMovie, {
@@ -59,10 +48,11 @@ describe('QIX Session in a swarm', () => {
     });
     halyard.addTable(tableMovie);
 
-    return qixGlobal.setScriptAndReloadWithHalyard(sessionApp, halyard, false)
-      .then(() => sessionApp.getAppLayout().then((layout) => {
-        expect(layout.qHasScript).to.be.true;
-        expect(layout.qHasData).to.be.true;
-      }));
+    const app = await qix.getActiveDoc();
+    await qix.setScriptAndReloadWithHalyard(app, halyard, false);
+    const layout = await app.getAppLayout();
+
+    expect(layout.qHasScript).to.be.true;
+    expect(layout.qHasData).to.be.true;
   });
 });

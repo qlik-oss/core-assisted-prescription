@@ -1,37 +1,29 @@
-import enigma from 'enigma.js';
-import { getEnigmaBaseConfig, getTestHost, getLoginCookie } from '../utils/test-utils';
+const enigma = require('enigma.js');
+const { getEnigmaBaseConfig, getLoginCookie } = require('../utils/test-utils');
 
 describe('QIX open doc in a swarm', () => {
-  let qixGlobal;
+  let qix;
+  let session;
   let customAnalyticsCookie;
 
   before(async () => {
     customAnalyticsCookie = await getLoginCookie();
   });
 
-  beforeEach(() => {
-    const enigmaConfig = getEnigmaBaseConfig(customAnalyticsCookie);
+  beforeEach(async () => {
+    const enigmaConfig = getEnigmaBaseConfig(customAnalyticsCookie, '/doc/doc/drugcases.qvf');
 
-    enigmaConfig.session = {
-      host: getTestHost(),
-      route: '/doc/doc/drugcases.qvf',
-    };
-
-    return enigma.getService('qix', enigmaConfig).then((qix) => {
-      qixGlobal = qix.global;
-    }).catch((err) => {
-      console.log(`error: ${err}`);
-    });
+    session = enigma.create(enigmaConfig);
+    qix = await session.open();
   });
 
-  afterEach(() => {
-    qixGlobal.session.on('error', () => { });
-    return qixGlobal.session.close().then(() => {
-      qixGlobal = null;
-    });
+  afterEach(async () => {
+    await session.close();
   });
 
-  it('and verify that the intended doc is opened', () => qixGlobal.getActiveDoc().then(app => app.getAppLayout().then((layout) => {
+  it('and verify that the intended doc is opened', async () => {
+    const app = await qix.getActiveDoc();
+    const layout = await app.getAppLayout();
     expect(layout.qFileName).to.equal('/doc/drugcases.qvf');
-  })));
+  });
 });

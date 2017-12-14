@@ -12,23 +12,32 @@ function getSwarmManagerIP() {
   return config.Driver.IPAddress;
 }
 
-export function getEnigmaBaseConfig(customAnalyticsCookie) {
-  const headers = customAnalyticsCookie ? { Cookie: [customAnalyticsCookie] } : undefined;
+function getTestHost() {
+  return process.env.SWARM ? process.env.GATEWAY_IP_ADDR || getSwarmManagerIP() : 'localhost';
+}
+
+export function getEnigmaBaseConfig(customAnalyticsCookie, route) {
+  const headers = customAnalyticsCookie ? {
+    Cookie: [customAnalyticsCookie],
+  } : undefined;
   return {
     schema: qixSchema,
     mixins: enigmaMixin,
-    createSocket: url => new WebSocket(url, { rejectUnauthorized: false, headers }),
+    url: `https://${getTestHost()}${route}`,
+    createSocket(url) {
+      return new WebSocket(url, {
+        rejectUnauthorized: false,
+        headers,
+      });
+    },
     listeners: {
       'notification:OnConnected': (params) => {
         console.log('OnConnected', params);
       },
     },
+
     handleLog: logRow => console.log(logRow),
   };
-}
-
-export function getTestHost() {
-  return process.env.SWARM ? process.env.GATEWAY_IP_ADDR || getSwarmManagerIP() : 'localhost';
 }
 
 export async function getLoginCookie() {
@@ -36,7 +45,6 @@ export async function getLoginCookie() {
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
     const loginUrl = '/login/local/callback?username=admin&password=password';
     const fullUrl = `https://${getTestHost()}${loginUrl}`;
-    request(fullUrl, { followRedirect: false },
-      (error, response) => resolve(response.headers['set-cookie'][0].split(';')[0]));
+    request(fullUrl, { followRedirect: false }, (error, response) => resolve(response.headers['set-cookie'][0].split(';')[0]));
   });
 }
