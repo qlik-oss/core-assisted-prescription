@@ -2,7 +2,8 @@ import enigmaMixin from 'halyard.js/dist/halyard-enigma-mixin';
 import request from 'request';
 import WebSocket from 'ws';
 import fs from 'fs';
-import qixSchema from 'enigma.js/schemas/12.20.0.json';
+
+const qixSchema = require('enigma.js/schemas/12.20.0.json');
 
 function getSwarmManagerIP() {
   const managerName = `${process.env.USERNAME || process.env.USER}-docker-manager1`;
