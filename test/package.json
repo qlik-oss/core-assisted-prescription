@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.1",
   "description": "Test cases and performance benchmarking for qliktive-custom-analytics use case",
-  "author": "Qlik",
+  "author": "QlikTech International AB",
   "license": "MIT",
   "scripts": {
     "lint": "eslint .",
@@ -25,5 +25,8 @@
     "seedrandom": "2.4.3",
     "winston": "2.4.0",
     "ws": "2.2.3"
+  },
+  "engines": {
+    "node": ">=8.0.x"
   }
 }
