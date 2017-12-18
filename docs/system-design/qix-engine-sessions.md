@@ -16,12 +16,12 @@ QIX Session Service, using Mira to find which QIX Engine instances that are avai
 
 ## Collaborating Components
 
-#### Web Browser
+### Web Browser
 
 - Requests to open WebSocket connection to the Assisted Prescription document.
 - Passes the session cookie (obtained at login) in the upgrade request.
 
-#### Gateway
+### Gateway
 
 - Receives the WebSocket upgrade request.
 - Uses login session cookie to look up entry in the Session DB and to retrieve the corresponding JWT.
@@ -30,19 +30,20 @@ QIX Session Service, using Mira to find which QIX Engine instances that are avai
 - Further communication from the browser over the WebSocket is now properly forwarded by the Gatwey to the engine
   instance serving the session.
 
-#### Session DB
+### Session DB
 
 - Keeps track of users by storing login sessions and associating each login with a JWT.
 
-#### Session Service
+### Session Service
 
 - To obtain the QIX session id, Mira is queried for available QIX Engine instances.
-- Among the available engine instances the Session Service selects one using a round-robin strategy.
+- Among the available engine instances the Session Service selects one using a least-load strategy.
+  The strategy is in detail described [here](https://github.com/qlik-ea/info/blob/master/docs/tutorials/scalability/newspaper.md).
 - The document is opened and the session is prepared. This determines the QIX session id.
 - The WebSocket is closed but by utilizing the session TTL feature in QIX Engine, the engine keeps the session alive
-  in order to enable a later reconnect to it (from the Gatway).
+  in order to enable a later reconnect to it (from the Gateway).
 
-#### Mira
+### Mira
 
 - Mira is the QIX Engine discovery service that periodically refreshes a list of available QIX Engine instances.
 - When Mira has discovered a QIX Engine instance, it periodically requests both its health and metrics endpoints.
