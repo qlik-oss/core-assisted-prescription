@@ -25,5 +25,8 @@
     "seedrandom": "2.4.3",
     "winston": "2.4.0",
     "ws": "2.2.3"
+  },
+  "engines": {
+    "node": ">=8.0.x"
   }
 }
