@@ -30,11 +30,9 @@ services:
       - doc-volume:/doc
 
   mira:
-    # On CCI, run Mira in 'local' mode instead of default 'swarm' mode and with a shorter discovery interval.
+    # On CCI, run Mira in 'local' mode instead of default 'swarm' mode.
     environment:
      - MIRA_MODE=local
-     - MIRA_ENGINE_DISCOVERY_REFRESH_RATE=1000
-     - MIRA_ENGINE_HEALTH_REFRESH_RATE=1000
 
   dummy-data:
     # Dummy container just to hold data that is needed in CCI remote docker space.

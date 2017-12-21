@@ -74,7 +74,7 @@ services:
     # APIs to list (or query) all available QIX Engine containers
     # in the cluster.
     # See https://github.com/qlik-ea/mira
-    image: qlikea/mira:0.0.8
+    image: qlikea/mira:0.0.9
     environment:
      - MIRA_MODE=swarm
     volumes:
