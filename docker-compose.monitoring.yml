@@ -1,6 +1,16 @@
 version: "3.3"
 
 services:
+  viz:
+    # A swarm visualizer, enables us to view what the cluster
+    # looks like, which services are running on which nodes etc.
+    image: dockersamples/visualizer:stable
+    volumes:
+     - /var/run/docker.sock:/var/run/docker.sock
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
   cadvisor:
     image: google/cadvisor:v0.27.2
     volumes:
@@ -121,7 +131,7 @@ services:
   openresty:
     environment:
       GRAFANA_HOST: grafana
-      GRAFANA_PORT: 3000
+      VISUALIZER_HOST: viz
 
 configs:
   init_grafana:

@@ -14,12 +14,8 @@ services:
       JWT_SECRET_FILE: /secrets/JWT_SECRET
       COOKIE_SIGNING_FILE: /secrets/COOKIE_SIGNING
       ACCOUNTS_FILE: /secrets/ACCOUNTS
-      AUTH_STRATEGY: local
     volumes:
       - secrets-volume:/secrets
-
-  viz:
-    # Not used here, but Docker does not support removing services in override
 
   qix-engine:
     container_name: qix-engine
@@ -30,7 +26,6 @@ services:
       - doc-volume:/doc
 
   mira:
-    # On CCI, run Mira in 'local' mode instead of default 'swarm' mode.
     environment:
      - MIRA_MODE=local
 
