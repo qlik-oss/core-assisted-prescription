@@ -86,7 +86,7 @@ services:
     # QIX Engines. Uses Mira to find appropriate containers
     # to place the session on.
     # See https://github.com/qlik-ea/qliktive-qix-session-service
-    image: qlikea/qliktive-qix-session-service:0.0.1-94
+    image: qlikea/qliktive-qix-session-service:0.0.1-100
     deploy:
       placement:
         constraints: [node.role == manager]
