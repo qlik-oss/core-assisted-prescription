@@ -120,6 +120,9 @@ services:
       - source: engine_dashboard
         target: /dashboard/engine_dashboard.json
         mode: 0444
+      - source: performance_engine_dashboard
+        target: /dashboard/performance_engine_dashboard.json
+        mode: 0444
     deploy:
       placement:
         constraints: [node.role == manager]
@@ -142,6 +145,8 @@ configs:
     file: ./configs/grafana/import-dashboards.sh
   engine_dashboard:
     file: ./configs/grafana/qix-engine-dashboard.json
+  performance_engine_dashboard:
+    file: ./configs/grafana/qix-and-performance-dashboard.json
   prometheus:
     file: ./configs/prometheus/prometheus.yml
   prometheus_alerts:
