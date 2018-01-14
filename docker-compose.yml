@@ -68,7 +68,7 @@ services:
     # QIX Engine is configured to run on all worker nodes in the
     # cluster, and is the service we primarily want to scale up in
     # this use-case.
-    image: qlikea/engine:12.119.0
+    image: qlikea/engine:12.121.0
     command: -S ValidateJsonWebTokens=2 -S JsonWebTokenSecret=${JWT_SECRET}
     labels:
       qix-engine: ""
