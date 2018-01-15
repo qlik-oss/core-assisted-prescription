@@ -260,11 +260,6 @@ exports.start = async (workerNr) => {
   console.log(` Rate of new sessions (ms): ${duration}`);
   console.log('================================================================================');
 
-  // Get login cookie
-  // const loginCookie = await getLoginCookie().then(
-  //   (result) => { console.log(result); return result; });
-
-
   let sessions = [];
 
   console.log(' Connecting users');
