@@ -314,6 +314,8 @@ function list() {
 refresh_nodes
 
 if   [ "$command" == "deploy" ];          then deploy_data && deploy_stack
+elif [ "$command" == "deploy-data" ];      then deploy_data
+elif [ "$command" == "deploy-stack" ];     then deploy_stack
 elif [ "$command" == "clean" ];           then clean
 elif [ "$command" == "validate" ];        then validate
 elif [ "$command" == "create" ];          then create

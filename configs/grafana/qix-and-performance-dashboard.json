@@ -125,7 +125,7 @@
               "format": "time_series",
               "intervalFactor": 2,
               "refId": "A",
-              "step": 20
+              "step": 40
             }
           ],
           "thresholds": "",
@@ -186,7 +186,7 @@
               "legendFormat": "{{container_label_com_docker_stack_namespace}}",
               "metric": "container_last_seen",
               "refId": "A",
-              "step": 4
+              "step": 10
             }
           ],
           "thresholds": [],
@@ -273,7 +273,7 @@
               "legendFormat": "{{host}}",
               "metric": "",
               "refId": "C",
-              "step": 4
+              "step": 10
             }
           ],
           "thresholds": [],
@@ -367,7 +367,7 @@
               "intervalFactor": 2,
               "legendFormat": "Free {{host}}",
               "refId": "A",
-              "step": 4
+              "step": 10
             },
             {
               "expr": "(node_filesystem_size{mountpoint=\"/\",instance=~\"$instance\"} - node_filesystem_free{mountpoint=\"/\",instance=~\"$instance\"}) * 100/ node_filesystem_size{mountpoint=\"/\",instance=~\"$instance\"}  * ON(instance) GROUP_LEFT(host) host",
@@ -376,7 +376,7 @@
               "intervalFactor": 2,
               "legendFormat": "Used {{host}}",
               "refId": "B",
-              "step": 4
+              "step": 10
             }
           ],
           "thresholds": [
@@ -547,7 +547,7 @@
               "intervalFactor": 2,
               "legendFormat": "Available Memory {{host}}",
               "refId": "H",
-              "step": 4
+              "step": 10
             },
             {
               "expr": "(node_memory_MemTotal{instance=~\"$instance\"} - node_memory_MemAvailable{instance=~\"$instance\"}) * ON(instance) GROUP_LEFT(host) host",
@@ -556,7 +556,7 @@
               "intervalFactor": 2,
               "legendFormat": "Unavailable Memory {{host}}",
               "refId": "G",
-              "step": 4
+              "step": 10
             },
             {
               "expr": "node_memory_Inactive",
@@ -702,7 +702,7 @@
               "legendFormat": "OUT on /{{device}} {{host}}",
               "metric": "node_disk_bytes_read",
               "refId": "A",
-              "step": 4
+              "step": 10
             },
             {
               "expr": "sum(rate(node_disk_bytes_written{instance=~\"$instance\"}[$interval])) by (device, instance) * ON(instance) GROUP_LEFT(host) host",
@@ -712,7 +712,7 @@
               "legendFormat": "IN on /{{device}} {{host}}",
               "metric": "",
               "refId": "B",
-              "step": 4
+              "step": 10
             }
           ],
           "thresholds": [],
@@ -809,7 +809,7 @@
               "intervalFactor": 2,
               "legendFormat": "RECEIVED",
               "refId": "A",
-              "step": 2
+              "step": 4
             },
             {
               "expr": "- sum(rate(container_network_transmit_bytes_total[$interval]))",
@@ -818,7 +818,7 @@
               "intervalFactor": 2,
               "legendFormat": "SENT",
               "refId": "B",
-              "step": 2
+              "step": 4
             }
           ],
           "thresholds": [],
@@ -919,7 +919,7 @@
               "intervalFactor": 2,
               "legendFormat": "Limited",
               "refId": "A",
-              "step": 2
+              "step": 4
             },
             {
               "expr": "sum((container_memory_usage_bytes{container_label_com_docker_swarm_task_id=~\".+\"}) and (container_spec_memory_limit_bytes{container_label_com_docker_swarm_task_id=~\".+\"} == 0))",
@@ -927,21 +927,21 @@
               "intervalFactor": 2,
               "legendFormat": "Unlimited",
               "refId": "B",
-              "step": 2
+              "step": 4
             },
             {
               "expr": "sum((container_spec_memory_limit_bytes{container_label_com_docker_swarm_task_id=~\".+\"}) and (container_spec_memory_limit_bytes{container_label_com_docker_swarm_task_id=~\".+\"} > 0))",
               "intervalFactor": 2,
               "legendFormat": "Max defined limit",
               "refId": "C",
-              "step": 2
+              "step": 4
             },
             {
               "expr": "sum(node_memory_MemTotal)",
               "intervalFactor": 2,
               "legendFormat": "Total cluster memory",
               "refId": "D",
-              "step": 2
+              "step": 4
             }
           ],
           "thresholds": [],
@@ -1043,7 +1043,7 @@
               "intervalFactor": 1,
               "metric": "",
               "refId": "A",
-              "step": 10
+              "step": 20
             }
           ],
           "thresholds": "",
@@ -1072,39 +1072,6 @@
       "height": 196,
       "panels": [
         {
-          "alert": {
-            "conditions": [
-              {
-                "evaluator": {
-                  "params": [
-                    4
-                  ],
-                  "type": "gt"
-                },
-                "operator": {
-                  "type": "and"
-                },
-                "query": {
-                  "params": [
-                    "B",
-                    "5m",
-                    "now"
-                  ]
-                },
-                "reducer": {
-                  "params": [],
-                  "type": "avg"
-                },
-                "type": "query"
-              }
-            ],
-            "executionErrorState": "keep_state",
-            "frequency": "30s",
-            "handler": 1,
-            "name": "System Load on Node alert",
-            "noDataState": "keep_state",
-            "notifications": []
-          },
           "aliasColors": {
             "node_load15": "#CCA300"
           },
@@ -1157,11 +1124,12 @@
             {
               "expr": "node_load1{instance=~\"$instance\"} * ON(instance) GROUP_LEFT(host) host",
               "format": "time_series",
+              "hide": false,
               "intervalFactor": 2,
               "legendFormat": "load1 {{host}}",
               "metric": "node",
               "refId": "A",
-              "step": 2
+              "step": 4
             },
             {
               "expr": "node_load5{instance=~\"$instance\"} * ON(instance) GROUP_LEFT(host) host",
@@ -1171,7 +1139,7 @@
               "legendFormat": "load5 {{host}}",
               "metric": "node",
               "refId": "B",
-              "step": 2
+              "step": 4
             },
             {
               "expr": "node_load15{instance=~\"$instance\"} * ON(instance) GROUP_LEFT(host) host",
@@ -1181,18 +1149,10 @@
               "legendFormat": "load15 {{host}}",
               "metric": "node",
               "refId": "C",
-              "step": 2
+              "step": 4
             }
           ],
-          "thresholds": [
-            {
-              "colorMode": "critical",
-              "fill": true,
-              "line": true,
-              "op": "gt",
-              "value": 4
-            }
-          ],
+          "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
           "title": "System Load on Node",
@@ -1257,7 +1217,7 @@
           "seriesOverrides": [],
           "spaceLength": 10,
           "span": 6,
-          "stack": false,
+          "stack": true,
           "steppedLine": false,
           "targets": [
             {
@@ -1267,7 +1227,7 @@
               "intervalFactor": 2,
               "legendFormat": "",
               "refId": "A",
-              "step": 2
+              "step": 4
             }
           ],
           "thresholds": [],
@@ -1365,7 +1325,7 @@
               "legendFormat": "{{task_name}}",
               "metric": "",
               "refId": "A",
-              "step": 2
+              "step": 4
             }
           ],
           "thresholds": [],
@@ -1440,7 +1400,7 @@
               "intervalFactor": 2,
               "legendFormat": "{{container_label_com_docker_stack_namespace}}",
               "refId": "A",
-              "step": 2
+              "step": 4
             }
           ],
           "thresholds": [],
@@ -1535,7 +1495,7 @@
               "intervalFactor": 2,
               "legendFormat": "{{task_name}}",
               "refId": "A",
-              "step": 2
+              "step": 4
             },
             {
               "expr": "rate(container_network_transmit_bytes_total{id=\"/\"}[$interval])",
@@ -1628,7 +1588,7 @@
               "intervalFactor": 2,
               "legendFormat": "{{task_name}}",
               "refId": "A",
-              "step": 2
+              "step": 4
             },
             {
               "expr": "- rate(container_network_transmit_bytes_total{name=~\".+\"}[$interval])",
@@ -1720,7 +1680,7 @@
               "intervalFactor": 2,
               "legendFormat": "{{task_name}}",
               "refId": "A",
-              "step": 2
+              "step": 4
             },
             {
               "expr": "rate(container_network_transmit_bytes_total{id=\"/\"}[$interval])",
@@ -1812,7 +1772,7 @@
               "intervalFactor": 2,
               "legendFormat": "{{task_name}}",
               "refId": "A",
-              "step": 2
+              "step": 4
             },
             {
               "expr": "- rate(container_network_transmit_bytes_total{name=~\".+\"}[$interval])",
@@ -1915,7 +1875,7 @@
               "intervalFactor": 2,
               "legendFormat": "{{task_name}}",
               "refId": "A",
-              "step": 2
+              "step": 4
             },
             {
               "expr": "container_memory_usage_bytes{name=~\".+\"}",
@@ -2008,7 +1968,7 @@
               "intervalFactor": 2,
               "legendFormat": "{{task_name}}",
               "refId": "A",
-              "step": 2
+              "step": 4
             }
           ],
           "thresholds": [],
@@ -2107,42 +2067,42 @@
               "intervalFactor": 2,
               "legendFormat": "{{instance}} cAdvisor Version: {{cadvisorVersion}}",
               "refId": "A",
-              "step": 2
+              "step": 4
             },
             {
               "expr": "prometheus_build_info",
               "intervalFactor": 2,
               "legendFormat": "{{instance}} Prometheus Version: {{version}}",
               "refId": "B",
-              "step": 2
+              "step": 4
             },
             {
               "expr": "node_exporter_build_info",
               "intervalFactor": 2,
               "legendFormat": "{{instance}} Node-Exporter Version: {{version}}",
               "refId": "C",
-              "step": 2
+              "step": 4
             },
             {
               "expr": "cadvisor_version_info",
               "intervalFactor": 2,
               "legendFormat": "{{instance}} Docker Version: {{dockerVersion}}",
               "refId": "D",
-              "step": 2
+              "step": 4
             },
             {
               "expr": "cadvisor_version_info",
               "intervalFactor": 2,
               "legendFormat": "{{instance}} Host OS Version: {{osVersion}}",
               "refId": "E",
-              "step": 2
+              "step": 4
             },
             {
               "expr": "cadvisor_version_info",
               "intervalFactor": 2,
               "legendFormat": "{{instance}} Host Kernel Version: {{kernelVersion}}",
               "refId": "F",
-              "step": 2
+              "step": 4
             }
           ],
           "timeFrom": null,
@@ -2197,7 +2157,7 @@
               "intervalFactor": 2,
               "legendFormat": "{{task_name}}",
               "refId": "A",
-              "step": 2
+              "step": 4
             }
           ],
           "title": "Memory Limit %",
@@ -2284,13 +2244,10 @@
         "sort": 0,
         "tagValuesQuery": "label_values({host=\"$tag\"},instance)",
         "tags": [
-          "hca-ca-engine-worker3",
-          "hca-ca-elk-worker",
-          "hca-ca-engine-worker1",
-          "hca-ca-engine-worker5",
-          "hca-ca-manager1",
-          "hca-ca-engine-worker4",
-          "hca-ca-engine-worker2"
+          "qliktive-prod-engine-worker1",
+          "qliktive-prod-manager1",
+          "qliktive-prod-elk-worker",
+          "qliktive-prod-engine-worker2"
         ],
         "tagsQuery": "label_values(host, host)",
         "type": "query",
@@ -2410,8 +2367,8 @@
         "auto_count": 50,
         "auto_min": "50s",
         "current": {
-          "text": "auto",
-          "value": "$__auto_interval"
+          "text": "1m",
+          "value": "1m"
         },
         "datasource": null,
         "hide": 0,
@@ -2421,7 +2378,7 @@
         "name": "interval",
         "options": [
           {
-            "selected": true,
+            "selected": false,
             "text": "auto",
             "value": "$__auto_interval"
           },
@@ -2431,7 +2388,7 @@
             "value": "30s"
           },
           {
-            "selected": false,
+            "selected": true,
             "text": "1m",
             "value": "1m"
           },
@@ -2508,7 +2465,7 @@
     ]
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {
@@ -2538,5 +2495,5 @@
   },
   "timezone": "browser",
   "title": "Docker Swarm & Container Overview",
-  "version": 1
+  "version": 3
 }
