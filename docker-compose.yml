@@ -87,8 +87,6 @@ services:
     # to place the session on.
     # See https://github.com/qlik-ea/qliktive-qix-session-service
     image: qlikea/qliktive-qix-session-service:0.0.1-102
-    environment:
-     - SESSION_STRATEGY=roundrobin
     deploy:
       placement:
         constraints: [node.role == manager]

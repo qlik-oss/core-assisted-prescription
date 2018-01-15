@@ -80,7 +80,7 @@ function deploy_data() {
       docker-machine ssh $engine_worker "sudo install -g ubuntu -o ubuntu -d /home/docker"
     fi
 
-    docker-machine-v0.12.2 scp -r ./data $engine_worker:/home/docker/
+    docker-machine scp -r ./data $engine_worker:/home/docker/
   done
 }
 
@@ -194,7 +194,7 @@ function create() {
 
   refresh_nodes
 
-  rest=4
+  rest=2
   engine-workers
 }
 
