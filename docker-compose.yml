@@ -16,7 +16,8 @@ services:
       # Possible values: 'github', 'local'. Default is 'local'.
       AUTH_STRATEGY: ${AUTH_STRATEGY:-local}
     deploy:
-      mode: global
+      placement:
+        constraints: [node.role == manager]
 
   redis:
     # The redis database stores sessions. The openresty gateway uses it to look
@@ -67,7 +68,7 @@ services:
     # QIX Engine is configured to run on all worker nodes in the
     # cluster, and is the service we primarily want to scale up in
     # this use-case.
-    image: qlikea/engine:12.119.0
+    image: qlikea/engine:12.121.0
     command: -S ValidateJsonWebTokens=2 -S JsonWebTokenSecret=${JWT_SECRET}
     labels:
       qix-engine: ""
@@ -89,8 +90,8 @@ services:
     environment:
      - SESSION_STRATEGY=roundrobin
     deploy:
-      mode: replicated
-      replicas: 4
+      placement:
+        constraints: [node.role == manager]
 
 secrets:
   github_client_id:

@@ -150,44 +150,6 @@ function validate() {
   fi
 }
 
-# Configures all machines with the appropriate Linux kernel settings for high performance.
-function configure() {
-  limit_values="
-    root soft nofile 1000000
-    root hard nofile 1000000
-    * soft nofile 1000000
-    * hard nofile 1000000
-  "
-  sysctl_values="
-    vm.max_map_count=262144
-    fs.file-max=1000000
-    fs.nr_open=1000000
-    net.netfilter.nf_conntrack_max=1048576
-    net.nf_conntrack_max=1048576
-  "
-
-  for machine in $machines
-  do
-    echo "$machine: Applying limits..."
-
-    docker-machine ssh $machine "echo \"$limit_values\" | sudo tee /etc/security/limits.conf"
-
-    echo "$machine: Applying kernel values..."
-
-    for value in $sysctl_values
-    do
-      # persist values after reboots:
-      cmd="echo sysctl -w $value | sudo tee -a /var/lib/boot2docker/profile"
-      if [ $DOCKER_DRIVER == "amazonec2" ]; then
-        cmd="echo $value | sudo tee -a /etc/sysctl.conf"
-      fi
-      docker-machine ssh $machine "$cmd"
-    done
-
-    docker-machine restart $machine
-  done
-}
-
 # Create nodes (1 manager, 1 elk-worker, 2 engine-workers) and join them as a swarm.
 function create() {
   if [ "$machines" ]; then
@@ -210,20 +172,30 @@ function create() {
   docker swarm init --advertise-addr $ip --listen-addr $ip:2377
 
   function create-elk-worker() {
-    token=$(docker swarm join-token -q worker)
+  token=$(docker swarm join-token -q worker)
 
-    name="${machine_prefix}-elk-worker"
-    AWS_INSTANCE_TYPE="${AWS_INSTANCE_TYPE_ELK:-$AWS_INSTANCE_TYPE_DEFAULT}" \
-    docker-machine create $switches --engine-label elk=true $name
-    docker-machine ssh $name "sudo docker swarm join --token $token $ip:2377"
+  name="${machine_prefix}-elk-worker"
+  AWS_INSTANCE_TYPE="${AWS_INSTANCE_TYPE_ELK:-$AWS_INSTANCE_TYPE_DEFAULT}" \
+  docker-machine create $switches --engine-label elk=true $name
+  docker-machine ssh $name "sudo sysctl -w vm.max_map_count=262144"
+
+  if [ $DOCKER_DRIVER == "amazonec2" ]; then
+    # Add to conf so the setting is not lost after a reboot.
+    docker-machine ssh $name "echo vm.max_map_count = 262144 | sudo tee -a /etc/sysctl.conf"
+  else
+    # Add to boot2docker profile so the setting is not lost after a reboot.
+    docker-machine ssh $name "echo sysctl -w vm.max_map_count=262144 | sudo tee -a /var/lib/boot2docker/profile"
+  fi
+
+  docker-machine ssh $name "sudo docker swarm join --token $token $ip:2377"
   }
 
   create-elk-worker
+
   refresh_nodes
+
   rest=4
   engine-workers
-  refresh_nodes
-  configure
 }
 
 # Remove all nodes related to this project.
@@ -313,14 +285,14 @@ function list() {
 
 refresh_nodes
 
-if   [ "$command" == "deploy" ];          then deploy_data && deploy_stack
-elif [ "$command" == "deploy-data" ];      then deploy_data
-elif [ "$command" == "deploy-stack" ];     then deploy_stack
-elif [ "$command" == "clean" ];           then clean
-elif [ "$command" == "validate" ];        then validate
-elif [ "$command" == "create" ];          then create
-elif [ "$command" == "remove" ];          then remove
-elif [ "$command" == "engine-workers" ];  then engine-workers
-elif [ "$command" == "ls" ];              then list
-elif [ "$command" == "configure" ];       then configure
-else echo "Invalid option: $command - please use one of: deploy, clean, validate, create, remove, engine-workers, configure"; fi
+if   [ "$command" == "deploy" ];        then deploy_data && deploy_stack
+elif [ "$command" == "deploy-data" ];   then deploy_data
+elif [ "$command" == "deploy-stack" ];  then deploy_stack
+elif [ "$command" == "clean" ];         then clean
+elif [ "$command" == "validate" ];      then validate
+elif [ "$command" == "create" ];        then create
+elif [ "$command" == "remove" ];        then remove
+elif [ "$command" == "engine-workers" ];then engine-workers
+elif [ "$command" == "ls" ];            then list
+
+else echo "Invalid option: $command - please use one of: deploy, clean, validate, create, remove, engine-workers, deploy-data, deploy-stack"; fi
