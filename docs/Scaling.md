@@ -1,7 +1,7 @@
 # Scaling
 
 ## Definition
-We would like to validate that our use-case is able to scale to 100k simultanious users.
+We would like to validate that our use-case is able to scale to 100k simultaneous users.
 
 This setup will be run in AWS.
 
@@ -30,12 +30,12 @@ root hard nofile 1000000
 ## Findings
 
 ### Gateway
-When running the initial test we where running with only one gateway service and directing all traffic to the node serving the gateway. That gateway drowned in requests, and ended up crashing. 
-We then scaled the gateway to run "globaly" in the cluster, so it would be deployed to each node. 
+When running the initial test, we were running with only one gateway service and directing all traffic to the node serving the gateway. That gateway drowned in requests, and ended up crashing. 
+We then scaled the gateway to run "globally" in the cluster, so it would be deployed to each node. 
 
-We keept on directing all our traffic to one node, and then have docker swarm loadbalance all the trafic via its ingress network. Now the gateway service didn't crash but the node that recieved all the traffic wasn't able to hale all the requests.  
+We kept on directing all our traffic to one node, and then have docker swarm loadbalance all the traffic via its ingress network. Now the gateway service didn't crash but the node that received all the traffic wasn't able to handle all the requests.  
 
-We then added a [Application load balancer i AWS](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html) to loadbalance over all our nodes. 
+We then added an [Application load balancer in AWS](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html) to loadbalance over all our nodes. 
 
 ### Qix session service
 We noticed that the Qix session service was using alot of CPU and hence decided to replicate the service to 4 replicas. 
