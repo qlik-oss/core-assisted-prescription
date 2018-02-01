@@ -11,7 +11,7 @@ ALERT high_cpu_usage_on_node
   }
 
 ALERT high_memory_usage_on_node
-  IF (((node_memory_MemTotal-node_memory_MemAvailable)/node_memory_MemTotal)*100 > 80) * ON(instance) GROUP_LEFT(host) host * ON(instance) GROUP_LEFT(node) host
+  IF (((node_memory_MemTotal-node_memory_MemAvailable)/node_memory_MemTotal)*100 > 85) * ON(instance) GROUP_LEFT(host) host * ON(instance) GROUP_LEFT(node) host
   FOR 5m
   ANNOTATIONS {
       summary = "HIGH MEMORY USAGE WARNING TASK ON '{{ $labels.host }}'",
@@ -62,7 +62,7 @@ ALERT high_cpu_usage_on_container
   }
 
 ALERT container_eating_memory
-  IF sum(container_memory_rss{container_label_com_docker_swarm_task_name=~".+"}) by (container_label_com_docker_swarm_task_name,container_label_com_docker_swarm_node_id) > 2500000000
+  IF sum(container_memory_rss{container_label_com_docker_swarm_task_name=~".+"}) by (container_label_com_docker_swarm_task_name,container_label_com_docker_swarm_node_id) > 2800000000
   FOR 5m
   ANNOTATIONS {
       summary = "HIGH MEMORY USAGE WARNING: TASK '{{ $labels.container_label_com_docker_swarm_task_name }}' on '{{ $labels.container_label_com_docker_swarm_node_id }}'",
