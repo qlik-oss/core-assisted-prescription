@@ -3,15 +3,15 @@
 [![CircleCI](https://circleci.com/gh/qlik-ea/qliktive-custom-analytics.svg?style=svg&circle-token=087152b4808d5373a8dcbbe82c2ff352e463a3a2)](https://circleci.com/gh/qlik-ea/qliktive-custom-analytics)
 
 This repository contains the implementation of a medical data web application called _Qliktive Assisted Prescription_.
-_Qliktive_ is a fictive company used to showcase different solutions built using Frontira.
+_Qliktive_ is a fictive company used to showcase different solutions built using Qlik Core.
 
 Qliktive Assisted Prescription provides some advanced analysis capabilities on drugs, treatments, and reactions.
 It targets the world-wide population of doctors. Even if the audience is more or less predictable, some seasonal or
 sudden epidemic events can affect the traffic.
 
-## How Frontira Is Used
+## How Qlik Core Is Used
 
-The application has a custom visualization web UI. The application uses Frontira on the backend to
+The application has a custom visualization web UI. The application uses Qlik Core on the backend to
 serve multiple users with medical analysis capabilities using one single QIX Engine document. To balance the load,
 multiple QIX Engine instances serve the same document, and users are assigned a QIX Engine instance based on a simple round-robin load balancer.
 
@@ -24,7 +24,7 @@ This repository contains
 
 - Background information and rationale for the Qliktive Assisted Prescription application.
 - Documentation on how to develop, test, and deploy Qliktive Assisted Prescription.
-- The backend service stack built on Frontira, with additional services to host the web application, handle
+- The backend service stack built on Qlik Core, with additional services to host the web application, handle
   authentication, and to provide logging and monitoring capabilities.
 - Various scripts and tools to deploy the stack, and to enable developing and testing locally on a developer
   machine.
@@ -60,7 +60,7 @@ deployment of the latest master build. A GitHub account is needed to sign in to 
 The application consists of multiple services, based on Docker images developed in other repos. There are several
 Docker Compose files defining different parts of the stack:
 
-- [docker-compose.yml](./docker-compose.yml) contains all mandatory services. This includes the Frontira services,
+- [docker-compose.yml](./docker-compose.yml) contains all mandatory services. This includes the Qlik Core services,
   the web server and gateway, and some other essential services.
 - [docker-compose.override.yml](./docker-compose.override.yml) provides some overrides to
   [docker-compose.yml](./docker-compose.yml) for running the stack on the local Docker engine.
