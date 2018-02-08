@@ -48,7 +48,7 @@ jobs:
             echo $GITHUB_CLIENT_SECRET > ~/qliktive-custom-analytics/secrets/GITHUB_CLIENT_SECRET
             echo $JWT_SECRET > ~/qliktive-custom-analytics/secrets/JWT_SECRET
             echo $SLACK_WEBHOOK > ~/qliktive-custom-analytics/secrets/SLACK_WEBHOOK
-            ./local.sh deploy
+            ACCEPT_EULA=yes ./local.sh deploy
       - run:
           name: Wait for deployment to come up
           command: |
@@ -100,7 +100,7 @@ jobs:
               export DOCKER_MACHINE_NAME=${DOCKER_AWS_MANAGER_NAME}
               scp -o StrictHostKeyChecking=no ubuntu@${DOCKER_AWS_MANAGER_IP}:/home/ubuntu/DEPLOY_SSL_* ~/qliktive-custom-analytics/secrets/
               cd ..
-              AUTH_STRATEGY="github" docker-compose -f docker-compose.yml -f docker-compose.pregen-ssl.yml config > docker-compose.merged.yml
+              ACCEPT_EULA=yes AUTH_STRATEGY="github" docker-compose -f docker-compose.yml -f docker-compose.pregen-ssl.yml config > docker-compose.merged.yml
               \cp docker-compose.merged.yml docker-compose.yml
 
               # Check if configs was changed. If so we need to remove stack before deploying to force an update.

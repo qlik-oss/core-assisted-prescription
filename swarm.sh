@@ -92,12 +92,13 @@ function deploy_stack() {
     exit 0
   fi
 
+  ACCEPT_EULA=$ACCEPT_EULA AUTH_STRATEGY=$AUTH_STRATEGY JWT_SECRET=$(cat ./secrets/JWT_SECRET) docker-compose -f docker-compose.yml -f docker-compose.logging.yml -f docker-compose.monitoring.yml config > docker-compose.prod.yml
+  docker-compose -f docker-compose.prod.yml pull
+
   for manager in $managers
   do
     ip=$(docker-machine ip $manager)
     eval $(docker-machine env $manager)
-    AUTH_STRATEGY=$AUTH_STRATEGY JWT_SECRET=$(cat ./secrets/JWT_SECRET) docker-compose -f docker-compose.yml -f docker-compose.logging.yml -f docker-compose.monitoring.yml config > docker-compose.prod.yml
-    docker-compose -f docker-compose.prod.yml pull
     docker stack deploy -c ./docker-compose.prod.yml --with-registry-auth custom-analytics
     echo
     echo "$(docker service ls)"

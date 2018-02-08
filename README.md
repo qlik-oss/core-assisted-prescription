@@ -34,13 +34,15 @@ This repository contains
 To run the stack, Docker stable version 17.06 or later is required. Development is supported on both Docker for
 Windows and Docker for Mac.
 
+Note that before you deploy, you must accept the [Qlik Core EULA](https://ca.qliktive.com/docs/master/beta/) by setting the `ACCEPT_EULA` environment variable.
+
 ### Deploying to Local Docker Engine
 
 The stack can be deployed to the local Docker engine (without Docker Swarm) using the [local.sh](./local.sh) script.
 It uses `docker-compose`. Run:
 
 ```sh
-$ ./local.sh deploy
+$ ACCEPT_EULA=yes ./local.sh deploy
 ```
 
 The application can now be accessed at https://localhost. Login in with: "admin" and "password".
