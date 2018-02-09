@@ -63,7 +63,7 @@ function refresh_nodes() {
 }
 
 # Deploy the data we need to all worker nodes for easy directory mapping
-# into the QIX Engine containers.
+# into the Qlik Associative Engine containers.
 function deploy_data() {
   if [ -z "$engine_workers" ]; then
     echo "No qliktive worker nodes to deploy data against."

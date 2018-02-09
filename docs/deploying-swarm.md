@@ -122,14 +122,14 @@ More information on Docker Secrets management is available [here](./secrets.md).
 
 Assuming that a swarm has been [created](#deploy) with a fixed set of manager and worker nodes, there might be a need
 for scaling the swarm either up or down in size. For this use-case the scaling is focused on the availability of nodes
-running with QIX Engine containers, hence we should scale worker nodes. New worker nodes that are joining the swarm will
-spin up a QIX Engine automatically, due to global mode set on QIX Engine service in
+running with Qlik Associative Engine containers, hence we should scale worker nodes. New worker nodes that are joining the swarm will
+spin up a Qlik Associative Engine automatically, due to global mode set on Qlik Associative Engine service in
 [docker-compose.yml](../docker-compose.yml).
 
 There is no logic handling of active sessions on nodes being scaled down, so in that case a refresh is needed to
 retrieve a new session from one of the remaining nodes.
 
-Scaling is done by defining the total number of workers needed (i.e. how many QIX Engines you need). If you pass in a
+Scaling is done by defining the total number of workers needed (i.e. how many Qlik Associative Engines you need). If you pass in a
 value lower than current number of workers, it will remove top bottom workers until the new value has been reached.
 
 Set total workers to two:

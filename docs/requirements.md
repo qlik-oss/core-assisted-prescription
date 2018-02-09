@@ -21,7 +21,7 @@ The system shall:
 - Support peak traffic of around 10.000 simultaneous connections and an average of 500 on the given
   data model.
 - Support updates without interruption of the service.
-- Be possible to scale up or down with respect to the number of nodes hosting QIX Engine instances.
+- Be possible to scale up or down with respect to the number of nodes hosting Qlik Associative Engine instances.
 - Support manually scaling by invoking a single command or script.
 - Be designed with the assumption that later, fully automated scaling strategy can be implemented.
 
@@ -35,7 +35,7 @@ Monitoring and logging of the system shall:
 - Provide metrics on page-hits/sessions over time.
 - Provide typical KPIs of the system (page-hits, sessions, up-time, down-time, reliability, etc.)
 - Provide metrics on load so that decisions can be taken whether to scale the system up or down with respect to the
-  number of nodes hosting QIX Engine instances.
+  number of nodes hosting Qlik Associative Engine instances.
 - Provide information on QiX Engine containers, how they are behaving including detailed log entries and error messages from
   these containers.
 

@@ -51,8 +51,8 @@ services:
         constraints: [node.role == manager]
 
   mira:
-    # Mira is our QIX Engine Discovery Service. It provides internal
-    # APIs to list (or query) all available QIX Engine containers
+    # Mira is our Qlik Associative Engine Discovery Service. It provides internal
+    # APIs to list (or query) all available Qlik Associative Engine containers
     # in the cluster.
     # See https://github.com/qlik-ea/mira
     image: qlikea/mira:0.0.10
@@ -65,7 +65,7 @@ services:
         constraints: [node.role == manager]
 
   qix-engine:
-    # QIX Engine is configured to run on all worker nodes in the
+    # Qlik Associative Engine is configured to run on all worker nodes in the
     # cluster, and is the service we primarily want to scale up in
     # this use-case.
     image: qlikea/engine:12.134.0
@@ -83,7 +83,7 @@ services:
 
   qix-session:
     # This service handles preparation of sessions against
-    # QIX Engines. Uses Mira to find appropriate containers
+    # Qlik Associative Engines. Uses Mira to find appropriate containers
     # to place the session on.
     # See https://github.com/qlik-ea/qliktive-qix-session-service
     image: qlikea/qliktive-qix-session-service:0.0.1-102

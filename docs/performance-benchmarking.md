@@ -5,7 +5,7 @@ accessing the site.
 
 A performance benchmarking tool is provided to simulate such a peak in user connections and to provide a measure on the
 capability of a deployment of the use case. The tool does not include loading of browser content, instead it focuses on
-making QIX Engine connections through the gateway.
+making Qlik Associative Engine connections through the gateway.
 
 ## Setup
 

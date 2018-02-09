@@ -14,11 +14,11 @@ worker nodes.
 
 #### Manager Node
 
-The manager node runs the web gateway, services related to authentication, services related to QIX Engine session management, and Grafana, Prometheus, and Alertmanager for metrics monitoring.
+The manager node runs the web gateway, services related to authentication, services related to Qlik Associative Engine session management, and Grafana, Prometheus, and Alertmanager for metrics monitoring.
 
 #### Engine Workers
 
-These nodes are dedicated to run one single QIX Engine instance each. Only a minimal required set of additional services
+These nodes are dedicated to run one single Qlik Associative Engine instance each. Only a minimal required set of additional services
 run on these nodes. Also, these are the nodes that can be scaled up or down.
 
 The default configuration on AWS is two run two engine worker nodes.
@@ -26,12 +26,12 @@ The default configuration on AWS is two run two engine worker nodes.
 #### ELK Worker
 
 This worker node runs the ELK stack. This offloads the manager node and engine worker nodes from services possibly
-impacting QIX Engine performance negatively.
+impacting Qlik Associative Engine performance negatively.
 
 ## Design Aspects
 
 Different design aspects of the system are covered in separate sections:
 
 - [Authentication](./authentication.md)
-- [QIX Engine Sessions](./qix-engine-sessions.md)
+- [Qlik Associative Engine Sessions](./qix-engine-sessions.md)
 - [Monitoring](./monitoring.md)

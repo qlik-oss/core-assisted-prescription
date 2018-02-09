@@ -13,7 +13,7 @@ requirements of the use case.
 
 ## E2E tests
 
-There is a set of basic end-to-end tests for verifying QIX Engine using
+There is a set of basic end-to-end tests for verifying Qlik Associative Engine using
 [enigma.js](https://github.com/qlik-oss/enigma.js/).
 
 ### Without Docker Swarm

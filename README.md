@@ -12,8 +12,8 @@ sudden epidemic events can affect the traffic.
 ## How Qlik Core Is Used
 
 The application has a custom visualization web UI. The application uses Qlik Core on the backend to
-serve multiple users with medical analysis capabilities using one single QIX Engine document. To balance the load,
-multiple QIX Engine instances serve the same document, and users are assigned a QIX Engine instance based on a simple round-robin load balancer.
+serve multiple users with medical analysis capabilities using one single Qlik Associative Engine document. To balance the load,
+multiple Qlik Associative Engine instances serve the same document, and users are assigned a Qlik Associative Engine instance based on a simple round-robin load balancer.
 
 The application is hosted on AWS and uses Docker Swarm for container orchestration, but it could also be deployed to
 other cloud providers if needed.
