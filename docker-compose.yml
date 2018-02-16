@@ -56,7 +56,7 @@ services:
     # APIs to list (or query) all available Qlik Associative Engine containers
     # in the cluster.
     # See https://github.com/qlik-ea/mira
-    image: qlikea/mira:0.0.10
+    image: qlikea/mira:0.1.0
     environment:
      - MIRA_MODE=swarm
     volumes:
@@ -87,7 +87,7 @@ services:
     # Qlik Associative Engines. Uses Mira to find appropriate containers
     # to place the session on.
     # See https://github.com/qlik-ea/qliktive-qix-session-service
-    image: qlikea/qliktive-qix-session-service:0.0.1-102
+    image: qlikea/qliktive-qix-session-service:0.0.1-116
     deploy:
       placement:
         constraints: [node.role == manager]
