@@ -86,7 +86,7 @@ jobs:
           command: ./run-e2e-tests-cci.sh
           working_directory: ~/qliktive-custom-analytics/scripts
       - deploy:
-          name: Deploy public demo to AWS
+          name: Deploy public demo to AWS if on master branch
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               curl -L https://github.com/docker/machine/releases/download/v0.12.2/docker-machine-`uname -s`-`uname -m` > /usr/local/bin/docker-machine
