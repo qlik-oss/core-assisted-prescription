@@ -12,7 +12,7 @@ function deploy() {
   docker cp ./data/csv/. dummy-data:/data
   docker cp ./data/doc/. dummy-data:/doc
   docker cp ./secrets/. dummy-data:/secrets
-  JWT_SECRET=$(cat ./secrets/JWT_SECRET) docker-compose up -d
+  JWT_SECRET=$(cat ./secrets/JWT_SECRET) ACCEPT_EULA=YES docker-compose up -d
   echo "CUSTOM ANALYTICS deployed locally at https://localhost/"
 }
 
