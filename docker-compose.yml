@@ -30,7 +30,7 @@ services:
 
   auth:
     # A service handling authentication and JWT generation.
-    image: qlikea/qliktive-authentication-service:0.0.1-115
+    image: qlikea/qliktive-authentication-service:0.0.1-117
     secrets:
       - github_client_id
       - github_client_secret
