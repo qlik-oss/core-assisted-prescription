@@ -1,6 +1,6 @@
 # Qliktive Assisted Prescription
 
-[![CircleCI](https://circleci.com/gh/qlik-ea/qliktive-custom-analytics.svg?style=svg&circle-token=087152b4808d5373a8dcbbe82c2ff352e463a3a2)](https://circleci.com/gh/qlik-ea/qliktive-custom-analytics)
+[![CircleCI](https://circleci.com/gh/qlik-ea/core-assisted-prescription.svg?style=svg&circle-token=087152b4808d5373a8dcbbe82c2ff352e463a3a2)](https://circleci.com/gh/qlik-ea/core-assisted-prescription)
 
 This repository contains the implementation of a medical data web application called _Qliktive Assisted Prescription_.
 _Qliktive_ is a fictive company used to showcase different solutions built using Qlik Core.

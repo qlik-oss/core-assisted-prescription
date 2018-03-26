@@ -49,7 +49,7 @@ by running `docker-machine ls`.
 
 ## CI/CD
 
-All pushed commits trigger the [CircleCI job](https://circleci.com/gh/qlik-ea/qliktive-custom-analytics) and tests are
+All pushed commits trigger the [CircleCI job](https://circleci.com/gh/qlik-ea/core-assisted-prescription) and tests are
 run.
 
 Commits pushed to the `master` branch are also deployed to the AWS live environment as the last step, under the

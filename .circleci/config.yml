@@ -114,7 +114,7 @@ jobs:
               SKIP_SWARM_ENV="true" DOCKER_PREFIX="qliktive-prod" DOCKER_DRIVER="amazonec2" ./swarm.sh deploy
               # wait a little bit to let the manager node breath:
               sleep 5
-              # create the documentation site volume (deployed to the manager node from the qlik-ea/info CI):
+              # create the documentation site volume (deployed to the manager node from the qlik-ea/core-website CI):
               docker volume create -d local-persist -o mountpoint=/home/ubuntu/docs --name=docs-folder 2>&1
               docker service update --mount-add type=volume,source=docs-folder,target=/usr/local/openresty/nginx/html/docs custom-analytics_openresty
             fi

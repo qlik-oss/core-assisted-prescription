@@ -38,7 +38,7 @@ QIX Session Service, using Mira to find which Qlik Associative Engine instances 
 
 - To obtain the QIX session id, Mira is queried for available Qlik Associative Engine instances.
 - Among the available engine instances the Session Service selects one using a least-load strategy.
-  The strategy is in detail described [here](https://github.com/qlik-ea/info/blob/master/docs/tutorials/scalability/newspaper.md).
+  The strategy is in detail described [here](https://github.com/qlik-ea/core-website/blob/master/docs/tutorials/scalability/newspaper.md).
 - The document is opened and the session is prepared. This determines the QIX session id.
 - The WebSocket is closed but by utilizing the session TTL feature in Qlik Associative Engine, the engine keeps the session alive
   in order to enable a later reconnect to it (from the Gateway).
