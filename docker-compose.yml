@@ -65,12 +65,20 @@ services:
       placement:
         constraints: [node.role == manager]
 
+  licenses:
+    # The Licenses service is responsible for unlocking
+    # the Qlik Associative Engine.
+    image: qlikea/license-service:0.3.1-470
+    deploy:
+      placement:
+        constraints: [node.role == manager]    
+
   qix-engine:
     # Qlik Associative Engine is configured to run on all worker nodes in the
     # cluster, and is the service we primarily want to scale up in
     # this use-case.
     image: qlikea/engine:12.156.0
-    command: -S AcceptEULA=${ACCEPT_EULA} -S ValidateJsonWebTokens=2 -S JsonWebTokenSecret=${JWT_SECRET}
+    command: -S AcceptEULA=${ACCEPT_EULA} -S LicenseServiceUrl=licenses:9200 -S ValidateJsonWebTokens=2 -S JsonWebTokenSecret=${JWT_SECRET}
     labels:
       qix-engine: ""
       qix-engine-port: "9076"
