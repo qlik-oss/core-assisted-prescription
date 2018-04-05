@@ -24,7 +24,7 @@ describe('QIX Session in a swarm', () => {
 
   it('get engine component version', async () => {
     const response = await qix.engineVersion();
-    expect(response.qComponentVersion).to.match(/^(\d+\.)?(\d+\.)?(\*|\d+)$/);
+    expect(response.qComponentVersion).to.match(/^(\d+\.)?(\d+\.)?(\*|\d+)/);
   });
 
   it('verify that a session app is opened', async () => {
