@@ -91,10 +91,10 @@ jobs:
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               curl -L https://github.com/docker/machine/releases/download/v0.12.2/docker-machine-`uname -s`-`uname -m` > /usr/local/bin/docker-machine
               chmod +x /usr/local/bin/docker-machine
-              scp -o StrictHostKeyChecking=no ubuntu@${DOCKER_AWS_MANAGER_IP}:/home/ubuntu/qliktive-*.zip ~/
+              scp -o StrictHostKeyChecking=no ubuntu@${DOCKER_AWS_MANAGER_IP}:/home/ubuntu/ap-prod-*.zip ~/
               apt-get update
               apt-get install unzip
-              for i in ~/qliktive-*.zip; do ./import-machine.sh "$i"; done;
+              for i in ~/ap-prod-*.zip; do ./import-machine.sh "$i"; done;
               export DOCKER_HOST="tcp://${DOCKER_AWS_MANAGER_IP}:2376"
               export DOCKER_CERT_PATH="/root/.docker/machine/machines/${DOCKER_AWS_MANAGER_NAME}"
               export DOCKER_MACHINE_NAME=${DOCKER_AWS_MANAGER_NAME}
@@ -108,10 +108,10 @@ jobs:
 
               if [[ -n $CONFIGS_CHANGED ]]; then
                 echo "Configuration files was changed in the last commit. Removing and redeploying stack"
-                SKIP_SWARM_ENV="true" DOCKER_PREFIX="qliktive-prod" DOCKER_DRIVER="amazonec2" ./swarm.sh clean
+                SKIP_SWARM_ENV="true" DOCKER_PREFIX="ap-prod" DOCKER_DRIVER="amazonec2" ./swarm.sh clean
               fi
 
-              SKIP_SWARM_ENV="true" DOCKER_PREFIX="qliktive-prod" DOCKER_DRIVER="amazonec2" ./swarm.sh deploy
+              SKIP_SWARM_ENV="true" DOCKER_PREFIX="ap-prod" DOCKER_DRIVER="amazonec2" ./swarm.sh deploy
               # wait a little bit to let the manager node breath:
               sleep 5
               # create the documentation site volume (deployed to the manager node from the qlik-ea/core-website CI):
