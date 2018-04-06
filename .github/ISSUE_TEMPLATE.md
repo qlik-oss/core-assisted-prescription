@@ -18,7 +18,7 @@
 
 ### Versions
 
-* qliktive-custom-analytics: (`git rev-parse HEAD`)
+* core-assisted-prescription: (`git rev-parse HEAD`)
 * Browser:
 * Operating system:
 * Docker version: (`docker --version`)

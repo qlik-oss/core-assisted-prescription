@@ -8,7 +8,7 @@ Developing this use case consists mainly of
 
 ## Prerequisites
 
-* Access to the `qlikea` Docker Hub organization.
+* Access to the `qlikcore` Docker Hub organization.
 * Docker installed (latest release).
 * Login to docker with your Docker hub account via the command line: 
 ```sh
@@ -49,7 +49,7 @@ by running `docker-machine ls`.
 
 ## CI/CD
 
-All pushed commits trigger the [CircleCI job](https://circleci.com/gh/qlik-ea/core-assisted-prescription) and tests are
+All pushed commits trigger the [CircleCI job](https://circleci.com/gh/qlik-oss/core-assisted-prescription) and tests are
 run.
 
 Commits pushed to the `master` branch are also deployed to the AWS live environment as the last step, under the
