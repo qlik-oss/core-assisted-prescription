@@ -56,7 +56,7 @@ services:
     # APIs to list (or query) all available Qlik Associative Engine containers
     # in the cluster.
     # See https://github.com/qlik-oss/mira
-    image: qlikcore/mira:0.1.0
+    image: qlikcore/mira:0.2.0
     environment:
      - MIRA_MODE=swarm
     volumes:
