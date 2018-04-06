@@ -1,6 +1,6 @@
 # Qliktive Assisted Prescription
 
-[![CircleCI](https://circleci.com/gh/qlik-ea/core-assisted-prescription.svg?style=svg&circle-token=087152b4808d5373a8dcbbe82c2ff352e463a3a2)](https://circleci.com/gh/qlik-ea/core-assisted-prescription)
+[![CircleCI](https://circleci.com/gh/qlik-oss/core-assisted-prescription.svg?style=svg)](https://circleci.com/gh/qlik-oss/core-assisted-prescription)
 
 This repository contains the implementation of a medical data web application called _Qliktive Assisted Prescription_.
 _Qliktive_ is a fictive company used to showcase different solutions built using Qlik Core.
@@ -34,7 +34,7 @@ This repository contains
 To run the stack, Docker stable version 17.06 or later is required. Development is supported on both Docker for
 Windows and Docker for Mac.
 
-Note that before you deploy, you must accept the [Qlik Core EULA](https://ca.qliktive.com/docs/master/beta/) by setting the `ACCEPT_EULA` environment variable.
+Note that before you deploy, you must accept the [Qlik Core EULA](https://qlikcore.com/beta/) by setting the `ACCEPT_EULA` environment variable.
 
 ### Deploying to Local Docker Engine
 
@@ -54,7 +54,7 @@ deploy to Docker Swarm can be found [here](./docs/deploying-swarm.md).
 
 ### Live Environment
 
-Try out the live demo of the application at [ca.qliktive.com](https://ca.qliktive.com/). It is hosted on AWS and is a
+Try out the live demo of the application at [ap.qlikcore.com](https://ap.qlikcore.com/). It is hosted on AWS and is a
 deployment of the latest master build. A GitHub account is needed to sign in to live demo application.
 
 ### Services

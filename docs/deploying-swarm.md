@@ -107,7 +107,7 @@ are:
 - `AUTH_STRATEGY=local` - With this strategy, the `auth` service will authenticate logins against
     accounts defined in the Docker secret provided in the [ACCOUNTS](../secrets/ACCOUNTS) file.
 - `AUTH_STRATEGY=github` - With this strategy, the `auth` service will authenticate logins against GitHub, where users
-    are required to be members of the `qlik-ea` or `qlik-trial` organizations. For this, two additional secrets must be
+    are required to be members of the `qlik-oss` or `qlik-trial` organizations. For this, two additional secrets must be
     configured correctly, `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` (see below).
 
 The `local` strategy is the default, and used if the `AUTH_STRATEGY` environment variable is not set.

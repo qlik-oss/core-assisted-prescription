@@ -92,7 +92,7 @@ The end user shall:
 ## Data
 
 This use case is characterized by using a
-[single QVF](https://github.com/qlik-ea/core-assisted-prescription/blob/master/data/doc/drugcases.qvf) for all users
+[single QVF](https://github.com/qlik-oss/core-assisted-prescription/blob/master/data/doc/drugcases.qvf) for all users
 of the application.
 
 ### Data Model

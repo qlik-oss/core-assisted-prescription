@@ -4,8 +4,8 @@ services:
   openresty:
     # This is our externally-facing gateway, exposing the configured
     # things for all end-users. It has the Analytics UI bundled into it.
-    # See https://github.com/qlik-ea/core-assisted-prescription-openresty
-    image: qlikea/qliktive-custom-analytics-openresty:master-409
+    # See https://github.com/qlik-oss/core-assisted-prescription-openresty
+    image: qlikcore/assisted-prescription-gateway:master-419
     restart: always
     ports:
       - "443:443"
@@ -30,7 +30,7 @@ services:
 
   auth:
     # A service handling authentication and JWT generation.
-    image: qlikea/qliktive-authentication-service:0.0.1-117
+    image: qlikcore/assisted-prescription-auth:0.0.1-128
     secrets:
       - github_client_id
       - github_client_secret
@@ -41,7 +41,7 @@ services:
       SESSION_COOKIE_NAME: custom-analytics
       GITHUB_CLIENT_ID_FILE: /run/secrets/github_client_id
       GITHUB_CLIENT_SECRET_FILE: /run/secrets/github_client_secret
-      GITHUB_ORG_IS_ADMIN: qlik-ea;qlik-trial
+      GITHUB_ORG_IS_ADMIN: qlik-oss
       JWT_SECRET_FILE: /run/secrets/jwt_secret
       COOKIE_SIGNING_FILE: /run/secrets/cookie_signing
       FAILURE_REDIRECT_URL: /
@@ -55,8 +55,8 @@ services:
     # Mira is our Qlik Associative Engine Discovery Service. It provides internal
     # APIs to list (or query) all available Qlik Associative Engine containers
     # in the cluster.
-    # See https://github.com/qlik-ea/mira
-    image: qlikea/mira:0.1.0
+    # See https://github.com/qlik-oss/mira
+    image: qlikcore/mira:0.1.0
     environment:
      - MIRA_MODE=swarm
     volumes:
@@ -68,16 +68,16 @@ services:
   licenses:
     # The Licenses service is responsible for unlocking
     # the Qlik Associative Engine.
-    image: qlikea/license-service:0.3.0
+    image: qlikcore/licenses:0.0.1
     deploy:
       placement:
-        constraints: [node.role == manager]    
+        constraints: [node.role == manager]
 
   qix-engine:
     # Qlik Associative Engine is configured to run on all worker nodes in the
     # cluster, and is the service we primarily want to scale up in
     # this use-case.
-    image: qlikea/engine:12.157.0
+    image: qlikcore/engine:12.160.0
     command: -S AcceptEULA=${ACCEPT_EULA} -S LicenseServiceUrl=http://licenses:9200 -S ValidateJsonWebTokens=2 -S JsonWebTokenSecret=${JWT_SECRET}
     labels:
       qix-engine: ""
@@ -94,8 +94,8 @@ services:
     # This service handles preparation of sessions against
     # Qlik Associative Engines. Uses Mira to find appropriate containers
     # to place the session on.
-    # See https://github.com/qlik-ea/qliktive-qix-session-service
-    image: qlikea/qliktive-qix-session-service:0.0.1-132
+    # See https://github.com/qlik-oss/core-qix-session-placement-service
+    image: qlikcore/qix-session-placement-service:0.0.1-170
     deploy:
       placement:
         constraints: [node.role == manager]
