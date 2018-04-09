@@ -112,7 +112,5 @@ jobs:
               fi
 
               SKIP_SWARM_ENV="true" DOCKER_PREFIX="ap-prod" DOCKER_DRIVER="amazonec2" ./swarm.sh deploy
-              # wait a little bit to let the manager node breath:
-              sleep 5
             fi
           working_directory: ~/qliktive-custom-analytics/scripts
