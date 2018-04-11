@@ -38,7 +38,7 @@
   "hideControls": false,
   "id": null,
   "links": [],
-  "refresh": "5s",
+  "refresh": false,
   "rows": [
     {
       "collapse": false,
@@ -46,7 +46,7 @@
       "panels": [
         {
           "aliasColors": {},
-          "bars": true,
+          "bars": false,
           "dashLength": 10,
           "dashes": false,
           "datasource": "${DS_PROMETHEUS}",
@@ -62,7 +62,7 @@
             "values": false
           },
           "lines": true,
-          "linewidth": 0,
+          "linewidth": 1,
           "links": [],
           "nullPointMode": "null",
           "percentage": false,
@@ -81,7 +81,15 @@
               "intervalFactor": 2,
               "legendFormat": "",
               "refId": "A",
-              "step": 4
+              "step": 120
+            },
+            {
+              "expr": "sum(qix_active_sessions)",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "Total",
+              "refId": "B",
+              "step": 120
             }
           ],
           "thresholds": [],
@@ -157,7 +165,7 @@
               "intervalFactor": 2,
               "legendFormat": "",
               "refId": "A",
-              "step": 4
+              "step": 120
             }
           ],
           "thresholds": [],
@@ -245,7 +253,7 @@
               "intervalFactor": 2,
               "legendFormat": "",
               "refId": "A",
-              "step": 4
+              "step": 120
             }
           ],
           "thresholds": [],
@@ -320,7 +328,7 @@
               "format": "time_series",
               "intervalFactor": 2,
               "refId": "A",
-              "step": 4
+              "step": 120
             }
           ],
           "thresholds": [],
@@ -408,7 +416,7 @@
               "intervalFactor": 2,
               "legendFormat": "",
               "refId": "A",
-              "step": 4
+              "step": 120
             }
           ],
           "thresholds": [],
@@ -430,7 +438,7 @@
           },
           "yaxes": [
             {
-              "format": "short",
+              "format": "decbytes",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -483,7 +491,7 @@
               "format": "time_series",
               "intervalFactor": 2,
               "refId": "A",
-              "step": 4
+              "step": 120
             }
           ],
           "thresholds": [],
@@ -562,7 +570,7 @@
           "seriesOverrides": [],
           "spaceLength": 10,
           "span": 6,
-          "stack": true,
+          "stack": false,
           "steppedLine": false,
           "targets": [
             {
@@ -570,7 +578,7 @@
               "format": "time_series",
               "intervalFactor": 2,
               "refId": "A",
-              "step": 4
+              "step": 120
             }
           ],
           "thresholds": [],
@@ -647,7 +655,7 @@
               "intervalFactor": 2,
               "legendFormat": "",
               "refId": "A",
-              "step": 4
+              "step": 120
             }
           ],
           "thresholds": [],
@@ -734,7 +742,7 @@
               "format": "time_series",
               "intervalFactor": 2,
               "refId": "A",
-              "step": 4
+              "step": 120
             }
           ],
           "thresholds": [],
@@ -809,7 +817,7 @@
               "format": "time_series",
               "intervalFactor": 2,
               "refId": "A",
-              "step": 4
+              "step": 120
             }
           ],
           "thresholds": [],
@@ -897,7 +905,7 @@
               "format": "time_series",
               "intervalFactor": 2,
               "refId": "A",
-              "step": 4
+              "step": 120
             }
           ],
           "thresholds": [],
@@ -972,7 +980,7 @@
               "format": "time_series",
               "intervalFactor": 2,
               "refId": "A",
-              "step": 4
+              "step": 120
             }
           ],
           "thresholds": [],
@@ -1059,7 +1067,7 @@
               "format": "time_series",
               "intervalFactor": 2,
               "refId": "A",
-              "step": 4
+              "step": 120
             }
           ],
           "thresholds": [],
@@ -1135,7 +1143,7 @@
               "format": "time_series",
               "intervalFactor": 2,
               "refId": "A",
-              "step": 4
+              "step": 120
             }
           ],
           "thresholds": [],
@@ -1223,7 +1231,7 @@
               "intervalFactor": 2,
               "legendFormat": "",
               "refId": "A",
-              "step": 4
+              "step": 120
             }
           ],
           "thresholds": [],
@@ -1299,7 +1307,7 @@
               "intervalFactor": 2,
               "legendFormat": "",
               "refId": "A",
-              "step": 4
+              "step": 120
             }
           ],
           "thresholds": [],
@@ -1354,7 +1362,7 @@
     "list": []
   },
   "time": {
-    "from": "now-1h",
+    "from": "now/d",
     "to": "now"
   },
   "timepicker": {
@@ -1384,5 +1392,5 @@
   },
   "timezone": "browser",
   "title": "Qix Engine Dashboard",
-  "version": 1
+  "version": 4
 }
