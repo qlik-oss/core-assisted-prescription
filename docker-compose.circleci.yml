@@ -1,0 +1,8 @@
+version: "3.3"
+
+# This file is for parts that are specific for our own deployment on ap.qlikcore.com
+
+services:
+  elasticsearch:
+    volumes:
+      - /esdatadir:/usr/share/elasticsearch/data:rw
