@@ -77,7 +77,7 @@ services:
     # Qlik Associative Engine is configured to run on all worker nodes in the
     # cluster, and is the service we primarily want to scale up in
     # this use-case.
-    image: qlikcore/engine:12.166.0
+    image: qlikcore/engine:12.171.0
     command: -S AcceptEULA=${ACCEPT_EULA} -S LicenseServiceUrl=http://licenses:9200 -S ValidateJsonWebTokens=2 -S JsonWebTokenSecret=${JWT_SECRET}
     labels:
       qix-engine: ""
