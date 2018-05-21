@@ -2,6 +2,7 @@ node_modules/
 *.log
 .vscode/
 .idea/
+.DS_Store
 
 # Ignore .orig merge files (BC, KDiff3 etc.)
 *.orig
