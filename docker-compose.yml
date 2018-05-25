@@ -5,7 +5,7 @@ services:
     # This is our externally-facing gateway, exposing the configured
     # things for all end-users. It has the Analytics UI bundled into it.
     # See https://github.com/qlik-oss/core-assisted-prescription-openresty
-    image: qlikcore/assisted-prescription-gateway:master-431
+    image: qlikcore/assisted-prescription-gateway:master-433
     restart: always
     ports:
       - "443:443"
