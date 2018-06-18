@@ -5,7 +5,7 @@ services:
     # This is our externally-facing gateway, exposing the configured
     # things for all end-users. It has the Analytics UI bundled into it.
     # See https://github.com/qlik-oss/core-assisted-prescription-openresty
-    image: qlikcore/assisted-prescription-gateway:master-426
+    image: qlikcore/assisted-prescription-gateway:master-433
     restart: always
     ports:
       - "443:443"
@@ -56,7 +56,7 @@ services:
     # APIs to list (or query) all available Qlik Associative Engine containers
     # in the cluster.
     # See https://github.com/qlik-oss/mira
-    image: qlikcore/mira:0.2.0
+    image: qlikcore/mira:0.3.0
     environment:
      - MIRA_MODE=swarm
     volumes:
@@ -80,7 +80,11 @@ services:
     # Qlik Associative Engine is configured to run on all worker nodes in the
     # cluster, and is the service we primarily want to scale up in
     # this use-case.
+<<<<<<< HEAD
     image: qlikcore/engine:12.171.0
+=======
+    image: qlikcore/engine:12.181.0
+>>>>>>> master
     command: -S AcceptEULA=${ACCEPT_EULA} -S LicenseServiceUrl=http://licenses:9200 -S ValidateJsonWebTokens=2 -S JsonWebTokenSecret=${JWT_SECRET}
     labels:
       qix-engine: ""
