@@ -68,7 +68,7 @@ services:
   licenses:
     # The Licenses service is responsible for unlocking
     # the Qlik Associative Engine.
-    image: qlikcore/licenses:experimental
+    image: qlikcore/licenses:1.0.1
     environment:
       - LICENSES_SERIAL_NBR
       - LICENSES_CONTROL_NBR
@@ -81,7 +81,7 @@ services:
     # cluster, and is the service we primarily want to scale up in
     # this use-case.
     image: qlikcore/engine:12.181.0
-    command: -S AcceptEULA=${ACCEPT_EULA} -S LicenseServiceUrl=http://licenses:9200 -S ValidateJsonWebTokens=2 -S JsonWebTokenSecret=${JWT_SECRET}
+    command: -S AcceptEULA=${ACCEPT_EULA} -S LicenseServiceUrl=http://licenses:9200 -S ValidateJsonWebTokens=2 -S DisableStartupLicenseCheck=1 -S JsonWebTokenSecret=${JWT_SECRET}
     labels:
       qix-engine: ""
       qix-engine-port: "9076"
