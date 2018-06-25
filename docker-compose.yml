@@ -56,7 +56,7 @@ services:
     # APIs to list (or query) all available Qlik Associative Engine containers
     # in the cluster.
     # See https://github.com/qlik-oss/mira
-    image: qlikcore/mira:0.3.0
+    image: qlikcore/mira:0.3.1
     environment:
      - MIRA_MODE=swarm
     volumes:
@@ -80,8 +80,13 @@ services:
     # Qlik Associative Engine is configured to run on all worker nodes in the
     # cluster, and is the service we primarily want to scale up in
     # this use-case.
+<<<<<<< HEAD
     image: qlikcore/engine:12.193.0
     command: -S AcceptEULA=${ACCEPT_EULA} -S LicenseServiceUrl=http://licenses:9200 -S ValidateJsonWebTokens=2 -S JsonWebTokenSecret=${JWT_SECRET}
+=======
+    image: qlikcore/engine:12.190.0
+    command: -S AcceptEULA=${ACCEPT_EULA} -S LicenseServiceUrl=http://licenses:9200 -S ValidateJsonWebTokens=2 -S DisableStartupLicenseCheck=1 -S JsonWebTokenSecret=${JWT_SECRET}
+>>>>>>> master
     labels:
       qix-engine: ""
       qix-engine-port: "9076"
