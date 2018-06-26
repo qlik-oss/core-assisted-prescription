@@ -1,4 +1,4 @@
-# Qliktive Assisted Prescription
+# Assisted Prescription
 
 [![CircleCI](https://circleci.com/gh/qlik-oss/core-assisted-prescription.svg?style=svg)](https://circleci.com/gh/qlik-oss/core-assisted-prescription)
 
