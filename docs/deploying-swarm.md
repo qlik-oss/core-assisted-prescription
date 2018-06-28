@@ -7,7 +7,7 @@ developer. This section contains examples and steps for deploying to such enviro
 
 * `docker-machine` installed on the host, i.e. the computer executing the [swarm.sh](../swarm.sh) script.
 * bash running in administrator mode (Git Bash recommended on Windows).
-* [swarm.env.example](/swarm.env.example) copied to `swarm.env`, and sonfigured correctly.
+* [swarm.env.example](/swarm.env.example) copied to `swarm.env`, and configured correctly.
 
 ## Creating the Docker Swarm Cluster
 
