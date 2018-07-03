@@ -13,7 +13,7 @@
     "validate:compose": "docker-compose -f ../docker-compose.yml -f ../docker-compose.override.yml config"
   },
   "devDependencies": {
-    "after-work.js": "2.0.0",
+    "after-work.js": "2.2.0",
     "enigma.js": "2.2.1",
     "eslint": "5.0.1",
     "eslint-config-airbnb-base": "13.0.0",
