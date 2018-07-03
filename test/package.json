@@ -17,6 +17,7 @@
     "enigma.js": "2.2.1",
     "eslint": "5.0.1",
     "eslint-config-airbnb-base": "13.0.0",
+    "eslint-plugin-import": "2.13.0",
     "halyard.js": "1.3.0",
     "request": "2.87.0",
     "ws": "5.2.1"
