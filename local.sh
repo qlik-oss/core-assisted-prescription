@@ -8,6 +8,10 @@ cd "$(dirname "$0")"
 command=$1
 
 function deploy() {
+  if [[ -z "$LICENSES_SERIAL_NBR" || -z "$LICENSES_CONTROL_NBR" ]]; then
+    echo "Error: License environment variables LICENSES_SERIAL_NBR and/or LICENSES_CONTROL_NBR not properly set"
+    exit 1
+  fi
   docker-compose up -d dummy-data
   docker cp ./data/csv/. dummy-data:/data
   docker cp ./data/doc/. dummy-data:/doc

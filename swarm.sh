@@ -92,7 +92,12 @@ function deploy_stack() {
     exit 0
   fi
 
-  ACCEPT_EULA=$ACCEPT_EULA AUTH_STRATEGY=$AUTH_STRATEGY JWT_SECRET=$(cat ./secrets/JWT_SECRET) docker-compose -f docker-compose.yml -f docker-compose.logging.yml -f docker-compose.monitoring.yml config > docker-compose.prod.yml
+  if [[ "$SKIP_SWARM_ENV" != "true" && (-z "$LICENSES_SERIAL_NBR" || -z "$LICENSES_CONTROL_NBR") ]]; then
+    echo "Error: License environment variables LICENSES_SERIAL_NBR and/or LICENSES_CONTROL_NBR not properly set"
+    exit 1
+  fi
+
+  JWT_SECRET=$(cat ./secrets/JWT_SECRET) docker-compose -f docker-compose.yml -f docker-compose.logging.yml -f docker-compose.monitoring.yml config > docker-compose.prod.yml
   docker-compose -f docker-compose.prod.yml pull
 
   for manager in $managers
