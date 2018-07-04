@@ -76,8 +76,8 @@ export AWS_INSTANCE_TYPE=t2.medium
 ## Deploying the Services
 
 To run the Qlik Associative Engine under a license obtained from Qlik, the license information shall be provided in the
-`swarm.env` file in the `LICENSES_SERIAL_NBR` and `LICENSES_CONTROL_NBR` environment variables. If these environment
-variables are omitted, Qlik Associative Engine will run in a resticted mode without license.
+`swarm.env` file in the `LICENSES_SERIAL_NBR` and `LICENSES_CONTROL_NBR` environment variables. Omit these environment
+variables to run the [Community Version](https://qlikcore.com/licensing/#community).
 
 To deploy/update services in the swarm (see previous step how to create a swarm), run:
 

@@ -12,7 +12,7 @@ nocolor="\033[0m"
 function deploy() {
   LICENSE_COMPOSE_FLAG="-f docker-compose.licensing.yml"
   if [[ -z "$LICENSES_SERIAL_NBR" || -z "$LICENSES_CONTROL_NBR" ]]; then
-    echo -e "${green}INFO${nocolor}: Running Qlik Associative Engine without license. The number of simultaneous sessions will be restricted."
+    echo -e "${green}INFO${nocolor}: Running Qlik Associative Engine Community Version (no license)."
     LICENSE_COMPOSE_FLAG=""
   fi
   docker-compose up -d dummy-data
