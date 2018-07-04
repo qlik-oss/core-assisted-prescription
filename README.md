@@ -37,7 +37,7 @@ Windows and Docker for Mac.
 Note that before you deploy, you must accept the [Qlik Core EULA](https://qlikcore.com/beta/) by setting the
 `ACCEPT_EULA` environment variable.
 
-If you are running Qlik Associative Engine under a license obtained by Qlik, the license information shall be provided
+If you are running Qlik Associative Engine under a license obtained from Qlik, the license information shall be provided
 in the `LICENSES_SERIAL_NBR` and `LICENSES_CONTROL_NBR` environment variables. If these are not provided or empty,
 Qlik Associative Engine restricts the number of simultaneous sessions allowed.
 
