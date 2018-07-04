@@ -10,7 +10,7 @@
     "lint:fix": "eslint . --fix",
     "test:e2e": "aw-test-runner ./e2e --timeout 10000",
     "test:e2e:swarm": "env SWARM=true npm run test:e2e",
-    "validate:compose": "docker-compose -f ../docker-compose.yml -f ../docker-compose.override.yml config"
+    "validate:compose": "docker-compose -f ../docker-compose.yml -f ../docker-compose.override.yml -f ../docker-compose.licensing.yml config"
   },
   "devDependencies": {
     "after-work.js": "2.2.0",

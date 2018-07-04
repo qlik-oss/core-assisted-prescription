@@ -6,13 +6,20 @@ set -e
 cd "$(dirname "$0")"
 
 command=$1
+green="\033[0;32m"
+nocolor="\033[0m"
 
 function deploy() {
+  LICENSE_COMPOSE_FLAG="-f docker-compose.licensing.yml"
+  if [[ -z "$LICENSES_SERIAL_NBR" || -z "$LICENSES_CONTROL_NBR" ]]; then
+    echo -e "${green}INFO${nocolor}: Running Qlik Associative Engine Community Version (no license)."
+    LICENSE_COMPOSE_FLAG=""
+  fi
   docker-compose up -d dummy-data
   docker cp ./data/csv/. dummy-data:/data
   docker cp ./data/doc/. dummy-data:/doc
   docker cp ./secrets/. dummy-data:/secrets
-  JWT_SECRET=$(cat ./secrets/JWT_SECRET) docker-compose up -d
+  JWT_SECRET=$(cat ./secrets/JWT_SECRET) docker-compose -f docker-compose.yml -f docker-compose.override.yml $LICENSE_COMPOSE_FLAG up -d
   echo "CUSTOM ANALYTICS deployed locally at https://localhost/"
 }
 

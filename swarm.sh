@@ -40,6 +40,8 @@ machines=
 managers=
 engine_workers=
 elk_workers=
+green="\033[0;32m"
+nocolor="\033[0m"
 
 # Override default node name prefix if the user wants to.
 if [ "$DOCKER_PREFIX" != "" ]; then
@@ -92,7 +94,13 @@ function deploy_stack() {
     exit 0
   fi
 
-  ACCEPT_EULA=$ACCEPT_EULA AUTH_STRATEGY=$AUTH_STRATEGY JWT_SECRET=$(cat ./secrets/JWT_SECRET) docker-compose -f docker-compose.yml -f docker-compose.logging.yml -f docker-compose.monitoring.yml config > docker-compose.prod.yml
+  LICENSE_COMPOSE_FLAG="-f docker-compose.licensing.yml"
+  if [[ -z "$LICENSES_SERIAL_NBR" || -z "$LICENSES_CONTROL_NBR" ]]; then
+    echo -e "${green}INFO${nocolor}: Running Qlik Associative Engine Community Version (no license)."
+    LICENSE_COMPOSE_FLAG=""
+  fi
+
+  JWT_SECRET=$(cat ./secrets/JWT_SECRET) docker-compose -f docker-compose.yml $LICENSE_COMPOSE_FLAG -f docker-compose.logging.yml -f docker-compose.monitoring.yml config > docker-compose.prod.yml
   docker-compose -f docker-compose.prod.yml pull
 
   for manager in $managers
