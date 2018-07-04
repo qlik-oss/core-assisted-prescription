@@ -40,6 +40,8 @@ machines=
 managers=
 engine_workers=
 elk_workers=
+green="\033[0;32m"
+nocolor="\033[0m"
 
 # Override default node name prefix if the user wants to.
 if [ "$DOCKER_PREFIX" != "" ]; then
@@ -92,13 +94,13 @@ function deploy_stack() {
     exit 0
   fi
 
-  if [[ "$SKIP_SWARM_ENV" != "true" && (-z "$LICENSES_SERIAL_NBR" || -z "$LICENSES_CONTROL_NBR") ]]; then
-    echo "Error: License environment variables LICENSES_SERIAL_NBR and/or LICENSES_CONTROL_NBR not properly set."
-    echo "       Make sure they are set in the swarm.env file."
-    exit 1
+  LICENSE_COMPOSE_FLAG="-f docker-compose.licensing.yml"
+  if [[ -z "$LICENSES_SERIAL_NBR" || -z "$LICENSES_CONTROL_NBR" ]]; then
+    echo -e "${green}INFO${nocolor}: Running Qlik Associative Engine without license. The number of simultaneous sessions will be restricted."
+    LICENSE_COMPOSE_FLAG=""
   fi
 
-  JWT_SECRET=$(cat ./secrets/JWT_SECRET) docker-compose -f docker-compose.yml -f docker-compose.logging.yml -f docker-compose.monitoring.yml config > docker-compose.prod.yml
+  JWT_SECRET=$(cat ./secrets/JWT_SECRET) docker-compose -f docker-compose.yml $LICENSE_COMPOSE_FLAG -f docker-compose.logging.yml -f docker-compose.monitoring.yml config > docker-compose.prod.yml
   docker-compose -f docker-compose.prod.yml pull
 
   for manager in $managers
