@@ -100,7 +100,7 @@ function deploy_stack() {
     LICENSE_COMPOSE_FLAG=""
   fi
 
-  JWT_SECRET=$(cat ./secrets/JWT_SECRET) docker-compose -f docker-compose.yml $LICENSE_COMPOSE_FLAG -f docker-compose.logging.yml -f docker-compose.monitoring.yml config > docker-compose.prod.yml
+  ACCEPT_EULA=$ACCEPT_EULA AUTH_STRATEGY=$AUTH_STRATEGY JWT_SECRET=$(cat ./secrets/JWT_SECRET) docker-compose -f docker-compose.yml $LICENSE_COMPOSE_FLAG -f docker-compose.logging.yml -f docker-compose.monitoring.yml config > docker-compose.prod.yml
   docker-compose -f docker-compose.prod.yml pull
 
   for manager in $managers
