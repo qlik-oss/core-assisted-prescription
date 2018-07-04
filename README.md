@@ -34,7 +34,9 @@ This repository contains
 To run the stack, Docker stable version 17.06 or later is required. Development is supported on both Docker for
 Windows and Docker for Mac.
 
-Note that before you deploy, you must accept the [Qlik Core EULA](https://qlikcore.com/beta/) by setting the `ACCEPT_EULA` environment variable.
+Note that before you deploy, you must accept the [Qlik Core EULA](https://qlikcore.com/beta/) by setting the
+`ACCEPT_EULA` environment variable. You must also have obtained license information for Qlik Associative Engine which
+shall be provided in the `LICENSES_SERIAL_NBR` and `LICENSES_CONTROL_NBR` environment variables.
 
 ### Deploying to Local Docker Engine
 
@@ -42,10 +44,11 @@ The stack can be deployed to the local Docker engine (without Docker Swarm) usin
 It uses `docker-compose`. Run:
 
 ```sh
-$ ACCEPT_EULA=yes ./local.sh deploy
+$ ACCEPT_EULA=yes LICENSES_SERIAL_NBR=<serial nbr> LICENSES_CONTROL_NBR=<control nbr> ./local.sh deploy
 ```
 
-The application can now be accessed at https://localhost. Login in with: "admin" and "password".
+Replace `<serial nbr>` and `<control nbr>` with proper license numbers provided by Qlik. The application can now be
+accessed at https://localhost. Login in with: "admin" and "password".
 
 ### Deploying to Docker Swarm
 

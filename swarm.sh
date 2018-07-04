@@ -93,7 +93,8 @@ function deploy_stack() {
   fi
 
   if [[ "$SKIP_SWARM_ENV" != "true" && (-z "$LICENSES_SERIAL_NBR" || -z "$LICENSES_CONTROL_NBR") ]]; then
-    echo "Error: License environment variables LICENSES_SERIAL_NBR and/or LICENSES_CONTROL_NBR not properly set"
+    echo "Error: License environment variables LICENSES_SERIAL_NBR and/or LICENSES_CONTROL_NBR not properly set."
+    echo "       Make sure they are set in the swarm.env file."
     exit 1
   fi
 
