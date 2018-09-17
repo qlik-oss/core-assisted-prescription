@@ -34,7 +34,7 @@ This repository contains
 To run the stack, Docker stable version 17.06 or later is required. Development is supported on both Docker for
 Windows and Docker for Mac.
 
-Note that before you deploy, you must accept the [Qlik Core EULA](https://qlikcore.com/beta/) by setting the
+Note that before you deploy, you must accept the [Qlik Core EULA](https://core.qlik.com/eula/) by setting the
 `ACCEPT_EULA` environment variable.
 
 If you are running Qlik Associative Engine under a license obtained from Qlik, the license information shall be provided
