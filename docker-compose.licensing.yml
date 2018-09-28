@@ -7,7 +7,7 @@ services:
   
   licenses:
     # The Licenses service is responsible for unlocking the Qlik Associative Engine.
-    image: qlikcore/licenses:1.0.7
+    image: qlikcore/licenses:1.1.0
     environment:
       - LICENSES_SERIAL_NBR
       - LICENSES_CONTROL_NBR
