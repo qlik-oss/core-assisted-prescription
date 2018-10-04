@@ -48,3 +48,17 @@ scrape_configs:
       - 'tasks.qix-engine'
       type: 'A'
       port: 9090
+
+  - job_name: 'qlik-licenses'
+    dns_sd_configs:
+    - names:
+      - 'tasks.licenses'
+      type: 'A'
+      port: 9200
+
+  - job_name: 'qlik-mira'
+    dns_sd_configs:
+    - names:
+      - 'tasks.mira'
+      type: 'A'
+      port: 9100
