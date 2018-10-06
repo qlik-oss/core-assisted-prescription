@@ -23,7 +23,7 @@ services:
     # The redis database stores sessions. The openresty gateway uses it to look
     # up JWTs based on the session cookie, while the authentication service use
     # it to create/delete these entries.
-    image: redis:3.0.7-alpine
+    image: redis:3.2.12-alpine
     deploy:
       placement:
         constraints: [node.role == manager]

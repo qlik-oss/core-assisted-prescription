@@ -12,7 +12,7 @@ services:
         constraints: [node.role == manager]
 
   cadvisor:
-    image: google/cadvisor:v0.28.3
+    image: google/cadvisor:v0.31.0
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:rw
@@ -41,13 +41,13 @@ services:
       mode: global
 
   docker-exporter:
-    image: alpine/socat:1.0.1
+    image: alpine/socat:1.0.3
     command: -d TCP-L:4999,fork TCP:172.18.0.1:4999
     deploy:
       mode: global
 
   prometheus:
-    image: prom/prometheus:v1.7.1
+    image: prom/prometheus:v1.8.2
     configs:
       - source: prometheus
         target: /etc/prometheus/prometheus.yml
@@ -63,7 +63,7 @@ services:
         constraints: [node.role == manager]
 
   alertmanager:
-    image: prom/alertmanager:v0.11.0
+    image: prom/alertmanager:v0.15.2
     entrypoint: /init_alertmanager
     secrets:
       - slack_webhook
@@ -79,7 +79,7 @@ services:
       replicas: 1
 
   grafana:
-    image: grafana/grafana:4.3.2
+    image: grafana/grafana:4.6.4
     environment:
       GF_AUTH_ANONYMOUS_ENABLED: 'true'
       GF_SERVER_ROOT_URL: /grafana
