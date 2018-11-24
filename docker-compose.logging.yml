@@ -2,7 +2,7 @@ version: "3.3"
 
 services:
   filebeat:
-    image: docker.elastic.co/beats/filebeat:6.5.0
+    image: docker.elastic.co/beats/filebeat:6.5.1
     configs:
       - source: filebeat-config
         target: /usr/share/filebeat/filebeat.yml
@@ -16,7 +16,7 @@ services:
   elasticsearch:
     # This service only runs as one instance in our stack and is
     # used by Kibana (consuming) and Logstash (storing).
-    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.5.0
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.5.1
     environment:
       ES_JAVA_OPTS: "-Xmx512m -Xms512m"
     deploy:
@@ -25,7 +25,7 @@ services:
           - engine.labels.elk == true
 
   logstash:
-    image: docker.elastic.co/logstash/logstash-oss:6.5.0
+    image: docker.elastic.co/logstash/logstash-oss:6.5.1
     configs:
       - source: logstash-pipeline
         target: /usr/share/logstash/pipeline/logstash.conf
@@ -40,7 +40,7 @@ services:
 
   kibana:
     # Used for visualizing and viewing logs stored in elasticsearch.
-    image:  docker.elastic.co/kibana/kibana-oss:6.5.0
+    image:  docker.elastic.co/kibana/kibana-oss:6.5.1
     configs:
       - source: kibana-config
         target: /usr/share/kibana/config/kibana.yml
