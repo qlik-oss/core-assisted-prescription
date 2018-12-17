@@ -113,5 +113,15 @@ jobs:
               fi
 
               SKIP_SWARM_ENV="true" DOCKER_PREFIX="ap-prod" DOCKER_DRIVER="amazonec2" ./swarm.sh deploy
+
+              # Run docker system prune 
+              machines=$(docker-machine ls -q)
+
+              for machine in $machines
+              do
+                echo == Running system prune on $machine ==
+                docker-machine ssh $machine sudo docker system prune -f -a --volumes
+              done
+
             fi
           working_directory: ~/qliktive-custom-analytics/scripts
