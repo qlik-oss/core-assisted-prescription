@@ -61,6 +61,7 @@ services:
      - MIRA_MODE=swarm
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    user: root
     deploy:
       placement:
         constraints: [node.role == manager]
