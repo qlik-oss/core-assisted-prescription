@@ -63,7 +63,7 @@ services:
         constraints: [node.role == manager]
 
   alertmanager:
-    image: prom/alertmanager:v0.17.0
+    image: prom/alertmanager:v0.18.0
     entrypoint: /init_alertmanager
     secrets:
       - slack_webhook
