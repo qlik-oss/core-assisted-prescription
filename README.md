@@ -1,5 +1,8 @@
-# Qliktive Assisted Prescription
+# This project as been deprecated
+The project will be kept here for reference only. The repo will not be continuously updated and supported. 
 
+
+# Qliktive Assisted Prescription
 [![CircleCI](https://circleci.com/gh/qlik-oss/core-assisted-prescription.svg?style=svg)](https://circleci.com/gh/qlik-oss/core-assisted-prescription)
 
 This repository contains the implementation of a medical data web application called _Qliktive Assisted Prescription_.
