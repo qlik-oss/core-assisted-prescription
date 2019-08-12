@@ -1,4 +1,4 @@
-# This project as been deprecated
+# This project has been deprecated
 The project will be kept here for reference only. The repo will not be continuously updated and supported. 
 
 
